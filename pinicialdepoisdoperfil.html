@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Easy Glow</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logotipo {
+            width: 100%;
+            padding: 0px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .logo img {
+            width: 170px;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: nowrap;
+        }
+
+        .menu a {
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .menu a:hover {
+            color: #7a7a7a;
+        }
+
+        /* DROPDOWN */
+        .mais-menu {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .mais-links {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%);
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border-radius: 6px;
+            flex-direction: column;
+            min-width: 160px;
+            z-index: 999;
+        }
+
+        .mais-links a {
+            padding: 8px 12px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .mais-links a:hover {
+            background: #f2f2f2;
+        }
+
+        .mais-menu:hover .mais-links {
+            display: flex;
+        }
+
+        /* FOOTER (CONTACTOS) */
+        .contactos {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            background: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .contactos p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .insta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon {
+            width: 30px;
+        }
+        .banner {
+            width: 100%;
+            background: linear-gradient(180deg, 
+            rgba(36, 32, 28, 0.175),
+            rgba(248, 222, 187, 0.175),
+            rgba(196, 175, 154, 0.175));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px, 20px;
+        }
+
+        .banner h1,
+        .banner h2 {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            letter-spacing: 2px;
+            margin: 5px 0;
+        }
+
+        .banner h1 {
+            font-size: 30px;
+        }
+
+        .banner h2 {
+            font-size: 20px;
+        }
+
+        .banner p {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button {
+            position: relative;
+            top: -5px;               /* sobe 5px acima da posição normal */
+            padding: 10px 25px;
+            background-color: #c4b9a8;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+}
+
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* --- SECÇÃO FAZER A MARCAÇÃO --- */
+
+        .secao-marcacao {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .secao-marcacao h1 {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+
+        /* --- LAYOUT LADO A LADO --- */
+        .marcacao-container {
+            width: 85%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* ESQUERDA */
+        .marcacao-esquerda {
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .marcacao-esquerda img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .marcacao-esquerda p {
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        /* DIREITA */
+.marcacao-direita {
+    display: flex;
+    flex-direction: row; /* input e botão lado a lado */
+    gap: 10px;           /* espaço entre eles */
+    width: 100%;         /* ocupa toda a largura disponível */
+    padding-top: 40px;
+    align-items: stretch; /* faz input e botão terem altura igual */
+}
+
+.marcacao-direita input {
+    flex: 1;             /* input ocupa o máximo de espaço */
+    padding: 12px 15px;
+    border: 1px solid #e5dcd3;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box; /* garante altura correta */
+}
+
+.marcacao-direita button {
+    padding: 12px 20px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+
+.marcacao-direita button:hover {
+    opacity: 0.8;
+}
+
+hr {
+    margin: 40px auto;
+    width: 85%;
+}
+    @font-face {
+    font-family: 'High Cruiser';
+    src: url('fonts/HighCruiser.otf.otf') format('truetype');
+}
+
+.galeria-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 8px 16px 20px;
+    scrollbar-width: none; /* esconde a barra de scroll */
+    cursor: grab;
+}
+.video-card {
+    flex-shrink: 0;
+    width: 200px;
+    scroll-snap-align: start;
+    border-radius: 14px;
+    overflow: hidden;
+}
+.video-card video {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="logotipo">
+        <div class="logo">
+            <a href="pagInicial.html">
+            <img src="novologo.PNG" alt="Easy Glow Logo">
+            </a>
+        </div>
+
+        <div class="menu">
+            <a href="perfil1.html">PERFIL</a>
+            <a href="serviços.html">SERVIÇOS</a>
+            <a href="preços.html">PREÇOS</a>
+            <a href="agendar.html">AGENDAR</a>
+
+            <div class="mais-menu">
+                <span><b>MAIS</b></span>
+                <div class="mais-links">
+                    <a href="contactos.html">CONTACTOS</a>
+                    <a href="marcacoes.html">MARCAÇÕES</a>
+                    <a href="sobre.html">SOBRE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- BANNER -->
+    <div class="banner">
+        <h1>TRANSFORME O SEU VISUAL</h1>
+        <h2>E DESTAQUE A SUA BELEZA</h2>
+
+        <p>Agenda o teu penteado online e descubra a arte das tranças afro.</p>
+        <button onclick="location.href='agendar.html'">AGENDAR AGORA</button>
+    </div>
+
+                <div class="galeria-secao">
+    <h2 class="galeria-titulo">OS NOSSOS TRABALHOS</h2>
+
+    <div class="galeria-wrap">
+        <div class="galeria-scroll" id="galeria">
+
+            <div class="video-card">
+                <video src="trancascornrows.MOV" controls></video>
+                <div class="video-label">Tranças Cornrows <span>Curtas</span></div>
+            </div>
+
+            <div class="video-card">
+                <video src="trancastwistsfulani.mp4" controls></video>
+                <div class="video-label">Tranças Lemonade Twists <span>Longas</span></div>
+            </div>
+
+            <div class="video-card">
+                <video src="trançasbohobraids.mp4" controls></video>
+                <div class="video-label">Tranças Large Boho <span>Longas</span></div>
+            </div>
+
+            <div class="video-card">
+                <video src="IMG_0460.mp4" controls></video>
+                <div class="video-label">Tranças Twists Curtas <span>Médias</span></div>
+            </div>
+
+             <div class="video-card">
+                <video src="trançaslargeboho.MP4" controls></video>
+                <div class="video-label">Tranças Boho Large <span>Longas</span></div>
+            </div>
+
+             <div class="video-card">
+                <video src="trançastwistscachos.MP4" controls></video>
+                <div class="video-label">Tranças Twists encaracoladas <span>Longas</span></div>
+            </div>
+
+             <div class="video-card">
+                <video src="trançasknotlesscachos.MP4" controls></video>
+                <div class="video-label">Tranças Boho   <span>Longas</span></div>
+            </div>
+
+            <!-- adiciona mais cards aqui -->
+
+        </div>
+    </div>
+</div>
+
+    <div class="secao-marcacao">
+        <h1>SUBSCREVA</h1>
+
+        <div class="marcacao-container">
+
+            <div class="marcacao-esquerda">
+                <img src="paf.imagem.png" alt="">
+                <p>As tranças afro são mais do que um simples estilo de cabelo, 
+                    vêm carregadas de história e identidade.
+                </p>
+            </div>
+
+            <!-- EMAIL + BOTÃO À DIREITA -->
+            <div class="marcacao-direita">
+                <input type="email" id="emailInput" placeholder="Introduza o seu email">
+                <button id="subscribeBtn">SUBSCREVER</button>
+            </div>
+
+        </div>
+
+    <!-- CONTACTOS EM BAIXO -->
+    <div class="contactos">
+        <p>easyglow@gmail.com | +351 925 215 786 | Seg a Sex 09:00 às 20H</p>
+        <div class="insta">
+            <img src="iconinstagram.PNG" class="icon">
+            <span>@easyglow._</span>
+        </div>
+    </div>
+
+</body>
+</html>

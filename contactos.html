@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Glow — Contactos</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+        }
+
+        @font-face {
+            font-family: 'High Cruiser';
+            src: url('fonts/HighCruiser.otf.otf') format('truetype');
+        }
+
+        /* ── NAVBAR ── */
+        .logotipo {
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img { width: 150px; display: block; }
+
+        .menu { display: flex; align-items: center; gap: 22px; }
+        .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
+        .menu a:hover { color: #888; }
+
+        .mais-menu { position: relative; cursor: pointer; }
+        .mais-links {
+            display: none; position: absolute; top: calc(100% + 10px); right: 0;
+            background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
+        }
+        .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
+        .mais-links a:hover { background: #f5f5f5; }
+        .mais-menu:hover .mais-links { display: flex; }
+
+        .btn-login {
+            background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
+            font-size: 13px; font-weight: bold; text-decoration: none;
+            display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
+        }
+        .btn-login:hover { opacity: 0.8; }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
+
+        .menu-mobile {
+            display: none; flex-direction: column; background: #fff;
+            border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px;
+        }
+        .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
+
+        /* ── BANNER ── */
+        .contact-header {
+            background: linear-gradient(180deg,
+                rgba(36,32,28,0.175),
+                rgba(248,222,187,0.175),
+                rgba(196,175,154,0.175));
+            text-align: center;
+            padding: 40px 20px;
+            font-family: 'High Cruiser', Arial, sans-serif;
+        }
+        .contact-header h1 { margin: 0; letter-spacing: 2px; font-size: 30px; }
+        .contact-header1 { font-family: Arial, Helvetica, sans-serif; }
+        .contact-header p { margin: 10px 0; font-weight: bold; }
+        .contact-header span { display: block; margin-top: 5px; }
+
+        /* ── FORMULÁRIO ── */
+        .form-container { display: flex; justify-content: center; margin: 50px 0; }
+
+        .form-box {
+            background-color: #d6d3cf;
+            border-radius: 20px;
+            padding: 30px;
+            width: 650px;
+            max-width: 94%;
+            text-align: center;
+        }
+        .form-box p { margin-bottom: 15px; }
+
+        .campos-topo { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+        .campos-topo input {
+            flex: 1; min-width: 140px; padding: 12px 16px; border-radius: 12px;
+            border: none; font-size: 14px; outline: none; font-family: Arial, sans-serif;
+        }
+
+        .message-area { background-color: #ffffff; border-radius: 20px; padding: 20px; position: relative; }
+        textarea { width: 100%; height: 140px; border: none; resize: none; outline: none; font-size: 14px; padding: 10px; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+        .send-btn {
+            position: absolute; bottom: 15px; right: 15px;
+            background-color: #111; color: white; border: none; border-radius: 20px;
+            padding: 8px 20px; cursor: pointer; font-weight: bold; font-size: 13px;
+        }
+        .send-btn:hover { background-color: #333; }
+
+        /* TOAST */
+        .toast { display: none; position: fixed; bottom: 28px; right: 28px; background: #111; color: #fff; padding: 14px 24px; border-radius: 12px; z-index: 3000; font-size: 14px; font-weight: bold; }
+
+        /* MENSAGENS */
+        .minhas-msgs { display: none; max-width: 650px; margin: 0 auto 40px; padding: 0 20px; }
+        .minhas-msgs h3 { font-size: 15px; color: #555; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .msg-item { background: #f4efe9; border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; font-size: 13px; color: #333; border-left: 4px solid #c4b9a8; }
+        .msg-item .msg-meta { font-size: 11px; color: #999; margin-top: 6px; }
+
+        /* ── FOOTER ── */
+        .contactos {
+            background: #f8f8f8; color: #555; text-align: center; padding: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            flex-wrap: wrap; border-top: 1px solid #eee; margin-top: auto;
+        }
+        .contactos p { font-size: 15px; color: #555; }
+        .insta { display: flex; align-items: center; gap: 6px; }
+        .insta span { font-size: 14px; color: #555; }
+        .icon { width: 26px; }
+        .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .menu-toggle { display: flex; }
+            .campos-topo { flex-direction: column; }
+            .contactos { flex-direction: column; padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="logotipo">
+    <div class="logo"><a href="pagInicial.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
+    <div class="menu">
+        <a href="serviços.html">SERVIÇOS</a>
+        <a href="agendar.html">AGENDAR</a>
+        <div class="mais-menu">
+            <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
+            <div class="mais-links">
+                <a href="contactos.html">CONTACTOS</a>
+                <a href="marcacoes.html">MARCAÇÕES</a>
+                <a href="sobre.html">SOBRE</a>
+            </div>
+        </div>
+        <a id="btnAuth" href="login.html" class="btn-login">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span id="btnAuthText">LOGIN</span>
+        </a>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- MENU MOBILE -->
+<div class="menu-mobile" id="menuMobile">
+    <a href="serviços.html">SERVIÇOS</a>
+    <a href="agendar.html">AGENDAR</a>
+    <a href="contactos.html">CONTACTOS</a>
+    <a href="marcacoes.html">MARCAÇÕES</a>
+    <a href="sobre.html">SOBRE</a>
+    <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
+</div>
+
+<!-- BANNER -->
+<div class="contact-header">
+    <h1>CONTACTO</h1>
+    <div class="contact-header1">
+        <p>ENTRE EM CONTACTO CONNOSCO VIA CHAT, EMAIL OU TELEFONE</p>
+        <span>easyglow@gmail.com | +351 925 215 786 | Seg a Sex 10:00 às 20H</span>
+    </div>
+</div>
+
+<!-- FORMULÁRIO -->
+<div class="form-container">
+    <div class="form-box">
+        <p>Pode também enviar-nos uma mensagem pelo formulário:</p>
+        <div class="campos-topo">
+            <input type="text"  id="contactNome"  placeholder="O seu nome">
+            <input type="email" id="contactEmail" placeholder="O seu email">
+        </div>
+        <div class="message-area">
+            <textarea id="contactMsg" placeholder="Escreva a sua mensagem aqui..."></textarea>
+            <button class="send-btn" onclick="enviarMensagem()">ENVIAR</button>
+        </div>
+    </div>
+</div>
+
+<!-- HISTÓRICO DE MENSAGENS -->
+<div class="minhas-msgs" id="minhasMsgs">
+    <h3>As suas mensagens anteriores</h3>
+    <div id="listaMsgs"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="contactos">
+    <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
+    <div class="insta">
+        <img src="iconinstagram.PNG" class="icon" alt="Instagram">
+        <span>@easyglow._</span>
+    </div>
+    <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
+</div>
+
+<script>
+    /* ── LOGIN / PERFIL ── */
+    const ulog = localStorage.getItem('ulog');
+    const btn  = document.getElementById('btnAuth');
+    const btnT = document.getElementById('btnAuthText');
+    const btnM = document.getElementById('btnAuthMobile');
+
+    if (ulog) {
+        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
+        btn.href  = 'perfil1.html';
+        btnM.href = 'perfil1.html';
+        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+        btnT.textContent = nome;
+        btnM.textContent = nome;
+    }
+
+    /* ── HAMBURGER ── */
+    function toggleMenu() {
+        const m = document.getElementById('menuMobile');
+        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    /* ── PRÉ-PREENCHER ── */
+    window.onload = function() {
+        if (ulog) {
+            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+            if (ud.nome)  document.getElementById('contactNome').value  = ud.nome;
+            if (ud.email) document.getElementById('contactEmail').value = ud.email;
+            carregarMensagens(ulog);
+        }
+    };
+
+    function toast(msg, tipo) {
+        const t = document.getElementById('toast');
+        t.innerText = msg; t.style.display = 'block';
+        t.style.background = tipo === 'erro' ? '#c0392b' : '#111';
+        setTimeout(() => t.style.display = 'none', 3500);
+    }
+
+    function enviarMensagem() {
+        const nome  = document.getElementById('contactNome').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const msg   = document.getElementById('contactMsg').value.trim();
+
+        if (!nome)  { toast('Por favor indique o seu nome.', 'erro'); return; }
+        if (!email || !email.includes('@')) { toast('Por favor indique um email válido.', 'erro'); return; }
+        if (!msg)   { toast('Por favor escreva a sua mensagem.', 'erro'); return; }
+
+        const nova = {
+            id:   Date.now(), nome, email, msg,
+            data: new Date().toLocaleDateString('pt-PT'),
+            hora: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }),
+            lida: false
+        };
+
+        const todas = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
+        todas.unshift(nova);
+        localStorage.setItem('admin_mensagens', JSON.stringify(todas));
+
+        if (ulog) {
+            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+            if (!ud.mensagens) ud.mensagens = [];
+            ud.mensagens.unshift(nova);
+            localStorage.setItem(ulog, JSON.stringify(ud));
+            carregarMensagens(ulog);
+        }
+
+        document.getElementById('contactMsg').value = '';
+        const btn2 = document.querySelector('.send-btn');
+        btn2.innerText = 'ENVIADO ✔'; btn2.style.background = '#27ae60'; btn2.disabled = true;
+        setTimeout(() => { btn2.innerText = 'ENVIAR'; btn2.style.background = '#111'; btn2.disabled = false; }, 3000);
+    }
+
+    function carregarMensagens(ulog) {
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        const msgs = ud.mensagens || [];
+        if (!msgs.length) return;
+        document.getElementById('minhasMsgs').style.display = 'block';
+        document.getElementById('listaMsgs').innerHTML = msgs.map(m => `
+            <div class="msg-item">
+                <div>${m.msg}</div>
+                <div class="msg-meta">${m.data} às ${m.hora}</div>
+            </div>`).join('');
+    }
+</script>
+</body>
+</html>

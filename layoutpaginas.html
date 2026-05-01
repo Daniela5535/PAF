@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+<title>Easy Glow</title>
+<style>
+    body { margin:0; padding:0; font-family:Arial,sans-serif; min-height:100vh; display:flex; flex-direction:column; }
+
+    .logotipo { width:100%; padding:0 10px; display:flex; align-items:center; justify-content:space-between; box-sizing:border-box; }
+    .logo img { width:170px; }
+    .menu { display:flex; align-items:center; gap:18px; flex-wrap:nowrap; }
+    .menu a { text-decoration:none; font-size:15px; font-weight:bold; color:black; }
+    .menu a:hover { color:#7a7a7a; }
+    .mais-menu { position:relative; cursor:pointer; }
+    .mais-links { display:none; position:absolute; top:100%; left:50%; transform:translate(-50%); background:white; box-shadow:0 2px 6px rgba(0,0,0,0.2); border-radius:6px; flex-direction:column; min-width:160px; z-index:999; }
+    .mais-links a { padding:8px 12px; text-decoration:none; color:black; }
+    .mais-links a:hover { background:#f2f2f2; }
+    .mais-menu:hover .mais-links { display:flex; }
+
+    .spacer { height:20px; }
+    .container { display:flex; padding:40px; gap:40px; }
+
+    /* SIDEBAR */
+    .sidebar { width:220px; text-align:center; }
+
+    /* FOTO — corrigido */
+    .fotoperfil { width:120px; height:120px; background:#ccc; border-radius:50%; margin:0 auto 14px; overflow:hidden; cursor:pointer; position:relative; }
+    .fotoperfil img { width:100%; height:100%; object-fit:cover; display:block; }
+    .fotoperfil .foto-ov { position:absolute; inset:0; background:rgba(0,0,0,0.45); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; opacity:0; transition:opacity 0.2s; pointer-events:none; }
+    .fotoperfil .foto-ov span { color:#fff; font-size:10px; font-weight:bold; letter-spacing:.5px; }
+    .fotoperfil:hover .foto-ov { opacity:1; }
+
+    .sidebar-nome { font-weight:bold; font-size:15px; margin-bottom:4px; }
+    .sidebar-email { font-size:12px; color:#888; margin-bottom:14px; word-break:break-all; }
+
+    .sidebar button { width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; background:white; cursor:pointer; border-radius:8px; font-size:13px; font-weight:bold; }
+    .sidebar button:hover { background:#f5f5f5; }
+    .sidebar .dark { background:black; color:white; border-color:black; }
+    .sidebar .dark:hover { background:#333; }
+    .sidebar .danger { color:red; border:1px solid red; }
+    .sidebar .danger:hover { background:#fff0f0; }
+    .sidebar hr { border:none; border-top:1px solid #eee; margin:4px 0 12px; }
+
+    /* CONTEÚDO */
+    .content { flex:1; }
+    .content h1 { font-size:40px; margin-bottom:20px; font-family:'High Cruiser',Arial,sans-serif; }
+
+    .box { background:linear-gradient(to bottom,#d9d4cd,#f4efe9); padding:20px 30px; border-radius:25px; margin-bottom:30px; }
+    .box h3 { margin:0 0 14px; font-size:13px; color:#555; text-transform:uppercase; letter-spacing:1px; }
+
+    .info-row { display:flex; gap:30px; flex-wrap:wrap; margin-bottom:12px; }
+    .info-field { display:flex; flex-direction:column; gap:4px; }
+    .info-field label { font-size:12px; color:#888; font-weight:bold; }
+    .info-field span { font-size:15px; color:#111; }
+    .info-field input { padding:8px 12px; border-radius:8px; border:1px solid #ccc; font-size:14px; outline:none; width:200px; box-sizing:border-box; }
+    .edit-row { display:flex; gap:10px; margin-top:4px; }
+    .btn-edit { padding:7px 18px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:13px; font-weight:bold; }
+    .btn-edit:hover { background:#f5f5f5; }
+    .btn-save { padding:7px 18px; border-radius:20px; border:none; background:#111; color:#fff; cursor:pointer; font-size:13px; font-weight:bold; display:none; }
+    .btn-save:hover { opacity:0.85; }
+    .btn-cancel { padding:7px 14px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:13px; display:none; }
+
+    .history { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.08); }
+    .history:last-child { border-bottom:none; }
+    .history-left { display:flex; gap:25px; align-items:center; }
+    .date { font-weight:bold; font-size:14px; }
+    .buttons button { margin-left:8px; padding:6px 12px; border:1px solid #999; background:white; cursor:pointer; border-radius:20px; font-size:12px; font-weight:bold; }
+    .buttons button:hover { background:#f5f5f5; }
+    .buttons button.cancel { color:red; border-color:red; }
+    .buttons button.cancel:hover { background:#fff0f0; }
+    .status { background:#9dff5a; padding:5px 15px; border-radius:20px; font-size:12px; font-weight:bold; }
+    .status.cancelado { background:#ffcaca; color:#c0392b; }
+    .empty { text-align:center; color:#aaa; padding:10px; }
+
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:2000; cursor:pointer; }
+    .modal-content { background:#fff; padding:30px 25px; border-radius:20px; width:320px; max-width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.2); display:flex; flex-direction:column; gap:10px; cursor:auto; }
+    .modal-content h3 { margin:0 0 8px; font-size:20px; color:#333; }
+    .modal-content p { font-size:13px; color:#555; margin:0; }
+    .modal-content input { width:100%; padding:12px 15px; border-radius:10px; border:1px solid #ccc; font-size:14px; box-sizing:border-box; outline:none; }
+    .modal-content input:focus { border-color:#000; }
+    .modal-content button { padding:12px 0; border:none; border-radius:20px; background:#000; color:#fff; font-weight:bold; font-size:15px; cursor:pointer; }
+    .modal-content button:hover { background:#222; }
+    .msg-modal { padding:8px; border-radius:8px; font-size:13px; text-align:center; display:none; }
+    .msg-modal.ok   { background:#e0ffe0; color:#27ae60; }
+    .msg-modal.erro { background:#ffe0e0; color:#c0392b; }
+
+    .toast { display:none; position:fixed; bottom:28px; right:28px; background:#111; color:#fff; padding:12px 22px; border-radius:12px; z-index:3000; font-size:14px; font-weight:bold; }
+
+    @font-face { font-family:'High Cruiser'; src:url('fonts/HighCruiser.otf.otf') format('truetype'); }
+</style>
+</head>
+<body>
+
+<div class="logotipo">
+    <div class="logo">
+        <a href="pagInicial.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a>
+    </div>
+    <div class="menu">
+        <a href="perfil1.html">PERFIL</a>
+        <a href="serviços.html">SERVIÇOS</a>
+        <a href="agendar.html">AGENDAR</a>
+        <div class="mais-menu">
+            <span><b>MAIS</b></span>
+            <div class="mais-links">
+                <a href="contactos.html">CONTACTOS</a>
+                <a href="marcacoes.html">MARCAÇÕES</a>
+                <a href="sobre.html">SOBRE</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="spacer"></div>
+
+<div class="container">
+
+    <div class="sidebar">
+        <div class="fotoperfil" id="fotoperfil" onclick="document.getElementById('uploadFoto').click()">
+            <img src="fotoperfil.jpg" id="fotoPerfilImg" alt="Foto de perfil">
+            <div class="foto-ov">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <span>ALTERAR</span>
+            </div>
+        </div>
+        <input type="file" id="uploadFoto" style="display:none" accept="image/*">
+
+        <div class="sidebar-nome" id="nomeDisplay">—</div>
+        <div class="sidebar-email" id="emailDisplay">—</div>
+
+        <button class="dark" onclick="location.href='agendar.html'">+ Nova marcação</button>
+        <button onclick="document.getElementById('modalSenha').style.display='flex'">Alterar palavra-passe</button>
+        <button id="notificacoesBtn">Notificações</button>
+        <hr>
+        <button class="danger" onclick="confirmarEliminar()">Eliminar conta</button>
+        <button onclick="logout()">Terminar sessão</button>
+    </div>
+
+    <div class="content">
+        <h1>PERFIL</h1>
+
+        <div class="box">
+            <h3>Dados Pessoais</h3>
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Nome</label>
+                    <span id="nomeSpan">—</span>
+                    <input id="nomeInput" style="display:none" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Email</label>
+                    <span id="emailSpan">—</span>
+                </div>
+                <div class="info-field">
+                    <label>Telemóvel</label>
+                    <span id="telSpan">Não definido</span>
+                    <input id="telInput" style="display:none" placeholder="+351 9XX XXX XXX">
+                </div>
+            </div>
+            <div class="edit-row">
+                <button class="btn-edit" id="btnEditar" onclick="ativarEdicao()">Editar</button>
+                <button class="btn-save" id="btnGuardar" onclick="guardarDados()">Guardar</button>
+                <button class="btn-cancel" id="btnCancelar" onclick="cancelarEdicao()">Cancelar</button>
+            </div>
+        </div>
+
+        <h3>Histórico de marcações</h3>
+        <div class="box" id="historicoLista"></div>
+
+        <h3>Favoritos</h3>
+        <div class="box empty" id="favoritosLista">Ainda não adicionou favoritos.</div>
+    </div>
+</div>
+
+<div class="modal" id="modalSenha">
+    <div class="modal-content">
+        <h3>Alterar Palavra-Passe</h3>
+        <div class="msg-modal" id="msgSenha"></div>
+        <input type="password" id="senhaAtual" placeholder="Senha atual">
+        <input type="password" id="novaSenha" placeholder="Nova senha (mín. 4 caracteres)">
+        <input type="password" id="confNovaSenha" placeholder="Confirmar senha">
+        <button onclick="alterarSenha()">Guardar</button>
+    </div>
+</div>
+
+<div class="modal" id="modalEliminar">
+    <div class="modal-content">
+        <h3>Eliminar Conta</h3>
+        <p>Esta ação é permanente e não pode ser desfeita.</p>
+        <input type="password" id="eliminarPass" placeholder="Confirmar palavra-passe">
+        <button style="background:#c0392b" onclick="eliminarConta()">Eliminar Conta</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    let userEmail = localStorage.getItem("ulog");
+    let userData  = userEmail ? JSON.parse(localStorage.getItem(userEmail) || '{}') : {};
+
+    function saveUser() { localStorage.setItem(userEmail, JSON.stringify(userData)); }
+
+    function toast(msg, tipo) {
+        const t = document.getElementById('toast');
+        t.innerText = msg; t.style.display = 'block';
+        t.style.background = tipo === 'erro' ? '#c0392b' : '#111';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    function carregarPerfil() {
+        document.getElementById('nomeDisplay').innerText = userData.nome || '—';
+        document.getElementById('emailDisplay').innerText = userData.email || '—';
+        document.getElementById('nomeSpan').innerText = userData.nome || '—';
+        document.getElementById('emailSpan').innerText = userData.email || '—';
+        document.getElementById('telSpan').innerText = userData.tel || 'Não definido';
+        if (userData.foto) document.getElementById('fotoPerfilImg').src = userData.foto;
+        carregarHistorico();
+        carregarFavoritos();
+    }
+
+    document.getElementById('uploadFoto').addEventListener('change', function(e) {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            userData.foto = evt.target.result;
+            document.getElementById('fotoPerfilImg').src = evt.target.result;
+            saveUser(); toast('Foto atualizada!');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function ativarEdicao() {
+        document.getElementById('nomeSpan').style.display = 'none';
+        document.getElementById('telSpan').style.display = 'none';
+        document.getElementById('nomeInput').style.display = 'block';
+        document.getElementById('telInput').style.display = 'block';
+        document.getElementById('nomeInput').value = userData.nome || '';
+        document.getElementById('telInput').value = userData.tel || '';
+        document.getElementById('btnEditar').style.display = 'none';
+        document.getElementById('btnGuardar').style.display = 'inline-block';
+        document.getElementById('btnCancelar').style.display = 'inline-block';
+    }
+
+    function cancelarEdicao() {
+        document.getElementById('nomeSpan').style.display = '';
+        document.getElementById('telSpan').style.display = '';
+        document.getElementById('nomeInput').style.display = 'none';
+        document.getElementById('telInput').style.display = 'none';
+        document.getElementById('btnEditar').style.display = '';
+        document.getElementById('btnGuardar').style.display = 'none';
+        document.getElementById('btnCancelar').style.display = 'none';
+    }
+
+    function guardarDados() {
+        const nome = document.getElementById('nomeInput').value.trim();
+        const tel  = document.getElementById('telInput').value.trim();
+        if (!nome) { toast('O nome não pode estar vazio.', 'erro'); return; }
+        userData.nome = nome; userData.tel = tel; saveUser();
+        document.getElementById('nomeSpan').innerText = nome;
+        document.getElementById('telSpan').innerText = tel || 'Não definido';
+        document.getElementById('nomeDisplay').innerText = nome;
+        cancelarEdicao(); toast('Dados guardados!');
+    }
+
+    function carregarHistorico() {
+        const lista = document.getElementById('historicoLista');
+        const marcacoes = userData.marcacoes || [];
+        if (!marcacoes.length) { lista.innerHTML = '<p class="empty">Ainda não tem marcações.</p>'; return; }
+        lista.innerHTML = marcacoes.map((m, i) => `
+            <div class="history">
+                <div class="history-left">
+                    <div class="date">${m.data}<br><small style="font-weight:normal;color:#666">${m.hora}</small></div>
+                    <div>
+                        <strong>${m.servico}</strong><br>
+                        <span style="font-size:13px;color:#666">${m.nome}</span>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <span class="status ${m.estado === 'Cancelado' ? 'cancelado' : ''}">${m.estado || 'Confirmado'}</span>
+                    ${m.estado !== 'Cancelado' ? `
+                        <button onclick="remarcar(${i})">Remarcar</button>
+                        <button class="cancel" onclick="cancelarMarcacao(${i})">Cancelar</button>
+                    ` : ''}
+                    <button onclick="verDetalhes(${i})">Ver detalhes</button>
+                </div>
+            </div>`).join('');
+    }
+
+    function cancelarMarcacao(i) {
+        if (!confirm('Cancelar esta marcação?')) return;
+        userData.marcacoes[i].estado = 'Cancelado'; saveUser(); carregarHistorico(); toast('Marcação cancelada.');
+    }
+    function remarcar(i) { location.href = 'agendar.html'; }
+    function verDetalhes(i) {
+        const m = userData.marcacoes[i];
+        alert(`Serviço: ${m.servico}\nData: ${m.data}\nHora: ${m.hora}\nNome: ${m.nome}\nEstado: ${m.estado || 'Confirmado'}`);
+    }
+
+    function carregarFavoritos() {
+        const lista = document.getElementById('favoritosLista');
+        const favs = userData.favoritos || [];
+        if (!favs.length) { lista.innerHTML = 'Ainda não adicionou favoritos.'; lista.className = 'box empty'; return; }
+        lista.className = 'box';
+        lista.innerHTML = favs.map(f =>
+            `<span style="display:inline-block;margin:4px 8px 4px 0;padding:5px 14px;background:#fff;border-radius:20px;font-size:13px;cursor:pointer" onclick="removerFav('${f}')">❤ ${f}</span>`
+        ).join('');
+    }
+
+    function removerFav(f) {
+        userData.favoritos = (userData.favoritos || []).filter(x => x !== f);
+        saveUser(); carregarFavoritos(); toast('Removido dos favoritos.');
+    }
+
+    function alterarSenha() {
+        const atual = document.getElementById('senhaAtual').value;
+        const nova  = document.getElementById('novaSenha').value;
+        const conf  = document.getElementById('confNovaSenha').value;
+        const el    = document.getElementById('msgSenha');
+        function erroS(m) { el.className='msg-modal erro'; el.innerText=m; el.style.display='block'; }
+        function okS(m)   { el.className='msg-modal ok';   el.innerText=m; el.style.display='block'; }
+        if (atual !== userData.password) { erroS('Senha atual incorreta.'); return; }
+        if (nova.length < 4)             { erroS('Mínimo 4 caracteres.'); return; }
+        if (nova !== conf)               { erroS('As senhas não coincidem.'); return; }
+        userData.password = nova; saveUser();
+        okS('Senha alterada com sucesso!');
+        setTimeout(() => { document.getElementById('modalSenha').style.display='none'; el.style.display='none'; }, 1500);
+        document.getElementById('senhaAtual').value=''; document.getElementById('novaSenha').value=''; document.getElementById('confNovaSenha').value='';
+    }
+
+    function confirmarEliminar() { document.getElementById('modalEliminar').style.display='flex'; }
+
+    function eliminarConta() {
+        const pass = document.getElementById('eliminarPass').value;
+        if (pass !== userData.password) { toast('Palavra-passe incorreta.','erro'); return; }
+        localStorage.removeItem(userEmail); localStorage.removeItem('ulog');
+        toast('Conta eliminada.'); setTimeout(() => location.href='pagInicial.html', 1200);
+    }
+
+    document.getElementById('notificacoesBtn').onclick = function() {
+        userData.notificacoes = !userData.notificacoes; saveUser();
+        toast(userData.notificacoes ? 'Notificações ativadas!' : 'Notificações desativadas.');
+    };
+
+    function logout() { localStorage.removeItem('ulog'); location.href='pagInicial.html'; }
+
+    document.getElementById('modalSenha').addEventListener('click', function(e)   { if(e.target===this) this.style.display='none'; });
+    document.getElementById('modalEliminar').addEventListener('click', function(e) { if(e.target===this) this.style.display='none'; });
+
+    carregarPerfil();
+</script>
+</body>
+</html>

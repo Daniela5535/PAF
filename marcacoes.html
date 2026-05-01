@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Glow — Marcações</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background-color: white; }
+
+        @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
+
+        /* ── NAVBAR ── */
+        .logotipo {
+            width: 100%; padding: 10px 20px; display: flex; align-items: center;
+            justify-content: space-between; background: #fff; border-bottom: 1px solid #eee;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo img { width: 150px; display: block; }
+        .menu { display: flex; align-items: center; gap: 22px; font-weight:bold; }
+        .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
+        .menu a:hover { color: #888; }
+        .mais-menu { position: relative; cursor: pointer; }
+        .mais-links {
+            display: none; position: absolute; top: calc(100% + 10px); right: 0;
+            background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
+        }
+        .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
+        .mais-links a:hover { background: #f5f5f5; }
+        .mais-menu:hover .mais-links { display: flex; }
+
+        .btn-login {
+            background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
+            font-size: 13px; font-weight: bold; text-decoration: none;
+            display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
+        }
+        .btn-login:hover { opacity: 0.8; }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
+
+        .menu-mobile {
+            display: none; flex-direction: column; background: #fff;
+            border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px;
+        }
+        .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
+
+        /* ── CONTEÚDO ── */
+        .Marcacoestitulo {
+            font-family: 'High Cruiser', Arial, sans-serif; letter-spacing: 1px; font-size: 35px;
+            display: flex; justify-content: center; align-items: center; text-align: center; padding: 40px;
+        }
+
+        .badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .badge-pendente   { background: #fff3cd; color: #856404; }
+        .badge-confirmado { background: #d4edda; color: #155724; }
+        .badge-cancelado  { background: #ffcaca; color: #c0392b; }
+        .badge-rejeitado  { background: #f8d7da; color: #7f1d1d; }
+
+        .aviso-pendente { background: #fff8e8; border: 1px solid #f0d080; border-radius: 10px; padding: 10px 16px; font-size: 13px; color: #7a5c00; margin-top: 8px; display: inline-block; }
+
+        .topo-agendamento { display: flex; justify-content: space-between; align-items: flex-start; margin: 20px 40px 10px; flex-wrap: wrap; gap: 14px; }
+
+        .cancelar-info { background: #efeaea; padding: 15px 20px; max-width: 500px; border-radius: 10px; font-size: 14px; }
+        .cancelar-info a { color: #3b5ed7; text-decoration: underline; cursor: pointer; }
+
+        .estado-wrap { text-align: right; }
+
+        .card-agendamento { margin: 10px 40px 30px; padding: 30px; background: linear-gradient(180deg, #d9cfc0, #cbbfae); display: flex; justify-content: space-between; align-items: center; border-radius: 15px; flex-wrap: wrap; gap: 16px; }
+
+        .info p { margin: 8px 0; color: #333; font-size: 14px; }
+
+        .acoes { display: flex; flex-direction: column; gap: 12px; }
+        .acoes button { padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; font-size: 14px; background: #e9e5e2; }
+        .acoes button:hover { background: #d8d4d1; }
+        .acoes button.btn-cancel { color: #c0392b; border: 1px solid #c0392b; background: white; }
+        .acoes button.btn-cancel:hover { background: #fff0f0; }
+
+        .sem-marcacoes { text-align: center; color: #aaa; padding: 60px 20px; font-size: 16px; }
+        .sem-marcacoes a { color: #3b5ed7; text-decoration: underline; cursor: pointer; }
+
+        .separador { margin: 0 40px; border: none; border-top: 1px solid #e0d8d0; }
+
+        /* MODAL CANCELAR */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; border-radius: 30px; padding: 50px 60px; text-align: center; max-width: 480px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-box h2 { font-size: 22px; margin: 0 0 35px; font-weight: normal; }
+        .modal-fechar { position: absolute; top: 20px; right: 25px; font-size: 26px; cursor: pointer; color: #555; background: none; border: none; }
+        .modal-fechar:hover { color: #000; }
+        .modal-botoes { display: flex; gap: 20px; justify-content: center; }
+        .modal-botoes button { padding: 14px 55px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; background: #c9bfb0; color: #333; }
+        .modal-botoes button:hover { background: #b8ae9f; }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: #f8f8f8; color: #555; text-align: center; padding: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            flex-wrap: wrap; border-top: 1px solid #eee; margin-top: auto;
+        }
+        .footer p { font-size: 15px; color: #555; }
+        .insta { display: flex; align-items: center; gap: 6px; }
+        .insta span { font-size: 14px; color: #555; }
+        .icon { width: 26px; }
+        .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .menu-toggle { display: flex; }
+            .topo-agendamento { margin: 16px 16px 10px; }
+            .card-agendamento { margin: 10px 16px 24px; padding: 20px; }
+            .separador { margin: 0 16px; }
+            .Marcacoestitulo { font-size: 26px; padding: 28px 16px; }
+            .footer { flex-direction: column; padding: 24px 16px; }
+            .modal-box { padding: 36px 24px; }
+            .modal-botoes button { padding: 12px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="logotipo">
+    <div class="logo"><a href="pagInicial.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
+    <div class="menu">
+        <a href="serviços.html">SERVIÇOS</a>
+        <a href="agendar.html">AGENDAR</a>
+        <div class="mais-menu">
+            <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
+            <div class="mais-links">
+                <a href="contactos.html">CONTACTOS</a>
+                <a href="marcacoes.html">MARCAÇÕES</a>
+                <a href="sobre.html">SOBRE</a>
+            </div>
+        </div>
+        <a id="btnAuth" href="login.html" class="btn-login">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span id="btnAuthText">LOGIN</span>
+        </a>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- MENU MOBILE -->
+<div class="menu-mobile" id="menuMobile">
+    <a href="serviços.html">SERVIÇOS</a>
+    <a href="agendar.html">AGENDAR</a>
+    <a href="contactos.html">CONTACTOS</a>
+    <a href="marcacoes.html">MARCAÇÕES</a>
+    <a href="sobre.html">SOBRE</a>
+    <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
+</div>
+
+<div class="Marcacoestitulo">A MINHA AGENDA</div>
+
+<div id="listaMarcacoes"></div>
+
+<!-- MODAL CANCELAR -->
+<div class="modal-overlay" id="modalCancelar">
+    <div class="modal-box">
+        <button class="modal-fechar" onclick="fecharModal()">&#x2715;</button>
+        <h2>Deseja cancelar a marcação?</h2>
+        <div class="modal-botoes">
+            <button onclick="confirmarCancelamento()">Sim</button>
+            <button onclick="fecharModal()">Não</button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
+    <div class="insta">
+        <img src="iconinstagram.PNG" class="icon" alt="Instagram">
+        <span>@easyglow._</span>
+    </div>
+    <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
+</div>
+
+<script>
+    /* ── PROTEÇÃO ── */
+    if (!localStorage.getItem('ulog')) {
+        localStorage.setItem('redirectAfterLogin', 'marcacoes.html');
+        location.href = 'login.html';
+    }
+
+    /* ── LOGIN / PERFIL ── */
+    const ulog = localStorage.getItem('ulog');
+    const btn  = document.getElementById('btnAuth');
+    const btnT = document.getElementById('btnAuthText');
+    const btnM = document.getElementById('btnAuthMobile');
+
+    if (ulog) {
+        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
+        btn.href  = 'perfil1.html';
+        btnM.href = 'perfil1.html';
+        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+        btnT.textContent = nome;
+        btnM.textContent = nome;
+    }
+
+    /* ── HAMBURGER ── */
+    function toggleMenu() {
+        const m = document.getElementById('menuMobile');
+        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    let cancelarIndex = null;
+
+    function badgeClasse(estado) {
+        const m = { 'Pendente':'pendente','Confirmado':'confirmado','Cancelado':'cancelado','Rejeitado':'rejeitado' };
+        return 'badge badge-' + (m[estado] || 'pendente');
+    }
+
+    function renderizar() {
+        const lista = document.getElementById('listaMarcacoes');
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        const marcacoes = ud.marcacoes || [];
+
+        if (!marcacoes.length) {
+            lista.innerHTML = `
+                <div class="sem-marcacoes">
+                    Ainda não tem marcações.<br><br>
+                    <a href="agendar.html">Fazer primeira marcação →</a>
+                </div>`;
+            return;
+        }
+
+        lista.innerHTML = marcacoes.map((m, i) => `
+            ${i > 0 ? '<hr class="separador">' : ''}
+            <div class="topo-agendamento">
+                <div class="cancelar-info">
+                    ${m.estado === 'Pendente' || m.estado === 'Confirmado' ? `
+                        <p>Caso pretenda cancelar o agendamento, clique em
+                        <a onclick="abrirModal(${i})">cancelar</a>.<br>
+                        Após o cancelamento, o agendamento não pode ser recuperado.</p>
+                    ` : `
+                        <p>Este agendamento encontra-se <strong>${(m.estado||'').toLowerCase()}</strong>.</p>
+                    `}
+                </div>
+                <div class="estado-wrap">
+                    <span class="${badgeClasse(m.estado || 'Pendente')}">${(m.estado || 'Pendente').toUpperCase()}</span>
+                    ${m.estado === 'Pendente' || !m.estado ? `
+                        <div class="aviso-pendente">⏳ A aguardar confirmação do funcionário.</div>
+                    ` : ''}
+                    ${m.estado === 'Rejeitado' ? `
+                        <div class="aviso-pendente" style="background:#fff0f0;border-color:#f5aaaa;color:#c0392b;">
+                            ✖ Marcação rejeitada pelo administrador.
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="card-agendamento">
+                <div class="info">
+                    <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
+                    <p>Nome: <strong>${m.nome}</strong></p>
+                    <p>Serviço: <strong>${m.servico}</strong></p>
+                    ${m.reparticao  ? `<p>Repartição: <strong>${m.reparticao}</strong></p>`  : ''}
+                    ${m.divisao     ? `<p>Divisão: <strong>${m.divisao}</strong></p>`         : ''}
+                    ${m.cumprimento ? `<p>Cumprimento: <strong>${m.cumprimento}</strong></p>` : ''}
+                </div>
+                <div class="acoes">
+                    ${m.estado !== 'Cancelado' && m.estado !== 'Rejeitado' ? `
+                        <button class="btn-cancel" onclick="abrirModal(${i})">Cancelar</button>
+                    ` : ''}
+                    <button onclick="location.href='agendar.html'">Nova marcação</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function abrirModal(i) {
+        cancelarIndex = i;
+        document.getElementById('modalCancelar').classList.add('active');
+    }
+
+    function fecharModal() {
+        document.getElementById('modalCancelar').classList.remove('active');
+        cancelarIndex = null;
+    }
+
+    function confirmarCancelamento() {
+        fecharModal();
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        ud.marcacoes[cancelarIndex].estado = 'Cancelado';
+        localStorage.setItem(ulog, JSON.stringify(ud));
+
+        const id = ud.marcacoes[cancelarIndex].id;
+        const todas = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
+        const idx = todas.findIndex(x => x.id === id);
+        if (idx !== -1) { todas[idx].estado = 'Cancelado'; localStorage.setItem('admin_marcacoes', JSON.stringify(todas)); }
+
+        renderizar();
+    }
+
+    document.getElementById('modalCancelar').addEventListener('click', function(e) {
+        if (e.target === this) fecharModal();
+    });
+
+    renderizar();
+</script>
+</body>
+</html>

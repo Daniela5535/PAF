@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Glow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+
+        @font-face {
+            font-family: 'High Cruiser';
+            src: url('fonts/HighCruiser.otf.otf') format('truetype');
+        }
+        /* ── NAVBAR ── */
+        .logotipo {
+            width: 100%;
+            padding: 10px 20px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img { 
+            width: 150px;
+            display: block; 
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #111;
+            letter-spacing: .5px;
+        }
+
+        .menu a:hover { color: #888; }
+
+        .mais-menu { position: relative; cursor: pointer; }
+
+        .mais-links {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-radius: 10px;
+            flex-direction: column;
+            min-width: 160px;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .mais-links a {
+            padding: 11px 16px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #111;
+            display: block;
+        }
+
+        .mais-links a:hover { background: #f5f5f5; }
+        .mais-menu:hover .mais-links { display: flex; }
+
+        .btn-login {
+            background: #111;
+            color: white !important;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-login:hover { opacity: 0.8; }
+
+        /* menu hamburger mobile */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #111;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .menu-mobile {
+            display: none;
+            flex-direction: column;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 16px 20px;
+            gap: 14px;
+        }
+
+        .menu-mobile a {
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: #111;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .menu-mobile .btn-login {
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        /* ── BANNER ── */
+        .banner {
+            width: 100%;
+            background: linear-gradient(160deg,
+            rgba(36,32,28,0.08) 0%,
+            rgba(248,222,187,0.25) 50%,
+            rgba(196,175,154,0.2) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 10px 50px;
+        }
+
+        .banner-tag {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #9a8878;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+
+        .banner h1 {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 30px;
+            letter-spacing: 3px;
+            color: #1a1410;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .banner h2 {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            color: #5a4a3a;
+            margin-bottom: 18px;
+        }
+
+        .banner p {
+            font-size: 15px;
+            color: #6a5a4a;
+            max-width: 420px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .btn-agendar-banner {
+            padding: 14px 36px;
+            background: #1a1410;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .btn-agendar-banner:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* ── GALERIA ── */
+        .galeria-secao {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .secao-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #9a8878;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .galeria-titulo {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 30px;
+            letter-spacing: 2px;
+            color: #1a1410;
+            margin-bottom: 4px;
+        }
+
+        .galeria-sub {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .galeria-wrap { position: relative; }
+
+        .galeria-scroll {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 8px 30px 20px;
+            scrollbar-width: none;
+            cursor: grab;
+        }
+
+        .galeria-scroll:active { cursor: grabbing; }
+        .galeria-scroll::-webkit-scrollbar { display: none; }
+
+        .video-card {
+            flex-shrink: 0;
+            width: 185px;
+            scroll-snap-align: start;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f0ebe4;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-label {
+            padding: 10px 12px 12px;
+            background: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2a1e14;
+            text-align: left;
+        }
+
+        .video-label span {
+            display: block;
+            font-weight: normal;
+            font-size: 11px;
+            color: #9a8878;
+            margin-top: 2px;
+        }
+
+        .galeria-arrow {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 38px; height: 38px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+
+        .galeria-arrow:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+        .galeria-arrow svg { width: 14px; height: 14px; stroke: #555; fill: none; stroke-width: 2; }
+        .galeria-arrow.esquerda { left: 8px; }
+        .galeria-arrow.direita  { right: 8px; }
+
+        .galeria-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .galeria-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #d0c4b8;
+            transition: background 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .galeria-dot.ativo { background: #5a4a3a; transform: scale(1.4); }
+
+        /* ── SUBSCREVER ── */
+        .secao-marcacao {
+            padding: 70px 20px 60px;
+            text-align: center;
+            background: #faf8f5;
+        }
+
+        .secao-marcacao h1 {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 30px;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            color: #1a1410;
+        }
+
+        .marcacao-container {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 50px;
+        }
+
+        .marcacao-esquerda { flex: 1; text-align: left; }
+
+        .marcacao-esquerda img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .marcacao-esquerda p {
+            font-size: 15px;
+            margin-top: 16px;
+            color: #5a4a3a;
+            line-height: 1.7;
+        }
+
+        .marcacao-direita {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-top: 40px;
+            align-items: flex-start;
+        }
+
+        .sub-titulo {
+            font-family: 'High Cruiser', Arial, sans-serif;
+            font-size: 20px;
+            color: #1a1410;
+            letter-spacing: 1px;
+        }
+
+        .sub-desc {
+            font-size: 14px;
+            color: #7a6a5a;
+            line-height: 1.6;
+        }
+
+        .sub-form {
+            display: flex;
+            width: 100%;
+            gap: 0;
+        }
+
+        .sub-form input {
+            flex: 1;
+            padding: 13px 16px;
+            border: 1.5px solid #d8cfc4;
+            font-size: 14px;
+            outline: none;
+            border-radius: 8px 0 0 8px;
+            background: #fff;
+        }
+
+        .sub-form input:focus { border-color: #5a4a3a; }
+
+        .sub-form button {
+            padding: 13px 22px;
+            background: #1a1410;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: .5px;
+            border-radius: 0 8px 8px 0;
+            transition: opacity 0.2s;
+        }
+
+        .sub-form button:hover { opacity: 0.85; }
+
+        .msg-sub {
+            display: none;
+            font-size: 13px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        /* ── FOOTER ── */
+        .contactos {
+            background: #1a1410;
+            color: #c8b8a8;
+            text-align: center;
+            padding: 28px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contactos {
+            background: #f8f8f8;
+            color: #555;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+        }
+
+            .contactos p { 
+                font-size: 15px; 
+                color: #555; 
+            }
+            .insta span  { 
+                font-size: 14px; 
+                color: #555; 
+            }
+            .icon { 
+                width: 26px; 
+                filter: none; 
+                opacity: 1; 
+            }
+
+            .footer-copy {
+                font-size: 12px;
+                color: #aaa;
+                width: 100%;
+                text-align: center;
+                margin-top: 4px;
+            }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .menu-toggle { display: flex; }
+
+            .banner { padding: 50px 20px 44px; }
+            .banner h1 { font-size: 26px; }
+            .banner h2 { font-size: 16px; }
+            .banner p  { font-size: 14px; }
+
+            .galeria-titulo { font-size: 22px; }
+            .video-card { width: 155px; }
+            .video-card video { height: 210px; }
+            .galeria-scroll { padding: 8px 14px 16px; }
+            .galeria-arrow { display: none; }
+
+            .secao-marcacao { padding: 50px 16px 40px; }
+            .secao-marcacao h1 { font-size: 22px; }
+
+            .marcacao-container {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .marcacao-direita { padding-top: 0; width: 100%; }
+            .sub-form { width: 100%; }
+
+            .contactos { gap: 12px; flex-direction: column; padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="logotipo">
+        <div class="logo">
+            <a href="pagInicial.html">
+                <img src="novologo.PNG" alt="Easy Glow Logo">
+            </a>
+        </div>
+
+        <!-- menu desktop -->
+        <div class="menu">
+            <a href="serviços.html">SERVIÇOS</a>
+            <a href="preços.html">PREÇOS</a>
+            <a href="agendar.html">AGENDAR</a>
+            <div class="mais-menu">
+                <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
+                <div class="mais-links">
+                    <a href="contactos.html">CONTACTOS</a>
+                    <a href="marcacoes.html">MARCAÇÕES</a>
+                    <a href="sobre.html">SOBRE</a>
+                </div>
+            </div>
+            <a id="btnAuth" href="login.html" class="btn-login">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+                <span id="btnAuthText">LOGIN</span>
+            </a>
+        </div>
+
+        <!-- hamburger mobile -->
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <!-- menu mobile -->
+    <div class="menu-mobile" id="menuMobile">
+        <a href="serviços.html">SERVIÇOS</a>
+        <a href="preços.html">PREÇOS</a>
+        <a href="agendar.html">AGENDAR</a>
+        <a href="contactos.html">CONTACTOS</a>
+        <a href="marcacoes.html">MARCAÇÕES</a>
+        <a href="sobre.html">SOBRE</a>
+        <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
+    </div>
+
+    <!-- BANNER -->
+    <div class="banner">
+        <div class="banner-tag">✦ Salão de Tranças Afro</div>
+        <h1>TRANSFORME O SEU VISUAL</h1>
+        <h2>E DESTAQUE A SUA BELEZA</h2>
+        <p>Agenda o teu penteado online e descobre a arte das tranças afro.</p>
+        <button class="btn-agendar-banner">AGENDAR AGORA</button>
+    </div>
+
+    <!-- GALERIA -->
+    <div class="galeria-secao">
+        <div class="secao-label">Portefólio</div>
+        <h2 class="galeria-titulo">OS NOSSOS TRABALHOS</h2>
+        <p class="galeria-sub">Arrasta para ver mais</p>
+
+        <div class="galeria-wrap">
+            <button class="galeria-arrow esquerda" onclick="moverGaleria(-1)">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+
+            <div class="galeria-scroll" id="galeria">
+                <div class="video-card">
+                    <video src="trancascornrows.mp4" controls muted></video>
+                    <div class="video-label">Tranças Cornrows <span>Curtas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trancastwistsfulani.mp4" controls muted></video>
+                    <div class="video-label">Tranças Lemonade Twists <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançasbohobraids.mp4" controls muted></video>
+                    <div class="video-label">Tranças Large Boho <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trancalemonadeetiandra.mp4" controls muted></video>
+                    <div class="video-label">Tranças Lemonade <span>Curtas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançastwistscachos.MP4" controls muted></video>
+                    <div class="video-label">Tranças Twists Encaracoladas <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançasknotlesscachos.MP4" controls muted></video>
+                    <div class="video-label">Tranças Boho <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="twistsetiandra.mp4" controls muted></video>
+                    <div class="video-label">Tranças Twists Curtas <span>Médias</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançaslargeboho.MP4" controls muted></video>
+                    <div class="video-label">Tranças Boho Large <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançaslemonade.mp4" controls muted></video>
+                    <div class="video-label">Tranças Lemonade <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="trançasgypsy.mp4" controls muted></video>
+                    <div class="video-label">Tranças Twists Encaracoladas <span>Longas</span></div>
+                </div>
+                <div class="video-card">
+                    <video src="IMG_0460.mp4" controls muted></video>
+                    <div class="video-label">Tranças Twists Curtas <span>Médias</span></div>
+                </div>
+            </div>
+
+            <button class="galeria-arrow direita" onclick="moverGaleria(1)">
+                <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+
+        <div class="galeria-dots" id="galeriaDots"></div>
+    </div>
+
+    <!-- SUBSCREVER -->
+    <div class="secao-marcacao">
+        <h1>SUBSCREVA</h1>
+        <div class="marcacao-container">
+            <div class="marcacao-esquerda">
+                <img src="paf.imagem.png" alt="Tranças afro">
+                <p>As tranças afro são mais do que um simples estilo de cabelo, 
+                   vêm carregadas de história e identidade.</p>
+            </div>
+            <div class="marcacao-direita">
+                <div class="sub-titulo">FIQUE A PAR DAS NOVIDADES</div>
+                <p class="sub-desc">Subscreva a nossa newsletter e receba ofertas exclusivas, novos estilos e dicas de cuidados capilares.</p>
+                <div class="sub-form">
+                    <input type="email" id="emailInput" placeholder="O seu email">
+                    <button onclick="subscrever()">SUBSCREVER</button>
+                </div>
+                <div class="msg-sub" id="msgSub">✔ Subscrito com sucesso! Obrigada.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="contactos">
+        <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
+        <div class="insta">
+            <img src="iconinstagram.PNG" class="icon" alt="Instagram">
+            <span>@easyglow._</span>
+        </div>
+        <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
+    </div>
+
+    <script>
+        // silenciar vídeos
+        document.querySelectorAll('video').forEach(v => {
+            v.muted = true; v.volume = 0;
+            v.addEventListener('volumechange', function() {
+                if (!this.muted || this.volume > 0) { this.muted = true; this.volume = 0; }
+            });
+        });
+
+        // hamburger
+        function toggleMenu() {
+            const m = document.getElementById('menuMobile');
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // login / perfil
+        const ulog = localStorage.getItem('ulog');
+        const btn  = document.getElementById('btnAuth');
+        const btnT = document.getElementById('btnAuthText');
+        const btnM = document.getElementById('btnAuthMobile');
+
+        if (ulog) {
+            const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
+            btn.href  = 'perfil1.html';
+            btnM.href = 'perfil1.html';
+            const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btnT.textContent  = nome;
+            btnM.textContent  = nome;
+        } else {
+            btn.href = 'login.html'; btnM.href = 'login.html';
+        }
+
+        // botão agendar agora
+        document.querySelector('.btn-agendar-banner').onclick = function() {
+            if (localStorage.getItem('ulog')) { location.href = 'agendar.html'; }
+            else { localStorage.setItem('redirectAfterLogin', 'agendar.html'); location.href = 'login.html'; }
+        };
+
+        // subscrever
+        function subscrever() {
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email || !email.includes('@')) { alert('Por favor introduza um email válido.'); return; }
+            const msg = document.getElementById('msgSub');
+            msg.style.display = 'block';
+            document.getElementById('emailInput').value = '';
+            setTimeout(() => msg.style.display = 'none', 4000);
+        }
+
+        // galeria
+        const galeria  = document.getElementById('galeria');
+        const dotsEl   = document.getElementById('galeriaDots');
+        const cardW    = 185 + 14;
+        const total    = galeria.querySelectorAll('.video-card').length;
+
+        for (let i = 0; i < total; i++) {
+            const d = document.createElement('div');
+            d.className = 'galeria-dot' + (i === 0 ? ' ativo' : '');
+            d.onclick = () => galeria.scrollTo({ left: i * cardW, behavior: 'smooth' });
+            dotsEl.appendChild(d);
+        }
+
+        galeria.addEventListener('scroll', () => {
+            const idx = Math.round(galeria.scrollLeft / cardW);
+            dotsEl.querySelectorAll('.galeria-dot').forEach((d, i) => {
+                d.className = 'galeria-dot' + (i === idx ? ' ativo' : '');
+            });
+        });
+
+        function moverGaleria(dir) {
+            galeria.scrollBy({ left: dir * (cardW * 3), behavior: 'smooth' });
+        }
+
+        // arrastar
+        let isDown = false, startX, scrollL;
+        galeria.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - galeria.offsetLeft; scrollL = galeria.scrollLeft; });
+        galeria.addEventListener('mouseleave', () => isDown = false);
+        galeria.addEventListener('mouseup',    () => isDown = false);
+        galeria.addEventListener('mousemove',  e => {
+            if (!isDown) return; e.preventDefault();
+            galeria.scrollLeft = scrollL - (e.pageX - galeria.offsetLeft - startX) * 1.5;
+        });
+    </script>
+</body>
+</html>
