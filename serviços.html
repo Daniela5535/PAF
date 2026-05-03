@@ -6,416 +6,150 @@
     <title>Easy Glow — Serviços</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background: #fff; }
+        @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
 
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-        }
+        /* NAVBAR */
+        .logotipo { width:100%; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid #eee; position:sticky; top:0; z-index:1000; }
+        .logo img { width:150px; display:block; }
+        .menu { display:flex; align-items:center; gap:22px; font-weight:bold; }
+        .menu a { text-decoration:none; font-size:13px; font-weight:bold; color:#111; letter-spacing:.5px; }
+        .menu a:hover { color:#888; }
+        .mais-menu { position:relative; cursor:pointer; }
+        .mais-links { display:none; position:absolute; top:calc(100% + 10px); right:0; background:white; box-shadow:0 8px 24px rgba(0,0,0,0.12); border-radius:10px; flex-direction:column; min-width:160px; z-index:999; overflow:hidden; }
+        .mais-links a { padding:11px 16px; text-decoration:none; font-size:13px; font-weight:bold; color:#111; display:block; }
+        .mais-links a:hover { background:#f5f5f5; }
+        .mais-menu:hover .mais-links { display:flex; }
+        .btn-login { background:#111; color:white !important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity 0.2s; white-space:nowrap; }
+        .btn-login:hover { opacity:0.8; }
+        .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
+        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; }
+        .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content:center; margin-top:4px; }
 
-        @font-face {
-            font-family: 'High Cruiser';
-            src: url('fonts/HighCruiser.otf.otf') format('truetype');
-        }
+        /* BANNER */
+        .banner { width:100%; background:linear-gradient(180deg, rgba(36,32,28,0.175), rgba(248,222,187,0.175), rgba(196,175,154,0.175)); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px 20px; }
+        .banner h1 { font-family:'High Cruiser',Arial,sans-serif; font-size:30px; margin:0; }
+        .banner p { margin-top:10px; }
 
-        /* ── NAVBAR (igual à pagInicial) ── */
-        .logotipo {
-            width: 100%;
-            padding: 10px 20px;
-            height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        /* INFO SECÇÃO */
+        .info-secao { padding:50px 40px 30px; text-align:center; }
+        .info-secao > p { font-size:15px; color:#555; margin:0 0 30px; }
+        .info-grid { display:flex; justify-content:center; align-items:flex-start; gap:20px; flex-wrap:wrap; margin:0 auto; }
+        .info-card { border:1.5px solid #222; overflow:hidden; text-align:center; width:240px; flex-shrink:0; display:flex; flex-direction:column; cursor:pointer; transition:opacity 0.2s; }
+        .info-card:hover { opacity:0.85; }
+        .info-card img { width:100%; height:240px; object-fit:cover; display:block; }
+        .info-card-texto { padding:14px 12px; background:white; border-top:1.5px solid #222; }
+        .info-card-texto h3 { font-family:'High Cruiser',Arial,sans-serif; font-size:16px; margin:0 0 4px; letter-spacing:1px; }
+        .info-card-texto p { font-size:12px; color:#555; margin:0; }
 
-        .logo img {
-            width: 150px;
-            display: block;
-        }
+        /* GRID SERVIÇOS */
+        .container { padding:40px 20px; max-width:1200px; margin:0 auto; }
+        .grid { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
+        .card { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:20px; overflow:hidden; background:#faf8f5; box-shadow:0 2px 10px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; width:260px; }
+        .card:hover { transform:translateY(-4px); box-shadow:0 6px 18px rgba(0,0,0,0.13); }
+        .img-box { width:100%; height:340px; overflow:hidden; }
+        .img-box img { width:100%; height:100%; object-fit:cover; object-position:center center; }
+        .card-legenda { width:100%; padding:14px 16px; text-align:center; }
+        .card-legenda b { font-size:15px; display:block; margin-bottom:4px; }
+        .card-legenda span { font-size:13px; color:#888; }
 
-        .menu {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-            font-weight:bold;
-        }
+        /* MODAL INFO */
+        .modal-info-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); justify-content:center; align-items:center; z-index:2000; }
+        .modal-info-overlay.active { display:flex; }
+        .modal-info-box { background:#6b6b6b; border-radius:25px; padding:25px; width:720px; max-width:94%; position:relative; color:white; display:flex; gap:30px; align-items:flex-start; }
+        .modal-info-fechar { position:absolute; top:16px; right:20px; background:none; border:none; color:white; font-size:26px; cursor:pointer; line-height:1; }
+        .modal-info-fechar:hover { color:#ddd; }
+        .modal-info-img { width:250px; height:340px; overflow:hidden; background:white; flex-shrink:0; }
+        .modal-info-img img { width:100%; height:100%; object-fit:cover; }
+        .modal-info-content { flex:1; display:flex; flex-direction:column; justify-content:center; gap:15px; }
+        .modal-info-titulo { font-family:'High Cruiser',Arial,sans-serif; font-size:20px; letter-spacing:1px; margin:0; }
+        .modal-info-sub { font-size:13px; color:#ccc; margin:0; }
+        .modal-info-lista { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+        .modal-info-lista li { font-size:14px; color:#eee; line-height:1.5; }
+        .modal-info-lista li strong { color:#c77dbd; }
+        .btn-escolha { background:black; color:white; border:none; border-radius:25px; padding:12px 30px; font-size:14px; font-weight:bold; cursor:pointer; align-self:flex-start; display:inline-flex; align-items:center; gap:10px; }
+        .btn-escolha:hover { background:#333; }
+        .btn-seta { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:10px solid #c77dbd; }
+        .opcoes-selector { display:none; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto; margin-top:6px; }
+        .opcoes-selector.visivel { display:flex; }
+        .opcao-btn { background:#444; color:#eee; border:2px solid #666; border-radius:20px; padding:7px 16px; font-size:13px; cursor:pointer; text-align:left; transition:0.2s; }
+        .opcao-btn:hover { background:#555; border-color:#c77dbd; }
+        .opcao-btn.escolhido { background:#222; border-color:#c77dbd; color:#c77dbd; font-weight:bold; }
+        .escolha-confirmada { display:none; margin-top:8px; background:#2a2a2a; border:1px solid #c77dbd; border-radius:10px; padding:8px 14px; font-size:13px; color:#c77dbd; }
 
-        .menu a {
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            color: #111;
-            letter-spacing: .5px;
-        }
+        /* MODAL SERVIÇO */
+        .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; overflow-y:auto; padding:16px; }
+        .modal-overlay.active { display:flex; }
+        .modal-box { background:#5a5a5a; border-radius:20px; padding:35px; width:720px; max-width:100%; position:relative; color:white; display:flex; flex-direction:column; gap:24px; margin:auto; }
+        .modal-fechar { position:absolute; top:16px; right:20px; background:none; border:none; color:white; font-size:26px; cursor:pointer; }
+        .modal-fechar:hover { color:#ddd; }
+        .modal-topo { display:flex; gap:30px; align-items:center; }
+        .modal-img { width:260px; height:260px; border-radius:16px; overflow:hidden; background:#888; flex-shrink:0; }
+        .modal-img img { width:100%; height:100%; object-fit:cover; }
+        .modal-info { flex:1; display:flex; flex-direction:column; gap:14px; padding-top:6px; }
+        .modal-titulo { font-size:20px; font-weight:bold; line-height:1.6; }
+        .modal-preco { font-size:20px; font-weight:bold; color:#c77dbd; }
+        .modal-prefs { display:none; background:#3a3a3a; border:1px solid #c77dbd; border-radius:10px; padding:10px 14px; font-size:13px; color:#eee; line-height:1.8; }
+        .modal-prefs-titulo { color:#c77dbd; font-weight:bold; margin-bottom:4px; }
+        .modal-obs { font-size:13px; line-height:1.7; color:#e0e0e0; }
+        .modal-obs span { color:#c77dbd; font-weight:bold; }
 
-        .menu a:hover { color: #888; }
+        /* CAMPO IMAGEM REFERÊNCIA */
+        .ref-img-secao { background:#3a3a3a; border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+        .ref-img-secao label { font-size:13px; font-weight:bold; color:#c77dbd; }
+        .ref-img-secao p { font-size:12px; color:#ccc; }
+        .ref-img-upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .btn-upload { background:#111; color:white; border:none; border-radius:20px; padding:8px 18px; font-size:13px; font-weight:bold; cursor:pointer; }
+        .btn-upload:hover { background:#333; }
+        .ref-img-preview { width:60px; height:60px; border-radius:8px; object-fit:cover; display:none; border:2px solid #c77dbd; }
+        .ref-img-nome { font-size:12px; color:#aaa; }
+        input[type="file"] { display:none; }
 
-        .mais-menu { position: relative; cursor: pointer; }
+        .modal-rodape { text-align:right; }
+        .btn-agendar { background:#111; color:white; border:none; border-radius:25px; padding:13px 45px; font-size:15px; font-weight:bold; cursor:pointer; letter-spacing:1px; }
+        .btn-agendar:hover { background:#333; }
 
-        .mais-links {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: white;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border-radius: 10px;
-            flex-direction: column;
-            min-width: 160px;
-            z-index: 999;
-            overflow: hidden;
-        }
+        /* FOOTER */
+        .contactos { background:#f8f8f8; color:#555; text-align:center; padding:20px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #eee; margin-top:auto; }
+        .contactos p { font-size:15px; color:#555; }
+        .insta { display:flex; align-items:center; gap:6px; }
+        .insta span { font-size:14px; color:#555; }
+        .icon { width:26px; }
+        .footer-copy { font-size:12px; color:#aaa; width:100%; text-align:center; margin-top:4px; }
 
-        .mais-links a {
-            padding: 11px 16px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            color: #111;
-            display: block;
-        }
-
-        .mais-links a:hover { background: #f5f5f5; }
-        .mais-menu:hover .mais-links { display: flex; }
-
-        .btn-login {
-            background: #111;
-            color: white !important;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-        }
-
-        .btn-login:hover { opacity: 0.8; }
-
-        /* menu hamburger mobile */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #111;
-            border-radius: 2px;
-            transition: 0.3s;
-        }
-
-        .menu-mobile {
-            display: none;
-            flex-direction: column;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            padding: 16px 20px;
-            gap: 14px;
-        }
-
-        .menu-mobile a {
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: bold;
-            color: #111;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .menu-mobile .btn-login {
-            justify-content: center;
-            margin-top: 4px;
-        }
-
-        /* ── BANNER ── */
-        .banner {
-            width: 100%;
-            background: linear-gradient(180deg,
-                rgba(36,32,28,0.175),
-                rgba(248,222,187,0.175),
-                rgba(196,175,154,0.175));
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .banner h1 {
-            font-family: 'High Cruiser', Arial, sans-serif;
-            font-size: 30px;
-            margin: 0;
-        }
-
-        .banner p {
-            margin-top: 10px;
-        }
-
-        /* ── INFO SECÇÃO ── */
-        .info-secao {
-            padding: 50px 40px 30px;
-            text-align: center;
-        }
-
-        .info-secao > p {
-            font-size: 15px;
-            color: #555;
-            margin: 0 0 30px;
-        }
-
-        .info-grid {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 0 auto;
-        }
-
-        .info-card {
-            border: 1.5px solid #222;
-            overflow: hidden;
-            text-align: center;
-            width: 240px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .info-card:hover { opacity: 0.85; }
-
-        .info-card img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .info-card-texto {
-            padding: 14px 12px;
-            background: white;
-            border-top: 1.5px solid #222;
-        }
-
-        .info-card-texto h3 {
-            font-family: 'High Cruiser', Arial, sans-serif;
-            font-size: 16px;
-            margin: 0 0 4px;
-            letter-spacing: 1px;
-        }
-
-        .info-card-texto p {
-            font-size: 12px;
-            color: #555;
-            margin: 0;
-        }
-
-        /* ── GRID DE SERVIÇOS ── */
-        .container {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            justify-content: center;
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #faf8f5;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 260px;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.13);
-        }
-
-        .img-box {
-            width: 100%;
-            height: 340px;
-            overflow: hidden;
-            background: #ddd;
-        }
-
-        .img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            display: block;
-            transition: transform 0.3s;
-        }
-
-        .card-legenda {
-            width: 100%;
-            padding: 14px 16px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .card-legenda b { font-size: 15px; display: block; margin-bottom: 4px; }
-        .card-legenda span { font-size: 13px; color: #888; }
-
-        /* ── MODAL INFO ── */
-        .modal-info-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-info-overlay.active { display: flex; }
-        .modal-info-box { background: #5a5a5a; border-radius: 20px; padding: 30px; width: 680px; max-width: 94%; position: relative; color: white; display: flex; gap: 24px; align-items: flex-start; }
-        .modal-info-fechar { position: absolute; top: 16px; right: 20px; background: none; border: none; color: white; font-size: 26px; cursor: pointer; line-height: 1; }
-        .modal-info-fechar:hover { color: #ddd; }
-        .modal-info-img { width: 240px; flex-shrink: 0; border: 1.5px solid #888; border-radius: 8px; overflow: hidden; }
-        .modal-info-img img { width: 100%; display: block; }
-        .modal-info-content { flex: 1; display: flex; flex-direction: column; gap: 14px; padding-top: 4px; }
-        .modal-info-titulo { font-family: 'High Cruiser', Arial, sans-serif; font-size: 20px; letter-spacing: 1px; margin: 0; }
-        .modal-info-sub { font-size: 13px; color: #ccc; margin: 0; }
-        .modal-info-lista { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-        .modal-info-lista li { font-size: 14px; color: #eee; line-height: 1.5; }
-        .modal-info-lista li strong { color: #c77dbd; }
-
-        .btn-escolha { display: inline-flex; align-items: center; gap: 10px; background: #111; color: white; border: none; border-radius: 25px; padding: 12px 28px; font-size: 14px; font-weight: bold; cursor: pointer; letter-spacing: 1px; margin-top: 6px; }
-        .btn-escolha:hover { background: #333; }
-        .btn-seta { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #c77dbd; }
-
-        .opcoes-selector { display: none; margin-top: 10px; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
-        .opcoes-selector.visivel { display: flex; }
-        .opcao-btn { background: #444; color: #eee; border: 2px solid #666; border-radius: 20px; padding: 7px 16px; font-size: 13px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .opcao-btn:hover { background: #555; border-color: #c77dbd; }
-        .opcao-btn.escolhido { background: #222; border-color: #c77dbd; color: #c77dbd; font-weight: bold; }
-        .escolha-confirmada { display: none; margin-top: 8px; background: #2a2a2a; border: 1px solid #c77dbd; border-radius: 10px; padding: 8px 14px; font-size: 13px; color: #c77dbd; }
-
-        /* ── MODAL SERVIÇO ── */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-overlay.active { display: flex; }
-        .modal-box { background: #5a5a5a; border-radius: 20px; padding: 35px; width: 720px; max-width: 94%; position: relative; color: white; display: flex; flex-direction: column; gap: 24px; }
-        .modal-fechar { position: absolute; top: 16px; right: 20px; background: none; border: none; color: white; font-size: 26px; cursor: pointer; }
-        .modal-fechar:hover { color: #ddd; }
-        .modal-topo { display: flex; gap: 30px; align-items: flex-start; }
-        .modal-img { width: 260px; height: 210px; border-radius: 16px; overflow: hidden; background: #888; flex-shrink: 0; }
-        .modal-img img { width: 100%; height: 100%; object-fit: cover; }
-        .modal-info { flex: 1; display: flex; flex-direction: column; gap: 14px; padding-top: 6px; }
-        .modal-titulo { font-size: 20px; font-weight: bold; line-height: 1.6; }
-        .modal-preco { font-size: 20px; font-weight: bold; color: #c77dbd; }
-        .modal-prefs { display: none; background: #3a3a3a; border: 1px solid #c77dbd; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #eee; line-height: 1.8; }
-        .modal-prefs-titulo { color: #c77dbd; font-weight: bold; margin-bottom: 4px; }
-        .modal-obs { font-size: 13px; line-height: 1.7; color: #e0e0e0; }
-        .modal-obs span { color: #c77dbd; font-weight: bold; }
-        .modal-rodape { text-align: right; }
-        .btn-agendar { background: #111; color: white; border: none; border-radius: 25px; padding: 13px 45px; font-size: 15px; font-weight: bold; cursor: pointer; letter-spacing: 1px; }
-        .btn-agendar:hover { background: #333; }
-
-        /* ── FOOTER (igual à pagInicial) ── */
-        .contactos {
-            background: #f8f8f8;
-            color: #555;
-            text-align: center;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            border-top: 1px solid #eee;
-            margin-top: auto;
-        }
-
-        .contactos p { font-size: 15px; color: #555; }
-        .insta { display: flex; align-items: center; gap: 6px; }
-        .insta span { font-size: 14px; color: #555; }
-        .icon { width: 26px; filter: none; opacity: 1; }
-
-        .footer-copy {
-            font-size: 12px;
-            color: #aaa;
-            width: 100%;
-            text-align: center;
-            margin-top: 4px;
-        }
-
-        /* ── MOBILE ── */
+        /* MOBILE */
         @media (max-width: 768px) {
-            .menu { display: none; }
-            .menu-toggle { display: flex; }
-
-            /* GRID COM 2 COLUNAS */
-            .grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 14px;
-                padding: 0 10px;
-            }
-
-            .card { width: 100%; }
-            .img-box { height: 180px; }
-            .card-legenda b { font-size: 13px; }
-            .card-legenda span { font-size: 12px; }
-
-            /* INFO CARDS EM 2 COLUNAS */
-            .info-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 0 10px;
-            }
-
-            .info-card { width: 100%; }
-            .info-card img { height: 120px; object-fit: cover; }
-            .info-card-texto { padding: 10px 8px; }
-            .info-card-texto h3 { font-size: 12px; }
-            .info-card-texto p { font-size: 10px; }
-
-            /* MODAIS MOBILE */
-            .modal-topo { flex-direction: column; }
-            .modal-img { width: 100%; height: 200px; }
-            .modal-info-box { flex-direction: column; }
-            .modal-info-img { width: 100%; }
-
-            .contactos { gap: 12px; flex-direction: column; padding: 24px 16px; }
-
-            .info-secao { padding: 30px 16px 20px; }
+            .menu { display:none; }
+            .menu-toggle { display:flex; }
+            .grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; padding:0 10px; }
+            .card { width:100%; }
+            .img-box { height:180px; }
+            .card-legenda b { font-size:13px; }
+            .card-legenda span { font-size:12px; }
+            .info-secao { padding:30px 16px 20px; }
+            .info-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; padding:0 10px; }
+            .info-card { width:100%; }
+            .info-card img { height:120px; }
+            .info-card-texto { padding:10px 8px; }
+            .info-card-texto h3 { font-size:12px; }
+            .info-card-texto p { font-size:10px; }
+            .modal-overlay { align-items:flex-start; padding-top:20px; }
+            .modal-box { padding:20px 16px; gap:16px; border-radius:16px; }
+            .modal-topo { flex-direction:column; }
+            .modal-img { width:100%; height:220px; border-radius:12px; }
+            .modal-info-box { flex-direction:column; }
+            .modal-info-img { width:100%; }
+            .contactos { flex-direction:column; padding:24px 16px; }
         }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR (igual à pagInicial) -->
+<!-- NAVBAR -->
 <div class="logotipo">
-    <div class="logo">
-        <a href="index.html">
-            <img src="novologo.PNG" alt="Easy Glow Logo">
-        </a>
-    </div>
-
-    <!-- menu desktop -->
+    <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="serviços.html">SERVIÇOS</a>
         <a href="agendar.html">AGENDAR</a>
@@ -428,21 +162,14 @@
             </div>
         </div>
         <a id="btnAuth" href="login.html" class="btn-login">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             <span id="btnAuthText">LOGIN</span>
         </a>
     </div>
-
-    <!-- hamburger mobile -->
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
 
-<!-- menu mobile -->
+<!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
     <a href="serviços.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
@@ -481,64 +208,53 @@
     </div>
 </div>
 
-<!-- GRID DE SERVIÇOS -->
+<!-- GRID SERVIÇOS -->
 <div class="container">
     <div class="grid">
-
         <div class="card" onclick="abrirModal('Tranças Fulani X Lemonade','4H/6H','trancafulanixlemonade.JPG','60€')">
             <div class="img-box"><img src="trancafulanixlemonade.JPG" alt="Tranças Fulani X Lemonade"></div>
             <div class="card-legenda"><b>Tranças "Fulani X Lemonade"</b><span>A partir de 60€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Lemonade','5H/6H','trancalemonade.JPG','30€')">
             <div class="img-box"><img src="trancalemonade.JPG" alt="Tranças Lemonade"></div>
             <div class="card-legenda"><b>Tranças "Lemonade"</b><span>A partir de 30€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Fulani','5H/7H','trancafulani.JPG','50€')">
             <div class="img-box"><img src="trancafulani.JPG" alt="Tranças Fulani"></div>
             <div class="card-legenda"><b>Tranças "Fulani"</b><span>A partir de 50€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Cornrows','3H/4H','trancacornrowNago.JPG','25€')">
             <div class="img-box"><img src="trancacornrowNago.JPG" alt="Cornrows"></div>
             <div class="card-legenda"><b>Tranças "Cornrows"</b><span>A partir de 25€</span></div>
         </div>
         <div class="card" onclick="abrirModal('Trança estilo mohawk','4H/6H','trancaestilomohank.JPG','35€')">
             <div class="img-box"><img src="trancaestilomohank.JPG" alt="Trança estilo mohawk"></div>
-            <div class="card-legenda"><b>Trança estilo mohawk"</b><span>A partir de 35€</span></div>
+            <div class="card-legenda"><b>Trança estilo mohawk</b><span>A partir de 35€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Dreads','5H/6H','trancadreads.JPG','40€')">
-            <div class="img-box"><img src="trancadreads.JPG" alt="Tranças Lemonade"></div>
+            <div class="img-box"><img src="trancadreads.JPG" alt="Tranças Dreads"></div>
             <div class="card-legenda"><b>Tranças "Dreads"</b><span>A partir de 40€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Knotless','6H/8H','trancaknotless.JPG','40€')">
             <div class="img-box"><img src="trancaknotless.JPG" alt="Tranças Knotless"></div>
             <div class="card-legenda"><b>Tranças "Knotless"</b><span>A partir de 40€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Gypsy','5H/7H','trancagypsy.JPG','40€')">
             <div class="img-box"><img src="trancagypsy.JPG" alt="Tranças Gypsy"></div>
             <div class="card-legenda"><b>Trança "Gypsy"</b><span>A partir de 40€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças Twist','4H/6H','trancatwists.JPG','35€')">
             <div class="img-box"><img src="trancatwists.JPG" alt="Tranças Twist"></div>
             <div class="card-legenda"><b>Tranças "Twists"</b><span>A partir de 35€</span></div>
         </div>
-
         <div class="card" onclick="abrirModal('Tranças French','5H/8H','trancafrench.JPG','50€')">
             <div class="img-box"><img src="trancafrench.JPG" alt="Tranças French"></div>
             <div class="card-legenda"><b>Tranças "French"</b><span>A partir de 50€</span></div>
         </div>
-
-         <div class="card" onclick="abrirModal('Manutenção + Penteado','5H/8H','manutencaorastas.JPG','33€')">
+        <div class="card" onclick="abrirModal('Manutenção Rasta + Penteado','5H/8H','manutencaorastas.JPG','25€')">
             <div class="img-box"><img src="manutencaorastas.JPG" alt="Manutenção Rasta + Penteado"></div>
-            <div class="card-legenda"><b>Manutenção Rasta + Penteado"</b><span>A partir de 25€</span></div>
+            <div class="card-legenda"><b>Manutenção Rasta + Penteado</b><span>A partir de 25€</span></div>
         </div>
-
     </div>
 </div>
 
@@ -582,6 +298,19 @@
                 </div>
             </div>
         </div>
+
+        <!-- IMAGEM DE REFERÊNCIA -->
+        <div class="ref-img-secao">
+            <label>Imagem de referência (opcional)</label>
+            <p>Carregue uma foto do estilo que deseja para ajudar a nossa equipa.</p>
+            <div class="ref-img-upload">
+                <button class="btn-upload" onclick="document.getElementById('inputImgRef').click()">Escolher imagem</button>
+                <input type="file" id="inputImgRef" accept="image/*" onchange="carregarImgRef(event)">
+                <img id="previewImgRef" class="ref-img-preview" src="" alt="Preview">
+                <span class="ref-img-nome" id="nomeImgRef"></span>
+            </div>
+        </div>
+
         <div class="modal-obs">
             <span>Observação:</span><br>
             Caso não pretenda lavar o cabelo connosco, o cabelo deve estar limpo e desembaraçado,
@@ -593,7 +322,7 @@
     </div>
 </div>
 
-<!-- FOOTER (igual à pagInicial) -->
+<!-- FOOTER -->
 <div class="contactos">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
     <div class="insta">
@@ -604,103 +333,37 @@
 </div>
 
 <script>
-    /* ── LOGIN / PERFIL (igual à pagInicial) ── */
     const ulog = localStorage.getItem('ulog');
     const btn  = document.getElementById('btnAuth');
     const btnT = document.getElementById('btnAuthText');
     const btnM = document.getElementById('btnAuthMobile');
-
     if (ulog) {
         const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href  = 'perfil1.html';
-        btnM.href = 'perfil1.html';
+        btn.href = btnM.href = 'perfil1.html';
         const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = nome;
-        btnM.textContent = nome;
-    } else {
-        btn.href = 'login.html';
-        btnM.href = 'login.html';
-    }
+        btnT.textContent = btnM.textContent = nome;
+    } else { btn.href = 'login.html'; btnM.href = 'login.html'; }
 
-    /* ── HAMBURGER ── */
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    /* ── INFO MODAL DATA ── */
     const infoData = {
-        reparticao: {
-            img: 'repartição.png', titulo: 'REPARTIÇÃO', sub: 'do couro cabeludo',
-            temSelector: true, chave: 'reparticaoEscolhida',
-            opcoes: ['Brick-Lay', 'Square/Box', 'Diamond', 'Triangle', 'Organic/Freeform'],
-            items: [
-                '<strong>Brick-Lay</strong> → colocação de tijolo',
-                '<strong>Square/Box</strong> → quadrado-box',
-                '<strong>Diamond</strong> → losango',
-                '<strong>Triangle</strong> → triângulo',
-                '<strong>Organic/Freeform</strong> → orgânico / forma livre'
-            ]
-        },
-        divisao: {
-            img: 'divisão.png', titulo: 'DIVISÃO', sub: 'separação do cabelo em partes',
-            temSelector: true, chave: 'divisaoEscolhida',
-            opcoes: ['Extra Large', 'Large', 'Medium', 'Small', 'Extra Small'],
-            items: [
-                '<strong>Extra Large</strong> → tranças muito grossas',
-                '<strong>Large</strong> → tranças grossas',
-                '<strong>Medium</strong> → tranças médias',
-                '<strong>Small</strong> → tranças finas',
-                '<strong>Extra Small</strong> → tranças muito finas'
-            ]
-        },
-        cumprimento: {
-            img: 'cumprimento.png', titulo: 'CUMPRIMENTO', sub: 'das tranças',
-            temSelector: true, chave: 'cumprimentoEscolhido',
-            opcoes: [
-                'Neck length', 'Shoulder length', 'Armpit length', 'Bra Strap length',
-                'Mid-back length', 'Waist length', 'Hip length', 'Tailbone length',
-                'Classic length', 'Mid-thigh length', 'Knee length', 'Calf length',
-                'Ankle length', 'Floor length'
-            ],
-            items: [
-                '<strong>Neck length</strong> → altura do pescoço',
-                '<strong>Shoulder length</strong> → altura dos ombros',
-                '<strong>Armpit length</strong> → altura das axilas',
-                '<strong>Bra Strap length</strong> → altura do soutien',
-                '<strong>Mid-back length</strong> → meio das costas',
-                '<strong>Waist length</strong> → altura da cintura',
-                '<strong>Hip length</strong> → altura das ancas',
-                '<strong>Tailbone length</strong> → altura do cóccix',
-                '<strong>Classic length</strong> → comprimento clássico',
-                '<strong>Mid-thigh length</strong> → meio da coxa',
-                '<strong>Knee length</strong> → altura do joelho',
-                '<strong>Calf length</strong> → altura da barriga da perna',
-                '<strong>Ankle length</strong> → altura do tornozelo',
-                '<strong>Floor length</strong> → comprimento até ao chão'
-            ]
-        },
-        preparacao: {
-            img: 'preparação.jpg', titulo: 'PREPARAÇÃO', sub: 'do cabelo',
-            temSelector: false,
-            items: [
-                'Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.',
-                'Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.',
-                '<strong>O cabelo deve estar:</strong>',
-                '✔ Limpo', '✔ Seco', '✔ Sem creme', '✔ Desembaraçado'
-            ]
-        }
+        reparticao: { img:'repartição.png', titulo:'REPARTIÇÃO', sub:'do couro cabeludo', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>Brick-Lay</strong> → colocação de tijolo','<strong>Square/Box</strong> → quadrado-box','<strong>Diamond</strong> → losango','<strong>Triangle</strong> → triângulo','<strong>Organic/Freeform</strong> → orgânico / forma livre'] },
+        divisao: { img:'divisão.png', titulo:'DIVISÃO', sub:'separação do cabelo em partes', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>Extra Large</strong> → tranças muito grossas','<strong>Large</strong> → tranças grossas','<strong>Medium</strong> → tranças médias','<strong>Small</strong> → tranças finas','<strong>Extra Small</strong> → tranças muito finas'] },
+        cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'das tranças', temSelector:true, chave:'cumprimentoEscolhido', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>Neck length</strong> → altura do pescoço','<strong>Shoulder length</strong> → altura dos ombros','<strong>Armpit length</strong> → altura das axilas','<strong>Bra Strap length</strong> → altura do soutien','<strong>Mid-back length</strong> → meio das costas','<strong>Waist length</strong> → altura da cintura','<strong>Hip length</strong> → altura das ancas','<strong>Tailbone length</strong> → altura do cóccix','<strong>Classic length</strong> → comprimento clássico','<strong>Mid-thigh length</strong> → meio da coxa','<strong>Knee length</strong> → altura do joelho','<strong>Calf length</strong> → altura da barriga da perna','<strong>Ankle length</strong> → altura do tornozelo','<strong>Floor length</strong> → comprimento até ao chão'] },
+        preparacao: { img:'preparação.jpg', titulo:'PREPARAÇÃO', sub:'do cabelo', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O cabelo deve estar:</strong>','✔ Limpo','✔ Seco','✔ Sem creme','✔ Desembaraçado'] }
     };
 
     let _tipoAtual = '', _selectorAberto = false;
 
     function abrirInfoModal(tipo) {
-        const d = infoData[tipo];
-        _tipoAtual = tipo; _selectorAberto = false;
-        document.getElementById('infoImg').src          = d.img;
+        const d = infoData[tipo]; _tipoAtual = tipo; _selectorAberto = false;
+        document.getElementById('infoImg').src = d.img;
         document.getElementById('infoTitulo').innerHTML = d.titulo;
-        document.getElementById('infoSub').innerText    = d.sub;
-        document.getElementById('infoLista').innerHTML  = d.items.map(i => `<li>${i}</li>`).join('');
+        document.getElementById('infoSub').innerText = d.sub;
+        document.getElementById('infoLista').innerHTML = d.items.map(i=>`<li>${i}</li>`).join('');
         document.getElementById('infoLista').style.display = 'flex';
         document.getElementById('opcoesSelector').classList.remove('visivel');
         document.getElementById('opcoesSelector').innerHTML = '';
@@ -709,10 +372,7 @@
         document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
         if (d.temSelector && d.chave) {
             const guardada = localStorage.getItem(d.chave);
-            if (guardada) {
-                document.getElementById('escolhaConfirmada').innerText = '✔ Escolha atual: ' + guardada;
-                document.getElementById('escolhaConfirmada').style.display = 'block';
-            }
+            if (guardada) { document.getElementById('escolhaConfirmada').innerText = '✔ Escolha atual: ' + guardada; document.getElementById('escolhaConfirmada').style.display = 'block'; }
         }
         document.getElementById('modalInfo').classList.add('active');
     }
@@ -721,13 +381,12 @@
         const d = infoData[_tipoAtual];
         if (!d || !d.temSelector) return;
         _selectorAberto = !_selectorAberto;
-        const lista    = document.getElementById('infoLista');
+        const lista = document.getElementById('infoLista');
         const selector = document.getElementById('opcoesSelector');
         if (_selectorAberto) {
             lista.style.display = 'none';
             const guardada = localStorage.getItem(d.chave) || '';
-            selector.innerHTML = d.opcoes.map(op => `
-                <button class="opcao-btn ${op === guardada ? 'escolhido' : ''}" onclick="escolherOpcao('${op}')">${op}</button>`).join('');
+            selector.innerHTML = d.opcoes.map(op=>`<button class="opcao-btn ${op===guardada?'escolhido':''}" onclick="escolherOpcao('${op}')">${op}</button>`).join('');
             selector.classList.add('visivel');
             document.getElementById('btnEscolha').innerHTML = 'FECHAR <span class="btn-seta"></span>';
         } else {
@@ -740,29 +399,17 @@
     function escolherOpcao(opcao) {
         const d = infoData[_tipoAtual];
         localStorage.setItem(d.chave, opcao);
-        document.querySelectorAll('.opcao-btn').forEach(b => b.classList.remove('escolhido'));
+        document.querySelectorAll('.opcao-btn').forEach(b=>b.classList.remove('escolhido'));
         event.target.classList.add('escolhido');
         const conf = document.getElementById('escolhaConfirmada');
         conf.innerText = '✔ Escolha guardada: ' + opcao;
         conf.style.display = 'block';
-        setTimeout(() => {
-            _selectorAberto = false;
-            document.getElementById('infoLista').style.display = 'flex';
-            document.getElementById('opcoesSelector').classList.remove('visivel');
-            document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
-        }, 800);
+        setTimeout(()=>{ _selectorAberto=false; document.getElementById('infoLista').style.display='flex'; document.getElementById('opcoesSelector').classList.remove('visivel'); document.getElementById('btnEscolha').innerHTML='ESCOLHA AQUI <span class="btn-seta"></span>'; }, 800);
     }
 
-    function fecharInfoModal() {
-        document.getElementById('modalInfo').classList.remove('active');
-        _selectorAberto = false;
-    }
+    function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto=false; }
+    document.getElementById('modalInfo').addEventListener('click', function(e){ if(e.target===this) fecharInfoModal(); });
 
-    document.getElementById('modalInfo').addEventListener('click', function(e) {
-        if (e.target === this) fecharInfoModal();
-    });
-
-    /* ── MODAL SERVIÇO ── */
     let _nomeAtual = '';
 
     function abrirModal(nome, duracao, img, preco) {
@@ -778,12 +425,29 @@
         if (rep || div || cump) {
             prefsBox.style.display = 'block';
             document.getElementById('modalPrefRep').innerHTML  = rep  ? `<strong>Repartição:</strong> ${rep}`  : '';
-            document.getElementById('modalPrefDiv').innerHTML  = div  ? `<strong>Divisão:</strong> ${div}`      : '';
-            document.getElementById('modalPrefCump').innerHTML = cump ? `<strong>Cumprimento:</strong> ${cump}` : '';
-        } else {
-            prefsBox.style.display = 'none';
-        }
+            document.getElementById('modalPrefDiv').innerHTML  = div  ? `<strong>Divisão:</strong> ${div}`     : '';
+            document.getElementById('modalPrefCump').innerHTML = cump ? `<strong>Cumprimento:</strong> ${cump}`: '';
+        } else { prefsBox.style.display = 'none'; }
+        // Limpar imagem anterior
+        document.getElementById('previewImgRef').style.display = 'none';
+        document.getElementById('nomeImgRef').innerText = '';
+        document.getElementById('inputImgRef').value = '';
         document.getElementById('modalDetalhe').classList.add('active');
+    }
+
+    function carregarImgRef(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('previewImgRef');
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            document.getElementById('nomeImgRef').innerText = file.name;
+            localStorage.setItem('imgReferencia', e.target.result);
+            localStorage.setItem('imgReferenciaNome', file.name);
+        };
+        reader.readAsDataURL(file);
     }
 
     function irAgendar() {
@@ -791,14 +455,8 @@
         window.location.href = 'agendar.html';
     }
 
-    function fecharModal() {
-        document.getElementById('modalDetalhe').classList.remove('active');
-    }
-
-    document.getElementById('modalDetalhe').addEventListener('click', function(e) {
-        if (e.target === this) fecharModal();
-    });
+    function fecharModal() { document.getElementById('modalDetalhe').classList.remove('active'); }
+    document.getElementById('modalDetalhe').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
 </script>
-
 </body>
 </html>
