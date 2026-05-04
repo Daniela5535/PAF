@@ -151,7 +151,7 @@
 <div class="logotipo">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
-        <a href="serviços.html">SERVIÇOS</a>
+        <a href="servicos.html">SERVIÇOS</a>
         <a href="agendar.html">AGENDAR</a>
         <div class="mais-menu">
             <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
@@ -171,7 +171,7 @@
 
 <!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
-    <a href="serviços.html">SERVIÇOS</a>
+    <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
     <a href="contactos.html">CONTACTOS</a>
     <a href="marcacoes.html">MARCAÇÕES</a>
@@ -181,8 +181,8 @@
 
 <!-- BANNER -->
 <div class="banner">
-    <h1>SERVIÇOS</h1>
-    <p>Descubra os estilos de tranças afro que oferecemos</p>
+    <h1>O QUE OFERECEMOS </h1>
+    <p> Vem e descubre os estilos de tranças africanas!</p>
 </div>
 
 <!-- INFO SECÇÃO -->
@@ -190,11 +190,11 @@
     <p>Aqui, na Easy Glow cada serviço é pensado para valorizar o seu cabelo afro e a sua identidade.</p>
     <div class="info-grid">
         <div class="info-card" onclick="abrirInfoModal('reparticao')">
-            <img src="repartição.png" alt="Repartição">
+            <img src="reparticao.png" alt="Repartição">
             <div class="info-card-texto"><h3>REPARTIÇÃO</h3><p>do couro cabeludo</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('divisao')">
-            <img src="divisão.png" alt="Divisão">
+            <img src="divisao.png" alt="Divisão">
             <div class="info-card-texto"><h3>DIVISÃO</h3><p>separação do cabelo em partes</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('cumprimento')">
@@ -202,7 +202,7 @@
             <div class="info-card-texto"><h3>CUMPRIMENTO</h3><p>das tranças</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('preparacao')">
-            <img src="preparação.jpg" alt="Preparação">
+            <img src="preparacao.jpg" alt="Preparação">
             <div class="info-card-texto"><h3>PREPARAÇÃO</h3><p>do cabelo</p></div>
         </div>
     </div>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="modal-preco" id="modalPreco"></div>
                 <div class="modal-prefs" id="modalPrefs">
-                    <div class="modal-prefs-titulo">✔ As suas preferências:</div>
+                    <div class="modal-prefs-titulo">&#10004; As suas preferências:</div>
                     <div id="modalPrefRep"></div>
                     <div id="modalPrefDiv"></div>
                     <div id="modalPrefCump"></div>
@@ -350,10 +350,10 @@
     }
 
     const infoData = {
-        reparticao: { img:'repartição.png', titulo:'REPARTIÇÃO', sub:'do couro cabeludo', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>Brick-Lay</strong> → colocação de tijolo','<strong>Square/Box</strong> → quadrado-box','<strong>Diamond</strong> → losango','<strong>Triangle</strong> → triângulo','<strong>Organic/Freeform</strong> → orgânico / forma livre'] },
-        divisao: { img:'divisão.png', titulo:'DIVISÃO', sub:'separação do cabelo em partes', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>Extra Large</strong> → tranças muito grossas','<strong>Large</strong> → tranças grossas','<strong>Medium</strong> → tranças médias','<strong>Small</strong> → tranças finas','<strong>Extra Small</strong> → tranças muito finas'] },
+        reparticao: { img:'reparticao.png', titulo:'REPARTI&#199;&#195;O', sub:'do couro cabeludo', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>Brick-Lay</strong> → colocação de tijolo','<strong>Square/Box</strong> → quadrado-box','<strong>Diamond</strong> → losango','<strong>Triangle</strong> → triângulo','<strong>Organic/Freeform</strong> → orgânico / forma livre'] },
+        divisao: { img:'divisao.png', titulo:'DIVIS&#195;O', sub:'separação do cabelo em partes', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>Extra Large</strong> → tranças muito grossas','<strong>Large</strong> → tranças grossas','<strong>Medium</strong> → tranças médias','<strong>Small</strong> → tranças finas','<strong>Extra Small</strong> → tranças muito finas'] },
         cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'das tranças', temSelector:true, chave:'cumprimentoEscolhido', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>Neck length</strong> → altura do pescoço','<strong>Shoulder length</strong> → altura dos ombros','<strong>Armpit length</strong> → altura das axilas','<strong>Bra Strap length</strong> → altura do soutien','<strong>Mid-back length</strong> → meio das costas','<strong>Waist length</strong> → altura da cintura','<strong>Hip length</strong> → altura das ancas','<strong>Tailbone length</strong> → altura do cóccix','<strong>Classic length</strong> → comprimento clássico','<strong>Mid-thigh length</strong> → meio da coxa','<strong>Knee length</strong> → altura do joelho','<strong>Calf length</strong> → altura da barriga da perna','<strong>Ankle length</strong> → altura do tornozelo','<strong>Floor length</strong> → comprimento até ao chão'] },
-        preparacao: { img:'preparação.jpg', titulo:'PREPARAÇÃO', sub:'do cabelo', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O cabelo deve estar:</strong>','✔ Limpo','✔ Seco','✔ Sem creme','✔ Desembaraçado'] }
+        preparacao: { img:'preparacao.jpg', titulo:'PREPARA&#199;&#195;O', sub:'do cabelo', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O cabelo deve estar:</strong>','&#10004; Limpo','&#10004; Seco','&#10004; Sem creme','&#10004; Desembaraçado'] }
     };
 
     let _tipoAtual = '', _selectorAberto = false;
@@ -428,7 +428,6 @@
             document.getElementById('modalPrefDiv').innerHTML  = div  ? `<strong>Divisão:</strong> ${div}`     : '';
             document.getElementById('modalPrefCump').innerHTML = cump ? `<strong>Cumprimento:</strong> ${cump}`: '';
         } else { prefsBox.style.display = 'none'; }
-        // Limpar imagem anterior
         document.getElementById('previewImgRef').style.display = 'none';
         document.getElementById('nomeImgRef').innerText = '';
         document.getElementById('inputImgRef').value = '';
