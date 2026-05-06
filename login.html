@@ -47,18 +47,17 @@
         .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
 
-       .menu-mobile { 
-            display:none; 
-            flex-direction:column; 
-            background:#fff; 
-            border-bottom:1px solid #eee; 
-            padding:16px 20px; 
-            gap:14px; 
-            position:fixed;
-            top:57px;
-            left:0;
-            width:100%;
-            z-index:999;
+        .menu-mobile { 
+            display: none; 
+            flex-direction: column; 
+            background: #fff; 
+            border-bottom: 1px solid #eee; 
+            padding: 16px 20px; 
+            gap: 14px; 
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
@@ -126,7 +125,7 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="logotipo">
+<div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
@@ -237,24 +236,39 @@
 <script>
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
-        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        const navbar = document.getElementById('navbar');
+        const navbarHeight = navbar.offsetHeight;
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbarHeight + 'px';
+            m.style.display = 'flex';
+        }
     }
+
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
 
     let modoLogin = false, codigoGerado = "";
 
     function mostrarErro(msg) {
         const el=document.getElementById("msgErro");      
-    el.innerText=msg; 
-    el.style.display="block"; 
-    document.getElementById("msgSucesso").style.display="none";    
-    setTimeout(()=>el.style.display="none",4000); 
-}
-    function mostrarSucesso(msg)   { 
+        el.innerText=msg; 
+        el.style.display="block"; 
+        document.getElementById("msgSucesso").style.display="none";    
+        setTimeout(()=>el.style.display="none",4000); 
+    }
+    function mostrarSucesso(msg) { 
         const el=document.getElementById("msgSucesso");   
         el.innerText=msg; el.style.display="block";
         document.getElementById("msgErro").style.display="none"; 
     }
-    function mostrarErroRec(msg)   { 
+    function mostrarErroRec(msg) { 
         const el=document.getElementById("msgErroRec");   
         el.innerText=msg; el.style.display="block"; 
         document.getElementById("msgSucessoRec").style.display="none"; 

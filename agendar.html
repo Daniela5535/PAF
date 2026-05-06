@@ -32,7 +32,6 @@
             padding:16px 20px; 
             gap:14px; 
             position:fixed;
-            top:57px;
             left:0;
             width:100%;
             z-index:999;
@@ -109,7 +108,7 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="logotipo">
+<div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
@@ -265,8 +264,23 @@
 
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
-        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        const navbar = document.getElementById('navbar');
+        const navbarHeight = navbar.offsetHeight;
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbarHeight + 'px';
+            m.style.display = 'flex';
+        }
     }
+
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
 
     /* CALENDÁRIO */
     const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -329,7 +343,6 @@
             if (ud.nome) document.getElementById('nome').value = ud.nome;
         }
 
-        // Serviço pré-selecionado
         const s = localStorage.getItem('servicoEscolhido');
         if (s) {
             const sel = document.getElementById('servico');
@@ -344,7 +357,6 @@
             localStorage.removeItem('servicoEscolhido');
         }
 
-        // Preferências
         const rep  = localStorage.getItem('reparticaoEscolhida');
         const div  = localStorage.getItem('divisaoEscolhida');
         const cump = localStorage.getItem('cumprimentoEscolhido');
@@ -355,7 +367,6 @@
             if (cump) document.getElementById('prefCump').innerHTML = '<strong>Cumprimento:</strong> ' + cump;
         }
 
-        // Imagem de referência
         const imgRef  = localStorage.getItem('imgReferencia');
         const imgNome = localStorage.getItem('imgReferenciaNome');
         if (imgRef) {

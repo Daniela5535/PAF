@@ -100,7 +100,6 @@
 
         .btn-login:hover { opacity: 0.8; }
 
-        /* menu hamburger mobile */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -119,17 +118,16 @@
         }
 
         .menu-mobile { 
-            display:none; 
-            flex-direction:column; 
-            background:#fff; 
-            border-bottom:1px solid #eee; 
-            padding:16px 20px; 
-            gap:14px; 
-            position:fixed;
-            top:57px;
-            left:0;
-            width:100%;
-            z-index:999;
+            display: none; 
+            flex-direction: column; 
+            background: #fff; 
+            border-bottom: 1px solid #eee; 
+            padding: 16px 20px; 
+            gap: 14px; 
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
@@ -429,18 +427,6 @@
 
         /* ── FOOTER ── */
         .contactos {
-            background: #1a1410;
-            color: #c8b8a8;
-            text-align: center;
-            padding: 28px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .contactos {
             background: #f8f8f8;
             color: #555;
             text-align: center;
@@ -453,27 +439,17 @@
             border-top: 1px solid #eee;
         }
 
-            .contactos p { 
-                font-size: 15px; 
-                color: #555; 
-            }
-            .insta span  { 
-                font-size: 14px; 
-                color: #555; 
-            }
-            .icon { 
-                width: 26px; 
-                filter: none; 
-                opacity: 1; 
-            }
+        .contactos p { font-size: 15px; color: #555; }
+        .insta span  { font-size: 14px; color: #555; }
+        .icon { width: 26px; filter: none; opacity: 1; }
 
-            .footer-copy {
-                font-size: 12px;
-                color: #aaa;
-                width: 100%;
-                text-align: center;
-                margin-top: 4px;
-            }
+        .footer-copy {
+            font-size: 12px;
+            color: #aaa;
+            width: 100%;
+            text-align: center;
+            margin-top: 4px;
+        }
 
         /* ── MOBILE ── */
         @media (max-width: 768px) {
@@ -509,14 +485,13 @@
 <body>
 
     <!-- NAVBAR -->
-    <div class="logotipo">
+    <div class="logotipo" id="navbar">
         <div class="logo">
             <a href="index.html">
                 <img src="novologo.PNG" alt="Easy Glow Logo">
             </a>
         </div>
 
-        <!-- menu desktop -->
         <div class="menu">
             <a href="servicos.html">SERVIÇOS</a>
             <a href="agendar.html">AGENDAR</a>
@@ -537,7 +512,6 @@
             </a>
         </div>
 
-        <!-- hamburger mobile -->
         <div class="menu-toggle" onclick="toggleMenu()">
             <span></span><span></span><span></span>
         </div>
@@ -660,7 +634,6 @@
     </div>
 
     <script>
-        // silenciar vídeos
         document.querySelectorAll('video').forEach(v => {
             v.muted = true; v.volume = 0;
             v.addEventListener('volumechange', function() {
@@ -668,13 +641,26 @@
             });
         });
 
-        // hamburger
         function toggleMenu() {
             const m = document.getElementById('menuMobile');
-            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+            const navbar = document.getElementById('navbar');
+            const navbarHeight = navbar.offsetHeight;
+            if (m.style.display === 'flex') {
+                m.style.display = 'none';
+            } else {
+                m.style.top = navbarHeight + 'px';
+                m.style.display = 'flex';
+            }
         }
 
-        // login / perfil
+        document.addEventListener('click', function(e) {
+            const m = document.getElementById('menuMobile');
+            const toggle = document.querySelector('.menu-toggle');
+            if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+                m.style.display = 'none';
+            }
+        });
+
         const ulog = localStorage.getItem('ulog');
         const btn  = document.getElementById('btnAuth');
         const btnT = document.getElementById('btnAuthText');
@@ -691,13 +677,11 @@
             btn.href = 'login.html'; btnM.href = 'login.html';
         }
 
-        // botão agendar agora
         document.querySelector('.btn-agendar-banner').onclick = function() {
             if (localStorage.getItem('ulog')) { location.href = 'agendar.html'; }
             else { localStorage.setItem('redirectAfterLogin', 'agendar.html'); location.href = 'login.html'; }
         };
 
-        // subscrever
         function subscrever() {
             const email = document.getElementById('emailInput').value.trim();
             if (!email || !email.includes('@')) { alert('Por favor introduza um email válido.'); return; }
@@ -707,7 +691,6 @@
             setTimeout(() => msg.style.display = 'none', 4000);
         }
 
-        // galeria
         const galeria  = document.getElementById('galeria');
         const dotsEl   = document.getElementById('galeriaDots');
         const cardW    = 185 + 14;
@@ -731,7 +714,6 @@
             galeria.scrollBy({ left: dir * (cardW * 3), behavior: 'smooth' });
         }
 
-        // arrastar
         let isDown = false, startX, scrollL;
         galeria.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - galeria.offsetLeft; scrollL = galeria.scrollLeft; });
         galeria.addEventListener('mouseleave', () => isDown = false);

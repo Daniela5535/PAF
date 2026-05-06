@@ -25,7 +25,7 @@
         .mais-links {
             display: none; position: absolute; top: calc(100% + 10px); right: 0;
             background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
+            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 9999; overflow: hidden;
         }
         .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
         .mais-links a:hover { background: #f5f5f5; }
@@ -42,17 +42,16 @@
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
 
         .menu-mobile { 
-            display:none; 
-            flex-direction:column; 
-            background:#fff; 
-            border-bottom:1px solid #eee; 
-            padding:16px 20px; 
-            gap:14px; 
-            position:fixed;
-            top:57px;
-            left:0;
-            width:100%;
-            z-index:999;
+            display: none; 
+            flex-direction: column; 
+            background: #fff; 
+            border-bottom: 1px solid #eee; 
+            padding: 16px 20px; 
+            gap: 14px; 
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
@@ -134,7 +133,7 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="logotipo">
+<div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
@@ -162,7 +161,7 @@
 
 <!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
-    <a href="serviços.html">SERVIÇOS</a>
+    <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
     <a href="contactos.html">CONTACTOS</a>
     <a href="marcacoes.html">MARCAÇÕES</a>
@@ -236,14 +235,31 @@
     /* ── HAMBURGER ── */
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
-        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        const navbar = document.getElementById('navbar');
+        const navbarHeight = navbar.offsetHeight;
+        
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbarHeight + 'px';
+            m.style.display = 'flex';
+        }
     }
+
+    // Fechar menu ao clicar fora
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
 
     let cancelarIndex = null;
 
     function badgeClasse(estado) {
-        const m = { 'Pendente':'pendente','Confirmado':'confirmado','Cancelado':'cancelado','Rejeitado':'rejeitado' };
-        return 'badge badge-' + (m[estado] || 'pendente');
+        const map = { 'Pendente':'pendente','Confirmado':'confirmado','Cancelado':'cancelado','Rejeitado':'rejeitado' };
+        return 'badge badge-' + (map[estado] || 'pendente');
     }
 
     function renderizar() {

@@ -6,129 +6,42 @@
     <title>Easy Glow — Sobre</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background: #fff; }
-
-        /* ── NAVBAR ── */
-        .logotipo {
-            width: 100%; padding: 10px 20px; display: flex; align-items: center;
-            justify-content: space-between; background: #fff; border-bottom: 1px solid #eee;
-            position: sticky; top: 0; z-index: 1000;
-        }
+        .logotipo { width: 100%; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
         .logo img { width: 150px; display: block; }
-        .menu { display: flex; align-items: center; gap: 22px;font-weight:bold; }
+        .menu { display: flex; align-items: center; gap: 22px; font-weight: bold; }
         .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
         .menu a:hover { color: #888; }
         .mais-menu { position: relative; cursor: pointer; }
-        .mais-links {
-            display: none; position: absolute; top: calc(100% + 10px); right: 0;
-            background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
-        }
+        .mais-links { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden; }
         .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
         .mais-links a:hover { background: #f5f5f5; }
         .mais-menu:hover .mais-links { display: flex; }
-
-        .btn-login {
-            background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
-            font-size: 13px; font-weight: bold; text-decoration: none;
-            display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
-        }
+        .btn-login { background: #111; color: white !important; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap; }
         .btn-login:hover { opacity: 0.8; }
-
         .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
-
-        .menu-mobile { 
-            display:none; 
-            flex-direction:column; 
-            background:#fff; 
-            border-bottom:1px solid #eee; 
-            padding:16px 20px; 
-            gap:14px; 
-            position:fixed;
-            top:57px;
-            left:0;
-            width:100%;
-            z-index:999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .menu-mobile { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
-
-        /* ── BANNER ── */
-        .banner {
-            width: 100%;
-            text-align: center;
-            padding: 40px 20px;
-        }
-        .banner h1 { font-family: 'High Cruiser', Arial, sans-serif; 
-        font-size: 50px; 
-        margin-bottom: 16px; 
-    }
-        .banner p { 
-            font-size: 15px; 
-            color: #444; 
-            line-height: 1.8; 
-            max-width: 700px; 
-            margin: 0 auto 10px; 
-        }
-
-        /* ── IMAGEM ── */
-        .sobre-img {
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+        .banner { width: 100%; text-align: center; padding: 40px 20px; }
+        .banner h1 { font-family: 'High Cruiser', Arial, sans-serif; font-size: 50px; margin-bottom: 16px; }
+        .banner p { font-size: 15px; color: #444; line-height: 1.8; max-width: 700px; margin: 0 auto 10px; }
+        .sobre-img { display: flex; justify-content: center; padding: 40px 20px; }
         .sobre-img img { max-width: 100%; border-radius: 12px; }
-
-        /* ── RODAPÉ INTERNO ── */
-        .rodape {
-            background: #ffffff;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .botao-agendar {
-            background-color: #eae1d2;
-            border-top: 2px solid #f7f2e6;
-            border-left: 2px solid #f7f2e6;
-            border-bottom: 2px solid #bba788;
-            border-right: 2px solid #bba788;
-            border-radius: 20px;
-            padding: 10px 28px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #555 !important;
-            text-decoration: none !important;
-            display: inline-block;
-            font-size: 14px;
-            transition: background-color 0.2s ease;
-        }
+        .rodape { background: #ffffff; text-align: center; padding: 40px 20px; }
+        .botao-agendar { background-color: #eae1d2; border-top: 2px solid #f7f2e6; border-left: 2px solid #f7f2e6; border-bottom: 2px solid #bba788; border-right: 2px solid #bba788; border-radius: 20px; padding: 10px 28px; cursor: pointer; font-weight: bold; color: #555 !important; text-decoration: none !important; display: inline-block; font-size: 14px; transition: background-color 0.2s ease; }
         .botao-agendar:hover { background-color: #d6c6ad; }
-
         .rodape hr { width: 80%; margin: 30px auto; border: none; border-top: 1px solid #ddd; }
-
         .rodape-texto p { font-size: 15px; color: #444; margin: 8px 0; line-height: 1.6; }
-
         .copyright { margin-top: 20px; font-size: 12px; color: #888; }
-
-        /* ── FOOTER ── */
-        .footer {
-            background: #f8f8f8; color: #555; text-align: center; padding: 20px;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            flex-wrap: wrap; border-top: 1px solid #eee; margin-top: auto;
-        }
+        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; margin-top: auto; }
         .footer p { font-size: 15px; color: #555; }
         .insta { display: flex; align-items: center; gap: 6px; }
         .insta span { font-size: 14px; color: #555; }
         .icon { width: 26px; }
         .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
-
-        @font-face { 
-            font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') 
-            format('truetype'); 
-    }
+        @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
         @media (max-width: 768px) {
             .menu { display: none; }
             .menu-toggle { display: flex; }
@@ -139,8 +52,7 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<div class="logotipo">
+<div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
@@ -154,21 +66,15 @@
             </div>
         </div>
         <a id="btnAuth" href="login.html" class="btn-login">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             <span id="btnAuthText">LOGIN</span>
         </a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
 
-<!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
-    <a href="serviços.html">SERVIÇOS</a>
+    <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
     <a href="contactos.html">CONTACTOS</a>
     <a href="marcacoes.html">MARCAÇÕES</a>
@@ -176,23 +82,10 @@
     <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
 </div>
 
-<!-- botao voltar -->
 <div style="padding: 12px 20px;">
-    <button onclick="history.back()" style="
-        background: none;
-        border: none;
-        font-size: 13px;
-        font-weight: bold;
-        color: #111;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.5px;
-    ">← VOLTAR</button>
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
-<!-- BANNER -->
 <div class="banner">
     <h1>SOBRE</h1>
     <p>As tranças afro têm raízes profundas na história do continente africano.</p>
@@ -200,12 +93,10 @@
     <p>Durante a diáspora africana, as tranças tornaram-se também um símbolo de resistência e liberdade, preservando tradições que o tempo e a opressão não conseguiram apagar. Hoje, continuam a representar orgulho, identidade e poder.</p>
 </div>
 
-<!-- IMAGEM -->
 <div class="sobre-img">
     <img src="mosaicosobre.png" alt="Mosaico sobre Easy Glow">
 </div>
 
-<!-- RODAPÉ INTERNO -->
 <div class="rodape">
     <a href="agendar.html" class="botao-agendar">AGENDAR AGORA</a>
     <hr>
@@ -218,7 +109,6 @@
     <p class="copyright">© Easy Glow</p>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
     <div class="insta">
@@ -228,12 +118,26 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
-
 <script>
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
-        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        const navbar = document.getElementById('navbar');
+        const navbarHeight = navbar.offsetHeight;
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbarHeight + 'px';
+            m.style.display = 'flex';
+        }
     }
+
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
 
     const ulog = localStorage.getItem('ulog');
     const btn  = document.getElementById('btnAuth');
