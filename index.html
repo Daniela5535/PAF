@@ -118,13 +118,19 @@
             transition: 0.3s;
         }
 
-        .menu-mobile {
-            display: none;
-            flex-direction: column;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            padding: 16px 20px;
-            gap: 14px;
+        .menu-mobile { 
+            display:none; 
+            flex-direction:column; 
+            background:#fff; 
+            border-bottom:1px solid #eee; 
+            padding:16px 20px; 
+            gap:14px; 
+            position:fixed;
+            top:57px;
+            left:0;
+            width:100%;
+            z-index:999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .menu-mobile a {
