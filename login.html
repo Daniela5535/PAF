@@ -119,7 +119,7 @@
 <div class="logotipo">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
-        <a href="serviços.html">SERVIÇOS</a>
+        <a href="servicos.html">SERVIÇOS</a>
         <a href="preços.html">PREÇOS</a>
         <a href="agendar.html">AGENDAR</a>
         <div class="mais-menu">
@@ -151,6 +151,21 @@
     <a href="marcacoes.html">MARCAÇÕES</a>
     <a href="sobre.html">SOBRE</a>
     <a href="login.html" class="btn-login">LOGIN</a>
+</div>
+
+<div style="padding: 12px 20px;">
+    <button onclick="history.back()" style="
+        background: none;
+        border: none;
+        font-size: 13px;
+        font-weight: bold;
+        color: #111;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.5px;
+    ">← VOLTAR</button>
 </div>
 
 <div class="form-wrap">
@@ -217,10 +232,29 @@
 
     let modoLogin = false, codigoGerado = "";
 
-    function mostrarErro(msg)      { const el=document.getElementById("msgErro");      el.innerText=msg; el.style.display="block"; document.getElementById("msgSucesso").style.display="none";    setTimeout(()=>el.style.display="none",4000); }
-    function mostrarSucesso(msg)   { const el=document.getElementById("msgSucesso");   el.innerText=msg; el.style.display="block"; document.getElementById("msgErro").style.display="none"; }
-    function mostrarErroRec(msg)   { const el=document.getElementById("msgErroRec");   el.innerText=msg; el.style.display="block"; document.getElementById("msgSucessoRec").style.display="none"; setTimeout(()=>el.style.display="none",4000); }
-    function mostrarSucessoRec(msg){ const el=document.getElementById("msgSucessoRec");el.innerText=msg; el.style.display="block"; document.getElementById("msgErroRec").style.display="none"; }
+    function mostrarErro(msg) {
+        const el=document.getElementById("msgErro");      
+    el.innerText=msg; 
+    el.style.display="block"; 
+    document.getElementById("msgSucesso").style.display="none";    
+    setTimeout(()=>el.style.display="none",4000); 
+}
+    function mostrarSucesso(msg)   { 
+        const el=document.getElementById("msgSucesso");   
+        el.innerText=msg; el.style.display="block";
+        document.getElementById("msgErro").style.display="none"; 
+    }
+    function mostrarErroRec(msg)   { 
+        const el=document.getElementById("msgErroRec");   
+        el.innerText=msg; el.style.display="block"; 
+        document.getElementById("msgSucessoRec").style.display="none"; 
+        setTimeout(()=>el.style.display="none",4000); 
+    }
+    function mostrarSucessoRec(msg){ 
+        const el=document.getElementById("msgSucessoRec");
+        el.innerText=msg; el.style.display="block"; 
+        document.getElementById("msgErroRec").style.display="none"; 
+    }
 
     function switchMode() {
         modoLogin = !modoLogin;
@@ -297,12 +331,22 @@
         const cd = document.getElementById("cd").value.trim();
         const np  = document.getElementById("np").value;
         const cnp = document.getElementById("cnp").value;
-        if (cd !== codigoGerado) { mostrarErroRec("Código incorreto."); return; }
-        if (np.length < 6)       { mostrarErroRec("A senha deve ter pelo menos 6 caracteres."); return; }
-        if (np !== cnp)          { mostrarErroRec("As palavras-passe não coincidem."); return; }
+        if (cd !== codigoGerado) { 
+            mostrarErroRec("Código incorreto."); return; 
+        }
+        if (np.length < 6)       { 
+            mostrarErroRec("A senha deve ter pelo menos 6 caracteres."); return; 
+        }
+        if (np !== cnp)          { 
+            mostrarErroRec("As palavras-passe não coincidem."); return; 
+        }
         const em   = document.getElementById("re").value.trim();
         const user = JSON.parse(localStorage.getItem(em));
-        if (user) { user.password = np; localStorage.setItem(em, JSON.stringify(user)); mostrarSucessoRec("Palavra-passe alterada!"); setTimeout(() => fecharRecuperacao(), 1500); }
+        if (user) { 
+            user.password = np; localStorage.setItem(em, JSON.stringify(user)); 
+            mostrarSucessoRec("Palavra-passe alterada!"); 
+            setTimeout(() => fecharRecuperacao(), 1500); 
+        }
         else mostrarErroRec("Conta não encontrada.");
     }
 

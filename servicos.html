@@ -41,7 +41,7 @@
         .info-card:hover { opacity:0.85; }
         .info-card img { width:100%; height:240px; object-fit:cover; display:block; }
         .info-card-texto { padding:14px 12px; background:white; border-top:1.5px solid #222; }
-        .info-card-texto h3 { font-family:'High Cruiser',Arial,sans-serif; font-size:16px; margin:0 0 4px; letter-spacing:1px; }
+        .info-card-texto h3 { font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size:16px; margin:0 0 4px; letter-spacing:1px; }
         .info-card-texto p { font-size:12px; color:#555; margin:0; }
 
         /* GRID SERVIÇOS */
@@ -65,19 +65,19 @@
         .modal-info-img img { width:100%; height:100%; object-fit:cover; }
         .modal-info-content { flex:1; display:flex; flex-direction:column; justify-content:center; gap:15px; }
         .modal-info-titulo { font-family:'High Cruiser',Arial,sans-serif; font-size:20px; letter-spacing:1px; margin:0; }
-        .modal-info-sub { font-size:13px; color:#ccc; margin:0; }
+        .modal-info-sub { font-size:13px; color:#ccc; margin:0; font-weight:bold; text-transform:uppercase; }
         .modal-info-lista { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
         .modal-info-lista li { font-size:14px; color:#eee; line-height:1.5; }
-        .modal-info-lista li strong { color:#c77dbd; }
+        .modal-info-lista li strong { color:#c77dbd; text-transform:uppercase; }
         .btn-escolha { background:black; color:white; border:none; border-radius:25px; padding:12px 30px; font-size:14px; font-weight:bold; cursor:pointer; align-self:flex-start; display:inline-flex; align-items:center; gap:10px; }
         .btn-escolha:hover { background:#333; }
         .btn-seta { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:10px solid #c77dbd; }
         .opcoes-selector { display:none; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto; margin-top:6px; }
         .opcoes-selector.visivel { display:flex; }
-        .opcao-btn { background:#444; color:#eee; border:2px solid #666; border-radius:20px; padding:7px 16px; font-size:13px; cursor:pointer; text-align:left; transition:0.2s; }
+        .opcao-btn { background:#444; color:#eee; border:2px solid #666; border-radius:20px; padding:7px 16px; font-size:13px; cursor:pointer; text-align:left; transition:0.2s; font-weight:bold; text-transform:uppercase; }
         .opcao-btn:hover { background:#555; border-color:#c77dbd; }
         .opcao-btn.escolhido { background:#222; border-color:#c77dbd; color:#c77dbd; font-weight:bold; }
-        .escolha-confirmada { display:none; margin-top:8px; background:#2a2a2a; border:1px solid #c77dbd; border-radius:10px; padding:8px 14px; font-size:13px; color:#c77dbd; }
+        .escolha-confirmada { display:none; margin-top:8px; background:#2a2a2a; border:1px solid #c77dbd; border-radius:10px; padding:8px 14px; font-size:13px; color:#c77dbd; font-weight:bold; text-transform:uppercase; }
 
         /* MODAL SERVIÇO */
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; overflow-y:auto; padding:16px; }
@@ -89,16 +89,17 @@
         .modal-img { width:260px; height:260px; border-radius:16px; overflow:hidden; background:#888; flex-shrink:0; }
         .modal-img img { width:100%; height:100%; object-fit:cover; }
         .modal-info { flex:1; display:flex; flex-direction:column; gap:14px; padding-top:6px; }
-        .modal-titulo { font-size:20px; font-weight:bold; line-height:1.6; }
+        .modal-titulo { font-size:20px; font-weight:bold; line-height:1.6; text-transform:uppercase; }
         .modal-preco { font-size:20px; font-weight:bold; color:#c77dbd; }
         .modal-prefs { display:none; background:#3a3a3a; border:1px solid #c77dbd; border-radius:10px; padding:10px 14px; font-size:13px; color:#eee; line-height:1.8; }
-        .modal-prefs-titulo { color:#c77dbd; font-weight:bold; margin-bottom:4px; }
+        .modal-prefs-titulo { color:#c77dbd; font-weight:bold; margin-bottom:4px; text-transform:uppercase; }
+        .modal-prefs strong { text-transform:uppercase; font-weight:bold; }
         .modal-obs { font-size:13px; line-height:1.7; color:#e0e0e0; }
-        .modal-obs span { color:#c77dbd; font-weight:bold; }
+        .modal-obs span { color:#c77dbd; font-weight:bold; text-transform:uppercase; }
 
         /* CAMPO IMAGEM REFERÊNCIA */
         .ref-img-secao { background:#3a3a3a; border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:10px; }
-        .ref-img-secao label { font-size:13px; font-weight:bold; color:#c77dbd; }
+        .ref-img-secao label { font-size:13px; font-weight:bold; color:#c77dbd; text-transform:uppercase; }
         .ref-img-secao p { font-size:12px; color:#ccc; }
         .ref-img-upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
         .btn-upload { background:#111; color:white; border:none; border-radius:20px; padding:8px 18px; font-size:13px; font-weight:bold; cursor:pointer; }
@@ -107,7 +108,9 @@
         .ref-img-nome { font-size:12px; color:#aaa; }
         input[type="file"] { display:none; }
 
-        .modal-rodape { text-align:right; }
+        .modal-rodape { display:flex; justify-content:space-between; align-items:center; }
+        .btn-voltar { background:none; color:#ccc; border:1px solid #ccc; border-radius:25px; padding:10px 24px; font-size:13px; font-weight:bold; cursor:pointer; letter-spacing:1px; transition:0.2s; }
+        .btn-voltar:hover { background:#444; color:white; border-color:white; }
         .btn-agendar { background:#111; color:white; border:none; border-radius:25px; padding:13px 45px; font-size:15px; font-weight:bold; cursor:pointer; letter-spacing:1px; }
         .btn-agendar:hover { background:#333; }
 
@@ -179,6 +182,21 @@
     <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
 </div>
 
+<div style="padding: 12px 20px;">
+    <button onclick="history.back()" style="
+        background: none;
+        border: none;
+        font-size: 13px;
+        font-weight: bold;
+        color: #111;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.5px;
+    ">← VOLTAR</button>
+</div>
+
 <!-- BANNER -->
 <div class="banner">
     <h1>O QUE OFERECEMOS </h1>
@@ -187,23 +205,23 @@
 
 <!-- INFO SECÇÃO -->
 <div class="info-secao">
-    <p>Aqui, na Easy Glow cada serviço é pensado para valorizar o seu cabelo afro e a sua identidade.</p>
+    <p>Aqui, na Easy Glow cada serviço é pensado para valorizar o seu cabelo e a tua identidade.</p>
     <div class="info-grid">
         <div class="info-card" onclick="abrirInfoModal('reparticao')">
             <img src="reparticao.png" alt="Repartição">
-            <div class="info-card-texto"><h3>REPARTIÇÃO</h3><p>do couro cabeludo</p></div>
+            <div class="info-card-texto"><h3>REPARTIÇÃO</h3><p>DO COURO CABELUDO</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('divisao')">
             <img src="divisao.png" alt="Divisão">
-            <div class="info-card-texto"><h3>DIVISÃO</h3><p>separação do cabelo em partes</p></div>
+            <div class="info-card-texto"><h3>DIVISÃO</h3><p>SEPARAÇÃO DO CABELO EM PARTES</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('cumprimento')">
             <img src="cumprimento.png" alt="Cumprimento">
-            <div class="info-card-texto"><h3>CUMPRIMENTO</h3><p>das tranças</p></div>
+            <div class="info-card-texto"><h3>CUMPRIMENTO</h3><p>DAS TRANÇAS</p></div>
         </div>
         <div class="info-card" onclick="abrirInfoModal('preparacao')">
             <img src="preparacao.jpg" alt="Preparação">
-            <div class="info-card-texto"><h3>PREPARAÇÃO</h3><p>do cabelo</p></div>
+            <div class="info-card-texto"><h3>PREPARAÇÃO</h3><p>DO CABELO</p></div>
         </div>
     </div>
 </div>
@@ -287,11 +305,11 @@
             <div class="modal-info">
                 <div class="modal-titulo">
                     <span id="modalNome"></span><br>
-                    Duração: <span id="modalDuracao"></span>
+                    DURAÇÃO: <span id="modalDuracao"></span>
                 </div>
                 <div class="modal-preco" id="modalPreco"></div>
                 <div class="modal-prefs" id="modalPrefs">
-                    <div class="modal-prefs-titulo">&#10004; As suas preferências:</div>
+                    <div class="modal-prefs-titulo">&#10004; AS SUAS PREFERÊNCIAS:</div>
                     <div id="modalPrefRep"></div>
                     <div id="modalPrefDiv"></div>
                     <div id="modalPrefCump"></div>
@@ -301,10 +319,10 @@
 
         <!-- IMAGEM DE REFERÊNCIA -->
         <div class="ref-img-secao">
-            <label>Imagem de referência (opcional)</label>
+            <label>IMAGEM DE REFERÊNCIA (OPCIONAL)</label>
             <p>Carregue uma foto do estilo que deseja para ajudar a nossa equipa.</p>
             <div class="ref-img-upload">
-                <button class="btn-upload" onclick="document.getElementById('inputImgRef').click()">Escolher imagem</button>
+                <button class="btn-upload" onclick="document.getElementById('inputImgRef').click()">ESCOLHER IMAGEM</button>
                 <input type="file" id="inputImgRef" accept="image/*" onchange="carregarImgRef(event)">
                 <img id="previewImgRef" class="ref-img-preview" src="" alt="Preview">
                 <span class="ref-img-nome" id="nomeImgRef"></span>
@@ -312,11 +330,12 @@
         </div>
 
         <div class="modal-obs">
-            <span>Observação:</span><br>
+            <span>OBSERVAÇÃO:</span><br>
             Caso não pretenda lavar o cabelo connosco, o cabelo deve estar limpo e desembaraçado,
             sem nenhum tipo de produto (creme, óleo ou condicionador).
         </div>
         <div class="modal-rodape">
+            <button class="btn-voltar" onclick="fecharModal()">← VOLTAR</button>
             <button class="btn-agendar" onclick="irAgendar()">AGENDAR</button>
         </div>
     </div>
@@ -350,10 +369,10 @@
     }
 
     const infoData = {
-        reparticao: { img:'reparticao.png', titulo:'REPARTI&#199;&#195;O', sub:'do couro cabeludo', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>Brick-Lay</strong> → colocação de tijolo','<strong>Square/Box</strong> → quadrado-box','<strong>Diamond</strong> → losango','<strong>Triangle</strong> → triângulo','<strong>Organic/Freeform</strong> → orgânico / forma livre'] },
-        divisao: { img:'divisao.png', titulo:'DIVIS&#195;O', sub:'separação do cabelo em partes', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>Extra Large</strong> → tranças muito grossas','<strong>Large</strong> → tranças grossas','<strong>Medium</strong> → tranças médias','<strong>Small</strong> → tranças finas','<strong>Extra Small</strong> → tranças muito finas'] },
-        cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'das tranças', temSelector:true, chave:'cumprimentoEscolhido', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>Neck length</strong> → altura do pescoço','<strong>Shoulder length</strong> → altura dos ombros','<strong>Armpit length</strong> → altura das axilas','<strong>Bra Strap length</strong> → altura do soutien','<strong>Mid-back length</strong> → meio das costas','<strong>Waist length</strong> → altura da cintura','<strong>Hip length</strong> → altura das ancas','<strong>Tailbone length</strong> → altura do cóccix','<strong>Classic length</strong> → comprimento clássico','<strong>Mid-thigh length</strong> → meio da coxa','<strong>Knee length</strong> → altura do joelho','<strong>Calf length</strong> → altura da barriga da perna','<strong>Ankle length</strong> → altura do tornozelo','<strong>Floor length</strong> → comprimento até ao chão'] },
-        preparacao: { img:'preparacao.jpg', titulo:'PREPARA&#199;&#195;O', sub:'do cabelo', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O cabelo deve estar:</strong>','&#10004; Limpo','&#10004; Seco','&#10004; Sem creme','&#10004; Desembaraçado'] }
+        reparticao: { img:'reparticao.png', titulo:'REPARTIÇÃO', sub:'DO COURO CABELUDO', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>BRICK-LAY</strong> → colocação de tijolo','<strong>SQUARE/BOX</strong> → quadrado-box','<strong>DIAMOND</strong> → losango','<strong>TRIANGLE</strong> → triângulo','<strong>ORGANIC/FREEFORM</strong> → orgânico / forma livre'] },
+        divisao: { img:'divisao.png', titulo:'DIVISÃO', sub:'SEPARAÇÃO DO CABELO EM PARTES', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>EXTRA LARGE</strong> → tranças muito grossas','<strong>LARGE</strong> → tranças grossas','<strong>MEDIUM</strong> → tranças médias','<strong>SMALL</strong> → tranças finas','<strong>EXTRA SMALL</strong> → tranças muito finas'] },
+        cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'DAS TRANÇAS', temSelector:true, chave:'cumprimentoEscolhido', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>NECK LENGTH</strong> → altura do pescoço','<strong>SHOULDER LENGTH</strong> → altura dos ombros','<strong>ARMPIT LENGTH</strong> → altura das axilas','<strong>BRA STRAP LENGTH</strong> → altura do soutien','<strong>MID-BACK LENGTH</strong> → meio das costas','<strong>WAIST LENGTH</strong> → altura da cintura','<strong>HIP LENGTH</strong> → altura das ancas','<strong>TAILBONE LENGTH</strong> → altura do cóccix','<strong>CLASSIC LENGTH</strong> → comprimento clássico','<strong>MID-THIGH LENGTH</strong> → meio da coxa','<strong>KNEE LENGTH</strong> → altura do joelho','<strong>CALF LENGTH</strong> → altura da barriga da perna','<strong>ANKLE LENGTH</strong> → altura do tornozelo','<strong>FLOOR LENGTH</strong> → comprimento até ao chão'] },
+        preparacao: { img:'preparacao.jpg', titulo:'PREPARAÇÃO', sub:'DO CABELO', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O CABELO DEVE ESTAR:</strong>','&#10004; LIMPO','&#10004; SECO','&#10004; SEM CREME','&#10004; DESEMBARAÇADO'] }
     };
 
     let _tipoAtual = '', _selectorAberto = false;
@@ -372,7 +391,8 @@
         document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
         if (d.temSelector && d.chave) {
             const guardada = localStorage.getItem(d.chave);
-            if (guardada) { document.getElementById('escolhaConfirmada').innerText = '✔ Escolha atual: ' + guardada; document.getElementById('escolhaConfirmada').style.display = 'block'; }
+            if (guardada) { document.getElementById('escolhaConfirmada').innerText = '✔ ESCOLHA ATUAL: ' + guardada.toUpperCase();
+            document.getElementById('escolhaConfirmada').style.display = 'block'; }
         }
         document.getElementById('modalInfo').classList.add('active');
     }
@@ -386,7 +406,7 @@
         if (_selectorAberto) {
             lista.style.display = 'none';
             const guardada = localStorage.getItem(d.chave) || '';
-            selector.innerHTML = d.opcoes.map(op=>`<button class="opcao-btn ${op===guardada?'escolhido':''}" onclick="escolherOpcao('${op}')">${op}</button>`).join('');
+            selector.innerHTML = d.opcoes.map(op=>`<button class="opcao-btn ${op===guardada?'escolhido':''}" onclick="escolherOpcao('${op}')">${op.toUpperCase()}</button>`).join('');
             selector.classList.add('visivel');
             document.getElementById('btnEscolha').innerHTML = 'FECHAR <span class="btn-seta"></span>';
         } else {
@@ -402,7 +422,7 @@
         document.querySelectorAll('.opcao-btn').forEach(b=>b.classList.remove('escolhido'));
         event.target.classList.add('escolhido');
         const conf = document.getElementById('escolhaConfirmada');
-        conf.innerText = '✔ Escolha guardada: ' + opcao;
+        conf.innerText = '✔ ESCOLHA GUARDADA: ' + opcao.toUpperCase();
         conf.style.display = 'block';
         setTimeout(()=>{ _selectorAberto=false; document.getElementById('infoLista').style.display='flex'; document.getElementById('opcoesSelector').classList.remove('visivel'); document.getElementById('btnEscolha').innerHTML='ESCOLHA AQUI <span class="btn-seta"></span>'; }, 800);
     }
@@ -414,19 +434,19 @@
 
     function abrirModal(nome, duracao, img, preco) {
         _nomeAtual = nome;
-        document.getElementById('modalNome').innerText    = nome;
+        document.getElementById('modalNome').innerText    = nome.toUpperCase();
         document.getElementById('modalDuracao').innerText = duracao;
         document.getElementById('modalImg').src           = img;
-        document.getElementById('modalPreco').innerText   = 'A partir de ' + preco;
+        document.getElementById('modalPreco').innerText   = 'A PARTIR DE ' + preco;
         const rep  = localStorage.getItem('reparticaoEscolhida');
         const div  = localStorage.getItem('divisaoEscolhida');
         const cump = localStorage.getItem('cumprimentoEscolhido');
         const prefsBox = document.getElementById('modalPrefs');
         if (rep || div || cump) {
             prefsBox.style.display = 'block';
-            document.getElementById('modalPrefRep').innerHTML  = rep  ? `<strong>Repartição:</strong> ${rep}`  : '';
-            document.getElementById('modalPrefDiv').innerHTML  = div  ? `<strong>Divisão:</strong> ${div}`     : '';
-            document.getElementById('modalPrefCump').innerHTML = cump ? `<strong>Cumprimento:</strong> ${cump}`: '';
+            document.getElementById('modalPrefRep').innerHTML  = rep  ? `<strong>REPARTIÇÃO:</strong> ${rep.toUpperCase()}`  : '';
+            document.getElementById('modalPrefDiv').innerHTML  = div  ? `<strong>DIVISÃO:</strong> ${div.toUpperCase()}`     : '';
+            document.getElementById('modalPrefCump').innerHTML = cump ? `<strong>CUMPRIMENTO:</strong> ${cump.toUpperCase()}`: '';
         } else { prefsBox.style.display = 'none'; }
         document.getElementById('previewImgRef').style.display = 'none';
         document.getElementById('nomeImgRef').innerText = '';

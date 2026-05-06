@@ -119,12 +119,27 @@
 
 <!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
-    <a href="serviços.html">SERVIÇOS</a>
+    <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
     <a href="contactos.html">CONTACTOS</a>
     <a href="marcacoes.html">MARCAÇÕES</a>
     <a href="sobre.html">SOBRE</a>
     <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
+</div>
+
+<div style="padding: 12px 20px;">
+    <button onclick="history.back()" style="
+        background: none;
+        border: none;
+        font-size: 13px;
+        font-weight: bold;
+        color: #111;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.5px;
+    ">← VOLTAR</button>
 </div>
 
 <!-- BANNER -->
@@ -369,14 +384,12 @@
             const todasMarcacoes = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
             todasMarcacoes.unshift(novaMarc);
             localStorage.setItem('admin_marcacoes', JSON.stringify(todasMarcacoes));
-
             localStorage.removeItem('reparticaoEscolhida');
             localStorage.removeItem('divisaoEscolhida');
             localStorage.removeItem('cumprimentoEscolhido');
             localStorage.removeItem('imgReferencia');
             localStorage.removeItem('imgReferenciaNome');
         }
-
         location.href = 'marcacoes.html';
     }
 </script>
