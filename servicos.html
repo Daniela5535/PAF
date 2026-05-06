@@ -56,9 +56,9 @@
         .card-legenda span { font-size:13px; color:#888; }
 
         /* MODAL INFO */
-        .modal-info-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); justify-content:center; align-items:center; z-index:2000; }
+        .modal-info-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); justify-content:center; align-items:center; z-index:2000; overflow-y:auto; padding:16px; }
         .modal-info-overlay.active { display:flex; }
-        .modal-info-box { background:#6b6b6b; border-radius:25px; padding:25px; width:720px; max-width:94%; position:relative; color:white; display:flex; gap:30px; align-items:flex-start; }
+        .modal-info-box { background:#6b6b6b; border-radius:25px; padding:25px; width:720px; max-width:94%; position:relative; color:white; display:flex; gap:30px; align-items:flex-start; margin:auto; }
         .modal-info-fechar { position:absolute; top:16px; right:20px; background:none; border:none; color:white; font-size:26px; cursor:pointer; line-height:1; }
         .modal-info-fechar:hover { color:#ddd; }
         .modal-info-img { width:250px; height:340px; overflow:hidden; background:white; flex-shrink:0; }
@@ -138,12 +138,57 @@
             .info-card-texto { padding:10px 8px; }
             .info-card-texto h3 { font-size:12px; }
             .info-card-texto p { font-size:10px; }
+
+            /* MODAL SERVIÇO MOBILE */
             .modal-overlay { align-items:flex-start; padding-top:20px; }
             .modal-box { padding:20px 16px; gap:16px; border-radius:16px; }
             .modal-topo { flex-direction:column; }
             .modal-img { width:100%; height:220px; border-radius:12px; }
-            .modal-info-box { flex-direction:column; }
-            .modal-info-img { width:100%; }
+
+            /* MODAL INFO MOBILE - CORRIGIDO */
+            .modal-info-overlay { align-items:flex-start; padding:16px; }
+            .modal-info-box { 
+                flex-direction:column; 
+                width:100%; 
+                max-width:100%;
+                max-height:85vh; 
+                overflow-y:auto; 
+                margin:auto;
+                padding:20px 16px;
+                gap:16px;
+                border-radius:16px;
+            }
+            .modal-info-img { 
+                width:100%; 
+                height:180px;
+                flex-shrink:0;
+            }
+            .modal-info-img img {
+                width:100%;
+                height:100%;
+                object-fit:cover;
+            }
+            .modal-info-content {
+                width:100%;
+                gap:12px;
+            }
+            .modal-info-titulo {
+                font-size:16px;
+            }
+            .opcoes-selector { 
+                max-height:220px; 
+                overflow-y:auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .modal-info-lista {
+                max-height:200px;
+                overflow-y:auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .btn-escolha {
+                width:100%;
+                justify-content:center;
+            }
             .contactos { flex-direction:column; padding:24px 16px; }
         }
     </style>
@@ -183,24 +228,13 @@
 </div>
 
 <div style="padding: 12px 20px;">
-    <button onclick="history.back()" style="
-        background: none;
-        border: none;
-        font-size: 13px;
-        font-weight: bold;
-        color: #111;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.5px;
-    ">← VOLTAR</button>
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
 <!-- BANNER -->
 <div class="banner">
-    <h1>O QUE OFERECEMOS </h1>
-    <p> Vem e descubre os estilos de tranças africanas!</p>
+    <h1>O QUE OFERECEMOS</h1>
+    <p>Vem e descubre os estilos de tranças africanas!</p>
 </div>
 
 <!-- INFO SECÇÃO -->
@@ -391,10 +425,14 @@
         document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
         if (d.temSelector && d.chave) {
             const guardada = localStorage.getItem(d.chave);
-            if (guardada) { document.getElementById('escolhaConfirmada').innerText = '✔ ESCOLHA ATUAL: ' + guardada.toUpperCase();
-            document.getElementById('escolhaConfirmada').style.display = 'block'; }
+            if (guardada) {
+                document.getElementById('escolhaConfirmada').innerText = '✔ ESCOLHA ATUAL: ' + guardada.toUpperCase();
+                document.getElementById('escolhaConfirmada').style.display = 'block';
+            }
         }
         document.getElementById('modalInfo').classList.add('active');
+        // Scroll para o topo do modal ao abrir
+        document.getElementById('modalInfo').scrollTop = 0;
     }
 
     function toggleSelector() {
@@ -452,6 +490,7 @@
         document.getElementById('nomeImgRef').innerText = '';
         document.getElementById('inputImgRef').value = '';
         document.getElementById('modalDetalhe').classList.add('active');
+        document.getElementById('modalDetalhe').scrollTop = 0;
     }
 
     function carregarImgRef(event) {
