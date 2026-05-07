@@ -3,149 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Glow — Perfil</title>
+    <title>Easy Glow — Agendar</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background: #fff; }
         @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
-        .logotipo { width: 100%; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
-        .logo img { width: 150px; display: block; }
-        .menu { display: flex; align-items: center; gap: 22px; font-weight: bold; }
-        .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
-        .menu a:hover { color: #888; }
-        .mais-menu { position: relative; cursor: pointer; }
-        .mais-links { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden; }
-        .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
-        .mais-links a:hover { background: #f5f5f5; }
-        .mais-menu:hover .mais-links { display: flex; }
-        .btn-login { background: #111; color: white !important; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap; }
-        .btn-login:hover { opacity: 0.8; }
-        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-        .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
-        .menu-mobile { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-        .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
-        .btn-voltar-wrap { padding: 10px 20px; }
-        .btn-voltar { background: none; border: none; font-size: 13px; font-weight: bold; color: #111; cursor: pointer; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
-        .btn-voltar:hover { color: #888; }
-        .spacer { height: 20px; }
-        .container { display: flex; padding: 40px; gap: 40px; flex: 1; }
-        .sidebar { width: 220px; text-align: center; flex-shrink: 0; }
-        .fotoperfil { width: 120px; height: 120px; background: #ccc; border-radius: 50%; margin: 0 auto 14px; overflow: hidden; cursor: pointer; position: relative; }
-        .fotoperfil img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .fotoperfil::after { content: "📷"; position: absolute; bottom: 6px; right: 6px; font-size: 18px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-        .fotoperfil:hover::after { opacity: 1; }
-        .sidebar-nome { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-        .sidebar-email { font-size: 12px; color: #888; margin-bottom: 14px; word-break: break-all; }
-        .sidebar button { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 8px; font-size: 13px; font-weight: bold; }
-        .sidebar button:hover { background: #f5f5f5; }
-        .sidebar .dark { background: black; color: white; border-color: black; }
-        .sidebar .dark:hover { background: #333; }
-        .sidebar .danger { color: red; border: 1px solid red; }
-        .sidebar .danger:hover { background: #fff0f0; }
-        .sidebar hr { border: none; border-top: 1px solid #eee; margin: 4px 0 12px; }
-        .content { flex: 1; min-width: 0; }
-        .content h1 { font-size: 40px; margin-bottom: 20px; font-family: 'High Cruiser', Arial, sans-serif; }
-        .box { background: linear-gradient(to bottom, #d9d4cd, #f4efe9); padding: 20px 30px; border-radius: 25px; margin-bottom: 30px; }
-        .box h3 { margin: 0 0 14px; font-size: 13px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
-        .info-row { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 12px; }
-        .info-field { display: flex; flex-direction: column; gap: 4px; }
-        .info-field label { font-size: 12px; color: #888; font-weight: bold; }
-        .info-field span { font-size: 15px; color: #111; }
-        .info-field input { padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; outline: none; width: 200px; }
-        .edit-row { display: flex; gap: 10px; margin-top: 4px; }
-        .btn-edit { padding: 7px 18px; border-radius: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 13px; font-weight: bold; }
-        .btn-edit:hover { background: #f5f5f5; }
-        .btn-save { padding: 7px 18px; border-radius: 20px; border: none; background: #111; color: #fff; cursor: pointer; font-size: 13px; font-weight: bold; display: none; }
-        .btn-save:hover { opacity: 0.85; }
-        .btn-cancel-edit { padding: 7px 14px; border-radius: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 13px; display: none; }
-        .history { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
-        .history:last-child { border-bottom: none; }
-        .history-left { display: flex; gap: 25px; align-items: center; }
-        .date { font-weight: bold; font-size: 14px; }
-        .buttons button { margin-left: 8px; padding: 6px 12px; border: 1px solid #999; background: white; cursor: pointer; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .buttons button:hover { background: #f5f5f5; }
-        .buttons button.cancel { color: red; border-color: red; }
-        .buttons button.cancel:hover { background: #fff0f0; }
-        .status { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .status.confirmado { background: #d4edda; color: #155724; }
-        .status.pendente   { background: #fff3cd; color: #856404; }
-        .status.cancelado  { background: #ffcaca; color: #c0392b; }
-        .status.rejeitado  { background: #f8d7da; color: #7f1d1d; }
-        .empty { text-align: center; color: #aaa; padding: 10px; }
 
-        /* FAVORITOS GRID */
-        .fav-grid { display: flex; flex-wrap: wrap; gap: 14px; }
-        .fav-card {
-            background: white;
-            border-radius: 14px;
-            overflow: hidden;
-            width: 150px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: relative;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        .fav-card:hover { transform: translateY(-3px); }
-        .fav-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
-        .fav-card-info { padding: 8px 10px 10px; }
-        .fav-card-info b { font-size: 12px; display: block; line-height: 1.4; }
-        .fav-card-info span { font-size: 11px; color: #888; }
-        .btn-remov-fav {
-            position: absolute;
-            top: 7px;
-            right: 7px;
-            background: rgba(255,255,255,0.9);
-            border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-            transition: background 0.2s;
-            line-height: 1;
-        }
-        .btn-remov-fav:hover { background: #fff0f0; }
-        .fav-empty { text-align: center; color: #aaa; padding: 20px 0; font-size: 14px; }
-        .fav-empty a { color: #111; font-weight: bold; }
+        /* NAVBAR */
+        .logotipo { width:100%; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid #eee; position:sticky; top:0; z-index:1000; }
+        .logo img { width:150px; display:block; }
+        .menu { display:flex; align-items:center; gap:22px; font-weight:bold; }
+        .menu a { text-decoration:none; font-size:13px; font-weight:bold; color:#111; letter-spacing:.5px; }
+        .menu a:hover { color:#888; }
+        .mais-menu { position:relative; cursor:pointer; }
+        .mais-links { display:none; position:absolute; top:calc(100% + 10px); right:0; background:white; box-shadow:0 8px 24px rgba(0,0,0,0.12); border-radius:10px; flex-direction:column; min-width:160px; z-index:999; overflow:hidden; }
+        .mais-links a { padding:11px 16px; text-decoration:none; font-size:13px; font-weight:bold; color:#111; display:block; }
+        .mais-links a:hover { background:#f5f5f5; }
+        .mais-menu:hover .mais-links { display:flex; }
+        .btn-login { background:#111; color:white !important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity 0.2s; white-space:nowrap; }
+        .btn-login:hover { opacity:0.8; }
+        .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
+        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; position:fixed; left:0; width:100%; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content:center; margin-top:4px; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; cursor: pointer; }
-        .modal-content { background: #fff; padding: 30px 25px; border-radius: 20px; width: 320px; max-width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 10px; cursor: auto; }
-        .modal-content h3 { margin: 0 0 8px; font-size: 20px; color: #333; }
-        .modal-content p { font-size: 13px; color: #555; margin: 0; }
-        .modal-content input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 14px; outline: none; }
-        .modal-content input:focus { border-color: #000; }
-        .modal-content button { padding: 12px 0; border: none; border-radius: 20px; background: #000; color: #fff; font-weight: bold; font-size: 15px; cursor: pointer; }
-        .modal-content button:hover { background: #222; }
-        .msg-modal { padding: 8px; border-radius: 8px; font-size: 13px; text-align: center; display: none; }
-        .msg-modal.ok   { background: #e0ffe0; color: #27ae60; }
-        .msg-modal.erro { background: #ffe0e0; color: #c0392b; }
-        .toast { display: none; position: fixed; bottom: 28px; right: 28px; background: #111; color: #fff; padding: 12px 22px; border-radius: 12px; z-index: 3000; font-size: 14px; font-weight: bold; }
-        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; }
-        .footer p { font-size: 15px; color: #555; }
-        .insta { display: flex; align-items: center; gap: 6px; }
-        .insta span { font-size: 14px; color: #555; }
-        .icon { width: 26px; }
-        .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
+        /* BANNER */
+        .banner { width:100%; background:linear-gradient(180deg, rgba(36,32,28,0.175), rgba(248,222,187,0.175), rgba(196,175,154,0.175)); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px 20px; }
+        .banner h1 { font-family:'High Cruiser',Arial,sans-serif; font-size:30px; margin:0; }
+        .banner p { margin-top:10px; }
+
+        /* CONTEÚDO */
+        .container { display:flex; justify-content:center; align-items:flex-start; padding:50px; margin-top:10px; flex-wrap:wrap; gap:80px; flex:1; }
+
+        /* FORMULÁRIO */
+        .agendamento { background:linear-gradient(to bottom,#dcd6cf,#f9f7f3); padding:40px; border-radius:12px; width:350px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .agendamento h2 { text-align:center; margin-bottom:20px; font-family:'Arial Black',Arial,sans-serif; }
+        .agendamento label { display:block; margin-top:15px; margin-bottom:5px; font-weight:bold; }
+        .agendamento input, .agendamento select { width:100%; padding:12px 10px; border-radius:8px; border:1px solid #ccc; outline:none; font-size:14px; }
+        .agendamento select.preenchido { border-color:#9b59b6; background:#fdf6ff; }
+        .agendamento button { width:100%; margin-top:25px; padding:12px; background-color:#000; color:#fff; font-size:16px; border:none; border-radius:25px; cursor:pointer; transition:0.3s ease; }
+        .agendamento button:hover { opacity:0.9; transform:scale(1.02); }
+
+        .aviso-servico { display:none; margin-top:6px; font-size:12px; color:#7d3c98; font-style:italic; }
+
+        .prefs-box { display:none; margin-top:14px; background:#f0eaf5; border:1px solid #c77dbd; border-radius:8px; padding:10px 14px; font-size:13px; color:#555; }
+        .prefs-box .prefs-titulo { font-weight:bold; color:#7d3c98; margin-bottom:6px; }
+        .prefs-box p { margin:3px 0; }
+
+        .ref-img-box { display:none; margin-top:16px; background:#f9f4ff; border:1px solid #c77dbd; border-radius:8px; padding:12px 14px; }
+        .ref-img-box .ref-titulo { font-weight:bold; color:#7d3c98; font-size:13px; margin-bottom:8px; }
+        .ref-img-box img { width:100%; max-height:180px; object-fit:cover; border-radius:8px; }
+        .ref-img-box .ref-nome { font-size:11px; color:#888; margin-top:6px; }
+        .ref-img-box .btn-remover { background:none; border:none; color:#c0392b; font-size:12px; cursor:pointer; margin-top:4px; padding:0; text-decoration:underline; }
+
+        /* CALENDÁRIO */
+        .calendario { width:350px; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+        .cal-nav { background:none; border:none; font-size:20px; cursor:pointer; color:#555; padding:0 6px; line-height:1; }
+        .cal-nav:hover { color:#000; }
+        .cal-mes-ano { font-weight:bold; font-size:14px; text-align:center; min-width:130px; }
+        .calendario table { width:100%; border-collapse:collapse; text-align:center; }
+        .calendario th { font-weight:bold; padding:8px 0; color:#555; font-size:13px; }
+        .calendario td { padding:9px 0; color:#555; cursor:pointer; border-radius:5px; font-size:13px; position:relative; }
+        .calendario td.today { background-color:#e4dddd; font-weight:bold; }
+        .calendario td.selecionado { background-color:#111; color:#fff; }
+        .calendario td.passado { color:#ccc; cursor:default; }
+        .calendario td.vazio { cursor:default; }
+        .calendario td:hover:not(.passado):not(.vazio):not(.selecionado):not(.completo) { background-color:#e0dcd5; }
+
+        /* DIA COMPLETO */
+        .calendario td.completo {
+            background-color:#f0f0f0;
+            color:#bbb;
+            cursor:not-allowed;
+            position:relative;
+        }
+        .calendario td.completo::after {
+            content:'Completo';
+            display:block;
+            font-size:8px;
+            color:#aaa;
+            letter-spacing:0.3px;
+            line-height:1;
+            margin-top:2px;
+        }
+
+        /* LEGENDA */
+        .cal-legenda {
+            display:flex;
+            gap:14px;
+            margin-top:16px;
+            flex-wrap:wrap;
+            font-size:12px;
+            color:#666;
+            align-items:center;
+        }
+        .cal-legenda-item { display:flex; align-items:center; gap:5px; }
+        .cal-legenda-dot {
+            width:12px; height:12px; border-radius:3px; display:inline-block;
+        }
+        .dot-disponivel { background:#e0dcd5; }
+        .dot-completo   { background:#f0f0f0; border:1px solid #ddd; }
+        .dot-selecionado { background:#111; }
+
+        /* FOOTER */
+        .contactos { background:#f8f8f8; color:#555; text-align:center; padding:20px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #eee; margin-top:auto; }
+        .contactos p { font-size:15px; color:#555; }
+        .insta { display:flex; align-items:center; gap:6px; }
+        .insta span { font-size:14px; color:#555; }
+        .icon { width:26px; }
+        .footer-copy { font-size:12px; color:#aaa; width:100%; text-align:center; margin-top:4px; }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .container { flex-direction:column; align-items:center; padding:30px 16px; gap:30px; }
+            .agendamento, .calendario { width:100%; max-width:400px; }
+        }
         @media (max-width: 768px) {
-            .menu { display: none; }
-            .menu-toggle { display: flex; }
-            .container { flex-direction: column; padding: 20px 16px; gap: 24px; }
-            .sidebar { width: 100%; }
-            .content h1 { font-size: 28px; }
-            .footer { flex-direction: column; padding: 24px 16px; }
-            .info-row { gap: 16px; }
-            .info-field input { width: 100%; }
-            .fav-card { width: calc(50% - 7px); }
+            .menu { display:none; }
+            .menu-toggle { display:flex; }
+            .contactos { flex-direction:column; padding:24px 16px; }
         }
     </style>
 </head>
 <body>
 
+<!-- NAVBAR -->
 <div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
@@ -159,104 +143,123 @@
                 <a href="sobre.html">SOBRE</a>
             </div>
         </div>
-        <a id="btnAuth" href="perfil1.html" class="btn-login">
+        <a id="btnAuth" href="login.html" class="btn-login">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-            <span id="btnAuthText">PERFIL</span>
+            <span id="btnAuthText">LOGIN</span>
         </a>
     </div>
     <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
 
+<!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
     <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
     <a href="contactos.html">CONTACTOS</a>
     <a href="marcacoes.html">MARCAÇÕES</a>
     <a href="sobre.html">SOBRE</a>
-    <a id="btnAuthMobile" href="perfil1.html" class="btn-login">PERFIL</a>
+    <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
 </div>
 
-<div class="btn-voltar-wrap">
-    <button class="btn-voltar" onclick="location.href='index.html'">← PÁGINA INICIAL</button>
+<div style="padding: 12px 20px;">
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
-<div class="spacer"></div>
+<!-- BANNER -->
+<div class="banner">
+    <h1>AGENDAR</h1>
+    <p>Escolha o seu serviço, data e horário preferido</p>
+</div>
 
+<!-- CONTEÚDO -->
 <div class="container">
-    <div class="sidebar">
-        <div class="fotoperfil" id="fotoperfil" onclick="document.getElementById('uploadFoto').click()">
-            <img src="fotoperfil.jpg" id="fotoPerfilImg" alt="Foto de perfil">
-        </div>
-        <input type="file" id="uploadFoto" style="display:none" accept="image/*">
-        <div class="sidebar-nome" id="nomeDisplay">—</div>
-        <div class="sidebar-email" id="emailDisplay">—</div>
-        <button class="dark" onclick="location.href='agendar.html'">+ Nova marcação</button>
-        <button onclick="document.getElementById('modalSenha').style.display='flex'">Alterar palavra-passe</button>
-        <button id="notificacoesBtn">Notificações</button>
-        <hr>
-        <button class="danger" onclick="confirmarEliminar()">Eliminar conta</button>
-        <button onclick="logout()">Terminar sessão</button>
-    </div>
+    <div class="agendamento">
+        <h2>Agende o seu horário connosco!</h2>
+        <div id="formAgendamento">
+            <label>Nome</label>
+            <input type="text" id="nome" placeholder="Seu nome completo" required>
 
-    <div class="content">
-        <h1>PERFIL</h1>
-        <div class="box">
-            <h3>Dados Pessoais</h3>
-            <div class="info-row">
-                <div class="info-field">
-                    <label>Nome</label>
-                    <span id="nomeSpan">—</span>
-                    <input id="nomeInput" style="display:none" placeholder="Nome completo">
-                </div>
-                <div class="info-field">
-                    <label>Email</label>
-                    <span id="emailSpan">—</span>
-                </div>
-                <div class="info-field">
-                    <label>Telemóvel</label>
-                    <span id="telSpan">Não definido</span>
-                    <input id="telInput" style="display:none" placeholder="+351 9XX XXX XXX">
-                </div>
+            <label>Serviço</label>
+            <select id="servico" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>Tranças Fulani X Lemonade</option>
+                <option>Tranças Lemonade</option>
+                <option>Tranças Fulani</option>
+                <option>Tranças Cornrows</option>
+                <option>Trança estilo mohawk</option>
+                <option>Tranças Dreads</option>
+                <option>Tranças Knotless</option>
+                <option>Tranças Gypsy</option>
+                <option>Tranças Twist</option>
+                <option>Tranças French</option>
+                <option>Manutenção Rasta + Penteado</option>
+            </select>
+            <div class="aviso-servico" id="avisoServico">✔ Serviço pré-selecionado a partir dos Serviços</div>
+
+            <div class="prefs-box" id="prefsBox">
+                <div class="prefs-titulo">✔ Preferências selecionadas nos Serviços:</div>
+                <p id="prefRep"></p>
+                <p id="prefDiv"></p>
+                <p id="prefCump"></p>
             </div>
-            <div class="edit-row">
-                <button class="btn-edit" id="btnEditar" onclick="ativarEdicao()">Editar</button>
-                <button class="btn-save" id="btnGuardar" onclick="guardarDados()">Guardar</button>
-                <button class="btn-cancel-edit" id="btnCancelar" onclick="cancelarEdicao()">Cancelar</button>
+
+            <div class="ref-img-box" id="refImgBox">
+                <div class="ref-titulo">📷 Imagem de referência:</div>
+                <img id="refImgAgendar" src="" alt="Imagem de referência">
+                <div class="ref-nome" id="refImgNome"></div>
+                <button class="btn-remover" onclick="removerImgRef()">✕ Remover imagem</button>
+            </div>
+
+            <label>Data</label>
+            <input id="data" type="date" required readonly style="background:#f9f9f9;cursor:default;">
+
+            <label>Horário</label>
+            <select id="horario" required>
+                <option value="" disabled selected>Selecione a hora</option>
+                <option>09:00</option><option>09:30</option>
+                <option>10:00</option><option>10:30</option>
+                <option>11:00</option><option>11:30</option>
+                <option>12:00</option><option>12:30</option>
+                <option>15:00</option><option>15:30</option>
+                <option>16:00</option><option>16:30</option>
+                <option>17:00</option><option>17:30</option>
+                <option>18:00</option><option>18:30</option>
+                <option>19:00</option><option>19:30</option>
+                <option>20:00</option>
+            </select>
+
+            <button onclick="submeterAgendamento()">Agendar</button>
+        </div>
+    </div>
+
+    <div class="calendario">
+        <div class="cal-header">
+            <button class="cal-nav" onclick="mudarMes(-1)">&#8249;</button>
+            <div class="cal-mes-ano" id="calMesAno"></div>
+            <button class="cal-nav" onclick="mudarMes(1)">&#8250;</button>
+        </div>
+        <table>
+            <thead><tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr></thead>
+            <tbody id="calendarBody"></tbody>
+        </table>
+
+        <!-- LEGENDA -->
+        <div class="cal-legenda">
+            <div class="cal-legenda-item">
+                <span class="cal-legenda-dot dot-disponivel"></span> Disponível
+            </div>
+            <div class="cal-legenda-item">
+                <span class="cal-legenda-dot dot-completo"></span> Completo
+            </div>
+            <div class="cal-legenda-item">
+                <span class="cal-legenda-dot dot-selecionado"></span> Selecionado
             </div>
         </div>
-
-        <h3 style="margin-bottom:12px;">Histórico de marcações</h3>
-        <div class="box" id="historicoLista"></div>
-
-        <!-- FAVORITOS -->
-        <h3 style="margin-bottom:12px;">Os meus favoritos</h3>
-        <div class="box" id="favoritosLista"></div>
     </div>
 </div>
 
-<div class="modal" id="modalSenha">
-    <div class="modal-content">
-        <h3>Alterar Palavra-Passe</h3>
-        <div class="msg-modal" id="msgSenha"></div>
-        <input type="password" id="senhaAtual" placeholder="Senha atual">
-        <input type="password" id="novaSenha" placeholder="Nova senha (mín. 4 caracteres)">
-        <input type="password" id="confNovaSenha" placeholder="Confirmar senha">
-        <button onclick="alterarSenha()">Guardar</button>
-    </div>
-</div>
-
-<div class="modal" id="modalEliminar">
-    <div class="modal-content">
-        <h3>Eliminar Conta</h3>
-        <p>Esta ação é permanente e não pode ser desfeita.</p>
-        <input type="password" id="eliminarPass" placeholder="Confirmar palavra-passe">
-        <button style="background:#c0392b" onclick="eliminarConta()">Eliminar Conta</button>
-    </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<div class="footer">
+<!-- FOOTER -->
+<div class="contactos">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
     <div class="insta">
         <img src="iconinstagram.PNG" class="icon" alt="Instagram">
@@ -266,43 +269,33 @@
 </div>
 
 <script>
-    if (!localStorage.getItem('ulog')) {
-        localStorage.setItem('redirectAfterLogin', 'perfil1.html');
+    const LIMITE_POR_DIA = 2;
+
+    const ulog = localStorage.getItem('ulog');
+    const btn  = document.getElementById('btnAuth');
+    const btnT = document.getElementById('btnAuthText');
+    const btnM = document.getElementById('btnAuthMobile');
+
+    if (ulog) {
+        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
+        btn.href = btnM.href = 'perfil1.html';
+        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+        btnT.textContent = btnM.textContent = nome;
+    } else {
+        localStorage.setItem('redirectAfterLogin', 'agendar.html');
         location.href = 'login.html';
     }
-
-    const ulogKey = localStorage.getItem('ulog');
-    const btnAuth  = document.getElementById('btnAuth');
-    const btnAuthT = document.getElementById('btnAuthText');
-    const btnAuthM = document.getElementById('btnAuthMobile');
-
-    // Mapa de imagens dos serviços para mostrar no perfil
-    const servicosImgs = {
-        "Tranças Fulani X Lemonade": "trancafulanixlemonade.JPG",
-        "Tranças Lemonade":          "trancalemonade.JPG",
-        "Tranças Fulani":            "trancafulani.JPG",
-        "Tranças Cornrows":          "trancacornrowNago.JPG",
-        "Trança estilo mohawk":      "trancaestilomohank.JPG",
-        "Tranças Dreads":            "trancadreads.JPG",
-        "Tranças Knotless":          "trancaknotless.JPG",
-        "Trança Gypsy":             "trancagypsy.JPG",
-        "Tranças Twists":            "trancatwists.JPG",
-        "Tranças French":            "trancafrench.JPG",
-        "Manutenção Rasta + Penteado": "manutencaorastas.JPG"
-    };
 
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
-        const navbarHeight = navbar.offsetHeight;
         if (m.style.display === 'flex') {
             m.style.display = 'none';
         } else {
-            m.style.top = navbarHeight + 'px';
+            m.style.top = navbar.offsetHeight + 'px';
             m.style.display = 'flex';
         }
     }
-
     document.addEventListener('click', function(e) {
         const m = document.getElementById('menuMobile');
         const toggle = document.querySelector('.menu-toggle');
@@ -311,183 +304,194 @@
         }
     });
 
-    let userEmail = ulogKey;
-    let userData  = userEmail ? JSON.parse(localStorage.getItem(userEmail) || '{}') : {};
+    /* ── DIAS OCUPADOS ──
+       Conta marcações com estado Confirmado por dia (formato dd/mm/yyyy).
+       Também conta propostas de nova data pendentes (novaData) para não deixar
+       o cliente reservar um dia que o admin já propôs a outro. */
+    function getDiasOcupados() {
+        const todas = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
+        const contagem = {}; // chave: "dd/mm/yyyy" → count
 
-    function saveUser() { localStorage.setItem(userEmail, JSON.stringify(userData)); }
+        todas.forEach(m => {
+            // Só bloqueia dias com marcações Confirmadas (ou com proposta de nova data aceite)
+            const estadosAtivos = ['Confirmado'];
+            // Se tem novaData proposta e está a aguardar resposta, também conta para o dia proposto
+            if (m.novaData && m.estado === 'Aguarda Confirmação') {
+                const chave = m.novaData;
+                contagem[chave] = (contagem[chave] || 0) + 1;
+            }
+            if (estadosAtivos.includes(m.estado)) {
+                const chave = m.data; // "dd/mm/yyyy"
+                contagem[chave] = (contagem[chave] || 0) + 1;
+            }
+        });
 
-    function toast(msg, tipo) {
-        const t = document.getElementById('toast');
-        t.innerText = msg; t.style.display = 'block';
-        t.style.background = tipo === 'erro' ? '#c0392b' : '#111';
-        setTimeout(() => t.style.display = 'none', 3000);
+        // Devolve set de dias completos (>= limite)
+        const completos = new Set();
+        Object.entries(contagem).forEach(([dia, cnt]) => {
+            if (cnt >= LIMITE_POR_DIA) completos.add(dia);
+        });
+        return completos;
     }
 
-    function carregarPerfil() {
-        const nome = userData.nome || '—';
-        document.getElementById('nomeDisplay').innerText = nome;
-        document.getElementById('emailDisplay').innerText = userData.email || '—';
-        document.getElementById('nomeSpan').innerText = nome;
-        document.getElementById('emailSpan').innerText = userData.email || '—';
-        document.getElementById('telSpan').innerText = userData.tel || 'Não definido';
-        if (userData.foto) document.getElementById('fotoPerfilImg').src = userData.foto;
-        const primeiroNome = userData.nome ? userData.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnAuthT.textContent = primeiroNome;
-        btnAuthM.textContent = primeiroNome;
-        carregarHistorico();
-        carregarFavoritos();
+    function formatarDataParaChave(ano, mes, dia) {
+        // Converte para "dd/mm/yyyy"
+        return String(dia).padStart(2,'0') + '/' + String(mes+1).padStart(2,'0') + '/' + ano;
     }
 
-    document.getElementById('uploadFoto').addEventListener('change', function(e) {
-        const file = e.target.files[0]; if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            userData.foto = evt.target.result;
-            document.getElementById('fotoPerfilImg').src = evt.target.result;
-            saveUser(); toast('Foto atualizada!');
-        };
-        reader.readAsDataURL(file);
-    });
+    /* CALENDÁRIO */
+    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const hoje = new Date();
+    let calMes = hoje.getMonth(), calAno = hoje.getFullYear(), dataSelecionada = null;
 
-    function ativarEdicao() {
-        document.getElementById('nomeSpan').style.display = 'none';
-        document.getElementById('telSpan').style.display = 'none';
-        document.getElementById('nomeInput').style.display = 'block';
-        document.getElementById('telInput').style.display = 'block';
-        document.getElementById('nomeInput').value = userData.nome || '';
-        document.getElementById('telInput').value = userData.tel || '';
-        document.getElementById('btnEditar').style.display = 'none';
-        document.getElementById('btnGuardar').style.display = 'inline-block';
-        document.getElementById('btnCancelar').style.display = 'inline-block';
+    function mudarMes(dir) {
+        calMes += dir;
+        if (calMes < 0)  { calMes = 11; calAno--; }
+        if (calMes > 11) { calMes = 0;  calAno++; }
+        gerarCalendario();
     }
 
-    function cancelarEdicao() {
-        document.getElementById('nomeSpan').style.display = '';
-        document.getElementById('telSpan').style.display = '';
-        document.getElementById('nomeInput').style.display = 'none';
-        document.getElementById('telInput').style.display = 'none';
-        document.getElementById('btnEditar').style.display = '';
-        document.getElementById('btnGuardar').style.display = 'none';
-        document.getElementById('btnCancelar').style.display = 'none';
+    function gerarCalendario() {
+        const diasCompletos = getDiasOcupados();
+        document.getElementById('calMesAno').innerText = meses[calMes] + ' ' + calAno;
+        const corpo = document.getElementById('calendarBody');
+        corpo.innerHTML = '';
+        const primeiroDia = new Date(calAno, calMes, 1).getDay();
+        const diasNoMes   = new Date(calAno, calMes + 1, 0).getDate();
+        let dia = 1;
+
+        for (let i = 0; i < 6; i++) {
+            const linha = document.createElement('tr');
+            for (let j = 0; j < 7; j++) {
+                const cel = document.createElement('td');
+                if ((i === 0 && j < primeiroDia) || dia > diasNoMes) {
+                    cel.classList.add('vazio');
+                } else {
+                    const d = dia;
+                    cel.textContent = d;
+                    const dataCel  = new Date(calAno, calMes, d);
+                    const eHoje    = d === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
+                    const ePassado = dataCel < new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+                    const eSel     = dataSelecionada && d === dataSelecionada.d && calMes === dataSelecionada.m && calAno === dataSelecionada.a;
+                    const chave    = formatarDataParaChave(calAno, calMes, d);
+                    const eCompleto = diasCompletos.has(chave);
+
+                    if (ePassado) {
+                        cel.classList.add('passado');
+                    } else if (eCompleto) {
+                        cel.classList.add('completo');
+                        cel.title = 'Dia sem disponibilidade';
+                    } else {
+                        if (eHoje) cel.classList.add('today');
+                        if (eSel)  cel.classList.add('selecionado');
+                        cel.addEventListener('click', function() {
+                            dataSelecionada = { d, m: calMes, a: calAno };
+                            document.getElementById('data').value = calAno + '-' + String(calMes+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+                            gerarCalendario();
+                        });
+                    }
+                    dia++;
+                }
+                linha.appendChild(cel);
+            }
+            corpo.appendChild(linha);
+            if (dia > diasNoMes) break;
+        }
     }
 
-    function guardarDados() {
-        const nome = document.getElementById('nomeInput').value.trim();
-        const tel  = document.getElementById('telInput').value.trim();
-        if (!nome) { toast('O nome não pode estar vazio.', 'erro'); return; }
-        userData.nome = nome; userData.tel = tel; saveUser();
-        document.getElementById('nomeSpan').innerText = nome;
-        document.getElementById('telSpan').innerText = tel || 'Não definido';
-        document.getElementById('nomeDisplay').innerText = nome;
-        cancelarEdicao(); toast('Dados guardados!');
+    function removerImgRef() {
+        localStorage.removeItem('imgReferencia');
+        localStorage.removeItem('imgReferenciaNome');
+        document.getElementById('refImgBox').style.display = 'none';
     }
 
-    function badgeClasse(estado) {
-        const m = { 'Pendente':'pendente','Confirmado':'confirmado','Cancelado':'cancelado','Rejeitado':'rejeitado' };
-        return 'status ' + (m[estado] || 'pendente');
-    }
+    window.onload = function() {
+        if (ulog) {
+            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+            if (ud.nome) document.getElementById('nome').value = ud.nome;
+        }
 
-    function carregarHistorico() {
-        const lista = document.getElementById('historicoLista');
-        const marcacoes = userData.marcacoes || [];
-        if (!marcacoes.length) { lista.innerHTML = '<p class="empty">Ainda não tem marcações.</p>'; return; }
-        lista.innerHTML = marcacoes.map((m, i) => `
-            <div class="history">
-                <div class="history-left">
-                    <div class="date">${m.data}<br><small style="font-weight:normal;color:#666">${m.hora}</small></div>
-                    <div><strong>${m.servico}</strong><br><span style="font-size:13px;color:#666">${m.nome}</span></div>
-                </div>
-                <div class="buttons">
-                    <span class="${badgeClasse(m.estado || 'Confirmado')}">${(m.estado || 'Confirmado').toUpperCase()}</span>
-                    ${m.estado !== 'Cancelado' && m.estado !== 'Rejeitado' ? `
-                        <button onclick="remarcar(${i})">Remarcar</button>
-                        <button class="cancel" onclick="cancelarMarcacao(${i})">Cancelar</button>
-                    ` : ''}
-                    <button onclick="verDetalhes(${i})">Ver detalhes</button>
-                </div>
-            </div>`).join('');
-    }
+        const s = localStorage.getItem('servicoEscolhido');
+        if (s) {
+            const sel = document.getElementById('servico');
+            for (let i = 0; i < sel.options.length; i++) {
+                if (sel.options[i].text === s || sel.options[i].value === s) {
+                    sel.selectedIndex = i;
+                    sel.classList.add('preenchido');
+                    document.getElementById('avisoServico').style.display = 'block';
+                    break;
+                }
+            }
+            localStorage.removeItem('servicoEscolhido');
+        }
 
-    function cancelarMarcacao(i) {
-        if (!confirm('Cancelar esta marcação?')) return;
-        userData.marcacoes[i].estado = 'Cancelado'; saveUser(); carregarHistorico(); toast('Marcação cancelada.');
-    }
-    function remarcar(i) { location.href = 'agendar.html'; }
-    function verDetalhes(i) {
-        const m = userData.marcacoes[i];
-        alert(`Serviço: ${m.servico}\nData: ${m.data}\nHora: ${m.hora}\nNome: ${m.nome}\nEstado: ${m.estado || 'Confirmado'}`);
-    }
+        const rep  = localStorage.getItem('reparticaoEscolhida');
+        const div  = localStorage.getItem('divisaoEscolhida');
+        const cump = localStorage.getItem('cumprimentoEscolhido');
+        if (rep || div || cump) {
+            document.getElementById('prefsBox').style.display = 'block';
+            if (rep)  document.getElementById('prefRep').innerHTML  = '<strong>Repartição:</strong> ' + rep;
+            if (div)  document.getElementById('prefDiv').innerHTML  = '<strong>Divisão:</strong> '    + div;
+            if (cump) document.getElementById('prefCump').innerHTML = '<strong>Cumprimento:</strong> ' + cump;
+        }
 
-    // ── FAVORITOS ─────────────────────────────────────────
-    function carregarFavoritos() {
-        const lista = document.getElementById('favoritosLista');
-        const favs = userData.favoritos || [];
+        const imgRef  = localStorage.getItem('imgReferencia');
+        const imgNome = localStorage.getItem('imgReferenciaNome');
+        if (imgRef) {
+            document.getElementById('refImgBox').style.display = 'block';
+            document.getElementById('refImgAgendar').src = imgRef;
+            document.getElementById('refImgNome').innerText = imgNome || '';
+        }
 
-        if (!favs.length) {
-            lista.innerHTML = `
-                <div class="fav-empty">
-                    Ainda não adicionaste favoritos.<br>
-                    <a href="servicos.html">Ver serviços </a>
-                </div>`;
+        gerarCalendario();
+    };
+
+    function submeterAgendamento() {
+        if (!document.getElementById('data').value) { alert('Por favor selecione uma data no calendário.'); return; }
+        const nome    = document.getElementById('nome').value.trim();
+        const servico = document.getElementById('servico').value;
+        const data    = document.getElementById('data').value;
+        const hora    = document.getElementById('horario').value;
+        if (!nome || !servico || !hora) { alert('Por favor preencha todos os campos.'); return; }
+
+        // Verificar se o dia já está completo (dupla verificação)
+        const [y, m, d] = data.split('-');
+        const chave = d + '/' + m + '/' + y;
+        const diasCompletos = getDiasOcupados();
+        if (diasCompletos.has(chave)) {
+            alert('Este dia já não tem disponibilidade. Por favor escolha outro dia.');
             return;
         }
 
-        lista.innerHTML = `<div class="fav-grid">` +
-            favs.map(nome => {
-                const img = servicosImgs[nome] || '';
-                return `
-                <div class="fav-card" onclick="location.href='servicos.html'">
-                    ${img ? `<img src="${img}" alt="${nome}">` : `<div style="height:120px;background:#ddd;"></div>`}
-                    <button class="btn-remov-fav" title="Remover dos favoritos" onclick="event.stopPropagation(); removerFav('${nome.replace(/'/g,"\\'")}')">❤</button>
-                    <div class="fav-card-info">
-                        <b>${nome}</b>
-                    </div>
-                </div>`;
-            }).join('') +
-        `</div>`;
+        if (ulog) {
+            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+            if (!ud.marcacoes) ud.marcacoes = [];
+            const novaMarc = {
+                id:          Date.now(),
+                nome, servico,
+                data:        d + '/' + m + '/' + y,
+                hora,
+                estado:      'Pendente',
+                email:       ulog,
+                reparticao:  localStorage.getItem('reparticaoEscolhida')  || '',
+                divisao:     localStorage.getItem('divisaoEscolhida')     || '',
+                cumprimento: localStorage.getItem('cumprimentoEscolhido') || '',
+                imgReferencia: localStorage.getItem('imgReferencia') || ''
+            };
+            ud.marcacoes.unshift(novaMarc);
+            localStorage.setItem(ulog, JSON.stringify(ud));
+
+            const todasMarcacoes = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
+            todasMarcacoes.unshift(novaMarc);
+            localStorage.setItem('admin_marcacoes', JSON.stringify(todasMarcacoes));
+            localStorage.removeItem('reparticaoEscolhida');
+            localStorage.removeItem('divisaoEscolhida');
+            localStorage.removeItem('cumprimentoEscolhido');
+            localStorage.removeItem('imgReferencia');
+            localStorage.removeItem('imgReferenciaNome');
+        }
+        location.href = 'marcacoes.html';
     }
-
-    function removerFav(nome) {
-        userData.favoritos = (userData.favoritos || []).filter(x => x !== nome);
-        saveUser(); carregarFavoritos(); toast('Removido dos favoritos.');
-    }
-
-    function alterarSenha() {
-        const atual = document.getElementById('senhaAtual').value;
-        const nova  = document.getElementById('novaSenha').value;
-        const conf  = document.getElementById('confNovaSenha').value;
-        const el    = document.getElementById('msgSenha');
-        const erroS = m => { el.className='msg-modal erro'; el.innerText=m; el.style.display='block'; };
-        const okS   = m => { el.className='msg-modal ok';   el.innerText=m; el.style.display='block'; };
-        if (atual !== userData.password) { erroS('Senha atual incorreta.'); return; }
-        if (nova.length < 4)             { erroS('Mínimo 4 caracteres.'); return; }
-        if (nova !== conf)               { erroS('As senhas não coincidem.'); return; }
-        userData.password = nova; saveUser();
-        okS('Senha alterada com sucesso!');
-        setTimeout(() => { document.getElementById('modalSenha').style.display='none'; el.style.display='none'; }, 1500);
-        ['senhaAtual','novaSenha','confNovaSenha'].forEach(id => document.getElementById(id).value = '');
-    }
-
-    function confirmarEliminar() { document.getElementById('modalEliminar').style.display = 'flex'; }
-
-    function eliminarConta() {
-        const pass = document.getElementById('eliminarPass').value;
-        if (pass !== userData.password) { toast('Palavra-passe incorreta.', 'erro'); return; }
-        localStorage.removeItem(userEmail); localStorage.removeItem('ulog');
-        toast('Conta eliminada.'); setTimeout(() => location.href = 'index.html', 1200);
-    }
-
-    document.getElementById('notificacoesBtn').onclick = function() {
-        userData.notificacoes = !userData.notificacoes; saveUser();
-        toast(userData.notificacoes ? 'Notificações ativadas!' : 'Notificações desativadas.');
-    };
-
-    function logout() { localStorage.removeItem('ulog'); location.href = 'index.html'; }
-
-    document.getElementById('modalSenha').addEventListener('click',   function(e) { if (e.target === this) this.style.display = 'none'; });
-    document.getElementById('modalEliminar').addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
-
-    carregarPerfil();
 </script>
 </body>
 </html>

@@ -247,21 +247,21 @@
 </div>
 
 <script>
-    const ulog = localStorage.getItem('ulog');
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
+        const ulogRaw = localStorage.getItem('ulog');
+        const ulog = ulogRaw ? JSON.parse(ulogRaw) : null;
 
-    if (ulog) {
-        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href = btnM.href = 'perfil1.html';
-        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = btnM.textContent = nome;
-    } else {
-        localStorage.setItem('redirectAfterLogin', 'agendar.html');
-        location.href = 'login.html';
-    }
+        const btn  = document.getElementById('btnAuth');
+        const btnT = document.getElementById('btnAuthText');
+        const btnM = document.getElementById('btnAuthMobile');
 
+        if (ulog) {
+            btn.href = btnM.href = 'perfil1.html';
+            const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btnT.textContent = btnM.textContent = nome;
+        } else {
+            localStorage.setItem('redirectAfterLogin', 'agendar.html');
+            location.href = 'login.html';
+        }
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
@@ -338,10 +338,10 @@
     }
 
     window.onload = function() {
-        if (ulog) {
-            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-            if (ud.nome) document.getElementById('nome').value = ud.nome;
-        }
+    if (ulog && ulog.nome) document.getElementById('nome').value = ulog.nome;
+
+        const s = localStorage.getItem('servicoEscolhido');
+        
 
         const s = localStorage.getItem('servicoEscolhido');
         if (s) {
@@ -378,44 +378,49 @@
         gerarCalendario();
     };
 
-    function submeterAgendamento() {
-        if (!document.getElementById('data').value) { alert('Por favor selecione uma data no calendário.'); return; }
-        const nome    = document.getElementById('nome').value.trim();
-        const servico = document.getElementById('servico').value;
-        const data    = document.getElementById('data').value;
-        const hora    = document.getElementById('horario').value;
-        if (!nome || !servico || !hora) { alert('Por favor preencha todos os campos.'); return; }
+async function submeterAgendamento() {
+    if (!document.getElementById('data').value) { alert('Por favor selecione uma data no calendário.'); return; }
+    const nome    = document.getElementById('nome').value.trim();
+    const servico = document.getElementById('servico').value;
+    const data    = document.getElementById('data').value;
+    const hora    = document.getElementById('horario').value;
+    if (!nome || !servico || !hora) { alert('Por favor preencha todos os campos.'); return; }
 
-        if (ulog) {
-            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-            if (!ud.marcacoes) ud.marcacoes = [];
-            const [y, m, d] = data.split('-');
-            const novaMarc = {
-                id:          Date.now(),
-                nome, servico,
-                data:        d + '/' + m + '/' + y,
-                hora,
-                estado:      'Pendente',
-                email:       ulog,
-                reparticao:  localStorage.getItem('reparticaoEscolhida')  || '',
-                divisao:     localStorage.getItem('divisaoEscolhida')     || '',
-                cumprimento: localStorage.getItem('cumprimentoEscolhido') || '',
-                imgReferencia: localStorage.getItem('imgReferencia') || ''
-            };
-            ud.marcacoes.unshift(novaMarc);
-            localStorage.setItem(ulog, JSON.stringify(ud));
+    // Obter id do serviço
+    const servicoSelect = document.getElementById('servico');
+    const id_servico = servicoSelect.selectedIndex; // índice = id na BD
 
-            const todasMarcacoes = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
-            todasMarcacoes.unshift(novaMarc);
-            localStorage.setItem('admin_marcacoes', JSON.stringify(todasMarcacoes));
-            localStorage.removeItem('reparticaoEscolhida');
-            localStorage.removeItem('divisaoEscolhida');
-            localStorage.removeItem('cumprimentoEscolhido');
-            localStorage.removeItem('imgReferencia');
-            localStorage.removeItem('imgReferenciaNome');
-        }
+    // Obter utilizador da sessão
+    const ulogRaw = localStorage.getItem('ulog');
+    const ulog = ulogRaw ? JSON.parse(ulogRaw) : null;
+    if (!ulog || !ulog.id) { location.href = 'login.html'; return; }
+
+    const res = await fetch("api/marcacoes.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            id_utilizador: ulog.id,
+            id_servico:    id_servico,
+            data:          data,
+            hora:          hora,
+            reparticao:    localStorage.getItem('reparticaoEscolhida')  || '',
+            divisao:       localStorage.getItem('divisaoEscolhida')     || '',
+            cumprimento:   localStorage.getItem('cumprimentoEscolhido') || ''
+        })
+    });
+    const result = await res.json();
+
+    if (result.sucesso) {
+        localStorage.removeItem('reparticaoEscolhida');
+        localStorage.removeItem('divisaoEscolhida');
+        localStorage.removeItem('cumprimentoEscolhido');
+        localStorage.removeItem('imgReferencia');
+        localStorage.removeItem('imgReferenciaNome');
         location.href = 'marcacoes.html';
+    } else {
+        alert('Erro ao guardar marcação: ' + result.erro);
     }
+}
 </script>
 </body>
 </html>

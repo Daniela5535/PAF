@@ -315,33 +315,50 @@
         if (!modoLogin) switchMode();
     }
 
-    function act() {
-        const email = document.getElementById("e").value.trim();
-        const pass  = document.getElementById("p").value;
-        if (modoLogin) {
-            if (!email || !pass) { mostrarErro("Por favor preencha todos os campos."); return; }
-            const dados = JSON.parse(localStorage.getItem(email));
-            if (dados && dados.password === pass) {
-                mostrarSucesso("Login efetuado!");
-                localStorage.setItem("ulog", email);
-                const redir = localStorage.getItem('redirectAfterLogin');
-                if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 1000); }
-                else setTimeout(() => location.href = "pagInicial.html", 1000);
-            } else mostrarErro("Email ou palavra-passe incorretos.");
+async function act() {
+    const email = document.getElementById("e").value.trim();
+    const pass  = document.getElementById("p").value;
+
+    if (modoLogin) {
+        if (!email || !pass) { mostrarErro("Por favor preencha todos os campos."); return; }
+        const res  = await fetch("api/login.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password: pass })
+        });
+        const data = await res.json();
+        if (data.sucesso) {
+            localStorage.setItem("ulog", JSON.stringify({ id: data.id, nome: data.nome, email: data.email }));
+            mostrarSucesso("Login efetuado!");
+            const redir = localStorage.getItem('redirectAfterLogin');
+            if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 1000); }
+            else setTimeout(() => location.href = "index.html", 1000);
         } else {
-            const nome     = document.getElementById("n").value.trim();
-            const confirma = document.getElementById("cp").value;
-            if (!nome || !email || !pass || !confirma) { mostrarErro("Por favor preencha todos os campos."); return; }
-            if (!email.includes("@")) { mostrarErro("Email inválido."); return; }
-            if (pass.length < 6)      { mostrarErro("A palavra-passe deve ter pelo menos 6 caracteres."); return; }
-            if (pass !== confirma)    { mostrarErro("As palavras-passe não coincidem."); return; }
-            if (localStorage.getItem(email)) { mostrarErro("Este email já está registado."); return; }
-            localStorage.setItem(email, JSON.stringify({ nome, email, password: pass }));
+            mostrarErro(data.erro);
+        }
+    } else {
+        const nome     = document.getElementById("n").value.trim();
+        const confirma = document.getElementById("cp").value;
+        if (!nome || !email || !pass || !confirma) { mostrarErro("Por favor preencha todos os campos."); return; }
+        if (!email.includes("@")) { mostrarErro("Email inválido."); return; }
+        if (pass.length < 6)      { mostrarErro("A palavra-passe deve ter pelo menos 6 caracteres."); return; }
+        if (pass !== confirma)    { mostrarErro("As palavras-passe não coincidem."); return; }
+
+        const res  = await fetch("api/registar.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, email, password: pass })
+        });
+        const data = await res.json();
+        if (data.sucesso) {
+            localStorage.setItem("ulog", JSON.stringify({ id: data.id, nome: data.nome, email: data.email }));
             mostrarSucesso("Conta criada! A redirecionar...");
-            localStorage.setItem("ulog", email);
-            setTimeout(() => location.href = "pagInicial.html", 1200);
+            setTimeout(() => location.href = "index.html", 1200);
+        } else {
+            mostrarErro(data.erro);
         }
     }
+}
 
     function sendCode() {
         const em = document.getElementById("re").value.trim();
@@ -375,7 +392,10 @@
     }
 
     // Se já tem sessão iniciada, redirecionar para perfil
-    if (localStorage.getItem('ulog')) location.href = 'perfil1.html';
+   const ulogRaw = localStorage.getItem('ulog');
+    if (ulogRaw) {
+    try { const u = JSON.parse(ulogRaw); if (u && u.id) location.href = 'perfil1.html'; } catch(e) {}
+    }
 
     document.addEventListener("keydown", e => {
         if (e.key === "Enter" && document.getElementById("formPrincipal").style.display !== "none") act();

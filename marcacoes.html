@@ -211,143 +211,138 @@
 </div>
 
 <script>
-    /* ── PROTEÇÃO ── */
-    if (!localStorage.getItem('ulog')) {
-        localStorage.setItem('redirectAfterLogin', 'marcacoes.html');
-        location.href = 'login.html';
+const ulogRaw = localStorage.getItem('ulog');
+const ulog = ulogRaw ? JSON.parse(ulogRaw) : null;
+
+if (!ulog || !ulog.id) {
+    localStorage.setItem('redirectAfterLogin', 'marcacoes.html');
+    location.href = 'login.html';
+}
+
+const btn  = document.getElementById('btnAuth');
+const btnT = document.getElementById('btnAuthText');
+const btnM = document.getElementById('btnAuthMobile');
+
+if (ulog) {
+    btn.href  = 'perfil1.html';
+    btnM.href = 'perfil1.html';
+    const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+    btnT.textContent = nome;
+    btnM.textContent = nome;
+}
+
+function toggleMenu() {
+    const m = document.getElementById('menuMobile');
+    const navbar = document.getElementById('navbar');
+    const navbarHeight = navbar.offsetHeight;
+    if (m.style.display === 'flex') {
+        m.style.display = 'none';
+    } else {
+        m.style.top = navbarHeight + 'px';
+        m.style.display = 'flex';
+    }
+}
+
+document.addEventListener('click', function(e) {
+    const m = document.getElementById('menuMobile');
+    const toggle = document.querySelector('.menu-toggle');
+    if (m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+        m.style.display = 'none';
+    }
+});
+
+let cancelarIndex = null;
+
+function badgeClasse(estado) {
+    const map = { 'pendente':'pendente','confirmado':'confirmado','cancelado':'cancelado','rejeitado':'rejeitado' };
+    return 'badge badge-' + (map[estado.toLowerCase()] || 'pendente');
+}
+
+async function renderizar() {
+    const lista = document.getElementById('listaMarcacoes');
+    lista.innerHTML = '<p style="text-align:center;padding:40px;color:#aaa;">A carregar...</p>';
+
+    const res = await fetch("api/marcacoes.php?id_utilizador=" + ulog.id);
+    const marcacoes = await res.json();
+
+    if (!marcacoes.length) {
+        lista.innerHTML = `
+            <div class="sem-marcacoes">
+                Ainda não tem marcações.<br><br>
+                <a href="agendar.html">Fazer primeira marcação →</a>
+            </div>`;
+        return;
     }
 
-    /* ── LOGIN / PERFIL ── */
-    const ulog = localStorage.getItem('ulog');
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
-
-    if (ulog) {
-        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href  = 'perfil1.html';
-        btnM.href = 'perfil1.html';
-        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = nome;
-        btnM.textContent = nome;
-    }
-
-    /* ── HAMBURGER ── */
-    function toggleMenu() {
-        const m = document.getElementById('menuMobile');
-        const navbar = document.getElementById('navbar');
-        const navbarHeight = navbar.offsetHeight;
-        
-        if (m.style.display === 'flex') {
-            m.style.display = 'none';
-        } else {
-            m.style.top = navbarHeight + 'px';
-            m.style.display = 'flex';
-        }
-    }
-
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', function(e) {
-        const m = document.getElementById('menuMobile');
-        const toggle = document.querySelector('.menu-toggle');
-        if (m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
-            m.style.display = 'none';
-        }
-    });
-
-    let cancelarIndex = null;
-
-    function badgeClasse(estado) {
-        const map = { 'Pendente':'pendente','Confirmado':'confirmado','Cancelado':'cancelado','Rejeitado':'rejeitado' };
-        return 'badge badge-' + (map[estado] || 'pendente');
-    }
-
-    function renderizar() {
-        const lista = document.getElementById('listaMarcacoes');
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        const marcacoes = ud.marcacoes || [];
-
-        if (!marcacoes.length) {
-            lista.innerHTML = `
-                <div class="sem-marcacoes">
-                    Ainda não tem marcações.<br><br>
-                    <a href="agendar.html">Fazer primeira marcação →</a>
-                </div>`;
-            return;
-        }
-
-        lista.innerHTML = marcacoes.map((m, i) => `
-            ${i > 0 ? '<hr class="separador">' : ''}
-            <div class="topo-agendamento">
-                <div class="cancelar-info">
-                    ${m.estado === 'Pendente' || m.estado === 'Confirmado' ? `
-                        <p>Caso pretenda cancelar o agendamento, clique em
-                        <a onclick="abrirModal(${i})">cancelar</a>.<br>
-                        Após o cancelamento, o agendamento não pode ser recuperado.</p>
-                    ` : `
-                        <p>Este agendamento encontra-se <strong>${(m.estado||'').toLowerCase()}</strong>.</p>
-                    `}
-                </div>
-                <div class="estado-wrap">
-                    <span class="${badgeClasse(m.estado || 'Pendente')}">${(m.estado || 'Pendente').toUpperCase()}</span>
-                    ${m.estado === 'Pendente' || !m.estado ? `
-                        <div class="aviso-pendente">⏳ A aguardar confirmação do funcionário.</div>
-                    ` : ''}
-                    ${m.estado === 'Rejeitado' ? `
-                        <div class="aviso-pendente" style="background:#fff0f0;border-color:#f5aaaa;color:#c0392b;">
-                            ✖ Marcação rejeitada pelo administrador.
-                        </div>
-                    ` : ''}
-                </div>
+    lista.innerHTML = marcacoes.map((m, i) => `
+        ${i > 0 ? '<hr class="separador">' : ''}
+        <div class="topo-agendamento">
+            <div class="cancelar-info">
+                ${m.estado === 'pendente' || m.estado === 'confirmado' ? `
+                    <p>Caso pretenda cancelar o agendamento, clique em
+                    <a onclick="abrirModal(${m.id})">cancelar</a>.<br>
+                    Após o cancelamento, o agendamento não pode ser recuperado.</p>
+                ` : `
+                    <p>Este agendamento encontra-se <strong>${m.estado}</strong>.</p>
+                `}
             </div>
-            <div class="card-agendamento">
-                <div class="info">
-                    <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
-                    <p>Nome: <strong>${m.nome}</strong></p>
-                    <p>Serviço: <strong>${m.servico}</strong></p>
-                    ${m.reparticao  ? `<p>Repartição: <strong>${m.reparticao}</strong></p>`  : ''}
-                    ${m.divisao     ? `<p>Divisão: <strong>${m.divisao}</strong></p>`         : ''}
-                    ${m.cumprimento ? `<p>Cumprimento: <strong>${m.cumprimento}</strong></p>` : ''}
-                </div>
-                <div class="acoes">
-                    ${m.estado !== 'Cancelado' && m.estado !== 'Rejeitado' ? `
-                        <button class="btn-cancel" onclick="abrirModal(${i})">Cancelar</button>
-                    ` : ''}
-                    <button onclick="location.href='agendar.html'">Nova marcação</button>
-                </div>
+            <div class="estado-wrap">
+                <span class="${badgeClasse(m.estado)}">${m.estado.toUpperCase()}</span>
+                ${m.estado === 'pendente' ? `
+                    <div class="aviso-pendente">⏳ A aguardar confirmação do funcionário.</div>
+                ` : ''}
+                ${m.estado === 'rejeitado' ? `
+                    <div class="aviso-pendente" style="background:#fff0f0;border-color:#f5aaaa;color:#c0392b;">
+                        ✖ Marcação rejeitada pelo administrador.
+                    </div>
+                ` : ''}
             </div>
-        `).join('');
-    }
+        </div>
+        <div class="card-agendamento">
+            <div class="info">
+                <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
+                <p>Serviço: <strong>${m.servico}</strong></p>
+                ${m.reparticao  ? `<p>Repartição: <strong>${m.reparticao}</strong></p>`  : ''}
+                ${m.divisao     ? `<p>Divisão: <strong>${m.divisao}</strong></p>`         : ''}
+                ${m.cumprimento ? `<p>Cumprimento: <strong>${m.cumprimento}</strong></p>` : ''}
+            </div>
+            <div class="acoes">
+                ${m.estado !== 'cancelado' && m.estado !== 'rejeitado' ? `
+                    <button class="btn-cancel" onclick="abrirModal(${m.id})">Cancelar</button>
+                ` : ''}
+                <button onclick="location.href='agendar.html'">Nova marcação</button>
+            </div>
+        </div>
+    `).join('');
+}
 
-    function abrirModal(i) {
-        cancelarIndex = i;
-        document.getElementById('modalCancelar').classList.add('active');
-    }
+function abrirModal(id) {
+    cancelarIndex = id;
+    document.getElementById('modalCancelar').classList.add('active');
+}
 
-    function fecharModal() {
-        document.getElementById('modalCancelar').classList.remove('active');
-        cancelarIndex = null;
-    }
+function fecharModal() {
+    document.getElementById('modalCancelar').classList.remove('active');
+    cancelarIndex = null;
+}
 
-    function confirmarCancelamento() {
-        fecharModal();
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        ud.marcacoes[cancelarIndex].estado = 'Cancelado';
-        localStorage.setItem(ulog, JSON.stringify(ud));
-
-        const id = ud.marcacoes[cancelarIndex].id;
-        const todas = JSON.parse(localStorage.getItem('admin_marcacoes') || '[]');
-        const idx = todas.findIndex(x => x.id === id);
-        if (idx !== -1) { todas[idx].estado = 'Cancelado'; localStorage.setItem('admin_marcacoes', JSON.stringify(todas)); }
-
-        renderizar();
-    }
-
-    document.getElementById('modalCancelar').addEventListener('click', function(e) {
-        if (e.target === this) fecharModal();
+async function confirmarCancelamento() {
+    fecharModal();
+    const res = await fetch("api/cancelar_marcacao.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: cancelarIndex, id_utilizador: ulog.id })
     });
+    const result = await res.json();
+    if (result.sucesso) renderizar();
+    else alert("Erro ao cancelar marcação.");
+}
 
-    renderizar();
+document.getElementById('modalCancelar').addEventListener('click', function(e) {
+    if (e.target === this) fecharModal();
+});
+
+renderizar();
 </script>
 </body>
 </html>
