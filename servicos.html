@@ -475,7 +475,9 @@
         const conf = document.getElementById('escolhaConfirmada');
         conf.innerText = '✔ ESCOLHA GUARDADA: ' + opcao.toUpperCase();
         conf.style.display = 'block';
-        setTimeout(()=>{ _selectorAberto=false; document.getElementById('infoLista').style.display='flex'; document.getElementById('opcoesSelector').classList.remove('visivel'); document.getElementById('btnEscolha').innerHTML='ESCOLHA AQUI <span class="btn-seta"></span>'; }, 800);
+        setTimeout(()=>{ _selectorAberto=false; document.getElementById('infoLista').style.display='flex';
+        document.getElementById('opcoesSelector').classList.remove('visivel'); 
+        document.getElementById('btnEscolha').innerHTML='ESCOLHA AQUI <span class="btn-seta"></span>'; }, 800);
     }
 
     function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto=false; }

@@ -61,16 +61,9 @@
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
 
         .menu-mobile { 
-            display: none; 
-            flex-direction: column; 
-            background: #fff; 
-            border-bottom: 1px solid #eee; 
-            padding: 16px 20px; 
-            gap: 14px; 
-            position: fixed;
-            left: 0;
-            width: 100%;
-            z-index: 999;
+            display: none; flex-direction: column; background: #fff; 
+            border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; 
+            position: fixed; left: 0; width: 100%; z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
@@ -123,11 +116,98 @@
         /* TOAST */
         .toast { display: none; position: fixed; bottom: 28px; right: 28px; background: #111; color: #fff; padding: 14px 24px; border-radius: 12px; z-index: 3000; font-size: 14px; font-weight: bold; }
 
-        /* MENSAGENS */
-        .minhas-msgs { display: none; max-width: 650px; margin: 0 auto 40px; padding: 0 20px; }
-        .minhas-msgs h3 { font-size: 15px; color: #555; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .msg-item { background: #f4efe9; border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; font-size: 13px; color: #333; border-left: 4px solid #c4b9a8; }
-        .msg-item .msg-meta { font-size: 11px; color: #999; margin-top: 6px; }
+        /* ── HISTÓRICO DE MENSAGENS ── */
+        .minhas-msgs { display: none; max-width: 650px; margin: 0 auto 50px; padding: 0 20px; }
+        .minhas-msgs h3 { 
+            font-size: 13px; color: #888; margin-bottom: 16px; 
+            text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold;
+        }
+
+        /* card de cada mensagem enviada */
+        .msg-item {
+            background: #f4efe9;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            border-left: 4px solid #c4b9a8;
+        }
+        .msg-item .msg-texto { font-size: 14px; color: #333; line-height: 1.5; }
+        .msg-item .msg-meta { font-size: 11px; color: #999; margin-top: 8px; }
+
+        /* resposta do admin */
+        .resposta-admin {
+            margin-top: 14px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px 18px;
+            border-left: 4px solid #27ae60;
+            position: relative;
+        }
+        .resposta-admin .resposta-label {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #27ae60;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .resposta-admin .resposta-label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #27ae60;
+        }
+        .resposta-admin .resposta-texto {
+            font-size: 14px;
+            color: #222;
+            line-height: 1.6;
+        }
+        .resposta-admin .resposta-data {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 8px;
+        }
+
+        /* sem resposta ainda */
+        .aguardar-resposta {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+        .dot-pulse {
+            display: flex; gap: 4px; align-items: center;
+        }
+        .dot-pulse span {
+            width: 5px; height: 5px; border-radius: 50%; background: #ccc;
+            display: inline-block; animation: pulse 1.4s infinite;
+        }
+        .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+        .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes pulse {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+
+        /* nova resposta (badge) */
+        .badge-nova-resposta {
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
 
         /* ── FOOTER ── */
         .contactos {
@@ -191,17 +271,9 @@
 
 <div style="padding: 12px 20px;">
     <button onclick="history.back()" style="
-        background: none;
-        border: none;
-        font-size: 13px;
-        font-weight: bold;
-        color: #111;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.5px;
-    ">← VOLTAR</button>
+        background: none; border: none; font-size: 13px; font-weight: bold;
+        color: #111; cursor: pointer; display: flex; align-items: center;
+        gap: 6px; letter-spacing: 0.5px;">← VOLTAR</button>
 </div>
 
 <!-- BANNER -->
@@ -228,9 +300,9 @@
     </div>
 </div>
 
-<!-- HISTÓRICO DE MENSAGENS -->
+<!-- HISTÓRICO DE MENSAGENS (com respostas) -->
 <div class="minhas-msgs" id="minhasMsgs">
-    <h3>As suas mensagens anteriores</h3>
+    <h3>As suas mensagens</h3>
     <div id="listaMsgs"></div>
 </div>
 
@@ -266,15 +338,13 @@
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
-        const navbarHeight = navbar.offsetHeight;
         if (m.style.display === 'flex') {
             m.style.display = 'none';
         } else {
-            m.style.top = navbarHeight + 'px';
+            m.style.top = navbar.offsetHeight + 'px';
             m.style.display = 'flex';
         }
     }
-
     document.addEventListener('click', function(e) {
         const m = document.getElementById('menuMobile');
         const toggle = document.querySelector('.menu-toggle');
@@ -316,10 +386,12 @@
             lida: false
         };
 
-        const todas = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
-        todas.unshift(nova);
-        localStorage.setItem('admin_mensagens', JSON.stringify(todas));
+        // Guardar para o admin
+        const todasAdmin = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
+        todasAdmin.unshift(nova);
+        localStorage.setItem('admin_mensagens', JSON.stringify(todasAdmin));
 
+        // Guardar no perfil do utilizador (para ver as respostas)
         if (ulog) {
             const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
             if (!ud.mensagens) ud.mensagens = [];
@@ -335,16 +407,74 @@
     }
 
     function carregarMensagens(ulog) {
+        // Sincronizar respostas do admin para o perfil do utilizador
+        sincronizarRespostas(ulog);
+
         const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
         const msgs = ud.mensagens || [];
         if (!msgs.length) return;
+
         document.getElementById('minhasMsgs').style.display = 'block';
-        document.getElementById('listaMsgs').innerHTML = msgs.map(m => `
-            <div class="msg-item">
-                <div>${m.msg}</div>
-                <div class="msg-meta">${m.data} às ${m.hora}</div>
-            </div>`).join('');
+        document.getElementById('listaMsgs').innerHTML = msgs.map(m => {
+            // bloco de resposta
+            let respostaHtml = '';
+            if (m.resposta) {
+                respostaHtml = `
+                    <div class="resposta-admin">
+                        <div class="resposta-label">Resposta da Easy Glow</div>
+                        <div class="resposta-texto">${m.resposta}</div>
+                        <div class="resposta-data">${m.respostaData || ''}</div>
+                    </div>`;
+            } else {
+                respostaHtml = `
+                    <div class="aguardar-resposta">
+                        <div class="dot-pulse"><span></span><span></span><span></span></div>
+                        A aguardar resposta
+                    </div>`;
+            }
+
+            const novaResposta = m.resposta && !m.respostaVista
+                ? `<span class="badge-nova-resposta">Nova resposta</span>` : '';
+
+            return `
+                <div class="msg-item">
+                    <div class="msg-texto">${m.msg}${novaResposta}</div>
+                    <div class="msg-meta">Enviada em ${m.data} às ${m.hora}</div>
+                    ${respostaHtml}
+                </div>`;
+        }).join('');
+
+        // Marcar respostas como vistas (após render)
+        setTimeout(() => marcarRespostasVistas(ulog), 1500);
+    }
+
+    function sincronizarRespostas(ulog) {
+        // Vai buscar as respostas do admin e sincroniza com o perfil do utilizador
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        if (!ud.mensagens || !ud.mensagens.length) return;
+
+        const todasAdmin = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
+
+        ud.mensagens.forEach((m, idx) => {
+            const adminMsg = todasAdmin.find(a => a.id === m.id);
+            if (adminMsg && adminMsg.resposta && adminMsg.resposta !== m.resposta) {
+                ud.mensagens[idx].resposta     = adminMsg.resposta;
+                ud.mensagens[idx].respostaData = adminMsg.respostaData;
+                ud.mensagens[idx].respostaVista = false; // nova resposta não vista
+            }
+        });
+
+        localStorage.setItem(ulog, JSON.stringify(ud));
+    }
+
+    function marcarRespostasVistas(ulog) {
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        if (!ud.mensagens) return;
+        ud.mensagens.forEach(m => {
+            if (m.resposta) m.respostaVista = true;
+        });
+        localStorage.setItem(ulog, JSON.stringify(ud));
     }
 </script>
 </body>
-</html>
+</html> 
