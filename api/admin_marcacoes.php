@@ -21,16 +21,16 @@ if ($metodo === "GET") {
         JOIN utilizadores u ON m.id_Utilizador = u.id
         JOIN servicos s     ON m.id_Servico    = s.id
     ";
+
     if ($estado !== 'todas') {
-        $sql .= " WHERE m.estado = ?";
-        $stmt = $conn->prepare($sql . " ORDER BY m.data DESC, m.hora DESC");
+        $stmt = $conn->prepare($sql . " WHERE m.estado = ? ORDER BY m.data DESC, m.hora DESC");
         $stmt->bind_param("s", $estado);
     } else {
         $stmt = $conn->prepare($sql . " ORDER BY m.data DESC, m.hora DESC");
     }
 
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result    = $stmt->get_result();
     $marcacoes = [];
     while ($row = $result->fetch_assoc()) $marcacoes[] = $row;
     echo json_encode($marcacoes);
@@ -40,8 +40,8 @@ if ($metodo === "GET") {
 // ── ALTERAR estado de uma marcação ──────────────────────────────────────────
 if ($metodo === "POST") {
     $dados  = json_decode(file_get_contents("php://input"), true);
-    $id     = intval($dados['id']     ?? 0);
-    $estado = trim($dados['estado']   ?? '');
+    $id     = intval($dados['id']   ?? 0);
+    $estado = trim($dados['estado'] ?? '');
 
     $permitidos = ['pendente', 'confirmado', 'cancelado', 'rejeitado'];
     if (!$id || !in_array($estado, $permitidos)) {

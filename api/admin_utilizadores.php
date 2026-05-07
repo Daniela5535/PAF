@@ -41,7 +41,7 @@ if ($metodo === "GET") {
 
     $stmt->execute();
     $result = $stmt->get_result();
-    $users = [];
+    $users  = [];
     while ($row = $result->fetch_assoc()) $users[] = $row;
     echo json_encode($users);
     exit;

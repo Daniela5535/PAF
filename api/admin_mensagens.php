@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
@@ -22,19 +22,22 @@ if ($metodo === "GET") {
     ");
     $stmt->execute();
     $result = $stmt->get_result();
-    $msgs = [];
+    $msgs   = [];
     while ($row = $result->fetch_assoc()) $msgs[] = $row;
     echo json_encode($msgs);
     exit;
 }
 
-// ── ATUALIZAR mensagem (marcar lida / responder) ────────────────────────────
+// ── ATUALIZAR mensagem (marcar lida / responder / apagar) ───────────────────
 if ($metodo === "POST") {
-    $dados  = json_decode(file_get_contents("php://input"), true);
-    $id     = intval($dados['id'] ?? 0);
-    $acao   = $dados['acao'] ?? '';
+    $dados = json_decode(file_get_contents("php://input"), true);
+    $id    = intval($dados['id'] ?? 0);
+    $acao  = $dados['acao'] ?? '';
 
-    if (!$id) { echo json_encode(["sucesso" => false, "erro" => "ID inválido."]); exit; }
+    if (!$id) {
+        echo json_encode(["sucesso" => false, "erro" => "ID inválido."]);
+        exit;
+    }
 
     if ($acao === 'lida') {
         $stmt = $conn->prepare("UPDATE mensagens SET lida = 1 WHERE id = ?");
@@ -46,9 +49,12 @@ if ($metodo === "POST") {
 
     if ($acao === 'responder') {
         $resposta = trim($dados['resposta'] ?? '');
-        if (!$resposta) { echo json_encode(["sucesso" => false, "erro" => "Resposta vazia."]); exit; }
+        if (!$resposta) {
+            echo json_encode(["sucesso" => false, "erro" => "Resposta vazia."]);
+            exit;
+        }
         $agora = date('d/m/Y \à\s H:i');
-        $stmt = $conn->prepare("UPDATE mensagens SET resposta = ?, resposta_data = ?, lida = 1 WHERE id = ?");
+        $stmt  = $conn->prepare("UPDATE mensagens SET resposta = ?, resposta_data = ?, lida = 1 WHERE id = ?");
         $stmt->bind_param("ssi", $resposta, $agora, $id);
         $stmt->execute();
         echo json_encode(["sucesso" => true, "respostaData" => $agora]);
