@@ -60,13 +60,58 @@
         /* GRID SERVIÇOS */
         .container { padding:40px 20px; max-width:1200px; margin:0 auto; }
         .grid { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
-        .card { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:20px; overflow:hidden; background:#faf8f5; box-shadow:0 2px 10px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; width:260px; }
+
+        /* CARD com favorito */
+        .card { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:20px; overflow:hidden; background:#faf8f5; box-shadow:0 2px 10px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; width:260px; position:relative; }
         .card:hover { transform:translateY(-4px); box-shadow:0 6px 18px rgba(0,0,0,0.13); }
         .img-box { width:100%; height:340px; overflow:hidden; }
         .img-box img { width:100%; height:100%; object-fit:cover; object-position:center center; }
         .card-legenda { width:100%; padding:14px 16px; text-align:center; }
         .card-legenda b { font-size:15px; display:block; margin-bottom:4px; }
         .card-legenda span { font-size:13px; color:#888; }
+
+        /* BOTÃO FAVORITO */
+        .btn-fav {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.92);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background 0.2s;
+            z-index: 10;
+            line-height: 1;
+        }
+        .btn-fav:hover { transform: scale(1.15); background: white; }
+        .btn-fav.ativo { background: #fff0f8; }
+        .btn-fav .heart-icon { transition: transform 0.2s; }
+        .btn-fav.ativo .heart-icon { transform: scale(1.2); }
+
+        /* TOAST FAVORITO */
+        .fav-toast {
+            display: none;
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 3000;
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
 
         /* MODAL INFO */
         .modal-info-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); justify-content:center; align-items:center; z-index:2000; overflow-y:auto; padding:16px; }
@@ -151,14 +196,10 @@
             .info-card-texto { padding:10px 8px; }
             .info-card-texto h3 { font-size:12px; }
             .info-card-texto p { font-size:10px; }
-
-            /* MODAL SERVIÇO MOBILE */
             .modal-overlay { align-items:flex-start; padding-top:20px; }
             .modal-box { padding:20px 16px; gap:16px; border-radius:16px; }
             .modal-topo { flex-direction:column; }
             .modal-img { width:100%; height:220px; border-radius:12px; }
-
-            /* MODAL INFO MOBILE - CORRIGIDO */
             .modal-info-overlay { align-items:flex-start; padding:16px; }
             .modal-info-box { 
                 flex-direction:column; 
@@ -171,37 +212,13 @@
                 gap:16px;
                 border-radius:16px;
             }
-            .modal-info-img { 
-                width:100%; 
-                height:180px;
-                flex-shrink:0;
-            }
-            .modal-info-img img {
-                width:100%;
-                height:100%;
-                object-fit:cover;
-            }
-            .modal-info-content {
-                width:100%;
-                gap:12px;
-            }
-            .modal-info-titulo {
-                font-size:16px;
-            }
-            .opcoes-selector { 
-                max-height:220px; 
-                overflow-y:auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            .modal-info-lista {
-                max-height:200px;
-                overflow-y:auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            .btn-escolha {
-                width:100%;
-                justify-content:center;
-            }
+            .modal-info-img { width:100%; height:180px; flex-shrink:0; }
+            .modal-info-img img { width:100%; height:100%; object-fit:cover; }
+            .modal-info-content { width:100%; gap:12px; }
+            .modal-info-titulo { font-size:16px; }
+            .opcoes-selector { max-height:220px; overflow-y:auto; -webkit-overflow-scrolling: touch; }
+            .modal-info-lista { max-height:200px; overflow-y:auto; -webkit-overflow-scrolling: touch; }
+            .btn-escolha { width:100%; justify-content:center; }
             .contactos { flex-direction:column; padding:24px 16px; }
         }
     </style>
@@ -275,53 +292,13 @@
 
 <!-- GRID SERVIÇOS -->
 <div class="container">
-    <div class="grid">
-        <div class="card" onclick="abrirModal('Tranças Fulani X Lemonade','4H/6H','trancafulanixlemonade.JPG','60€')">
-            <div class="img-box"><img src="trancafulanixlemonade.JPG" alt="Tranças Fulani X Lemonade"></div>
-            <div class="card-legenda"><b>Tranças "Fulani X Lemonade"</b><span>A partir de 60€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Lemonade','5H/6H','trancalemonade.JPG','30€')">
-            <div class="img-box"><img src="trancalemonade.JPG" alt="Tranças Lemonade"></div>
-            <div class="card-legenda"><b>Tranças "Lemonade"</b><span>A partir de 30€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Fulani','5H/7H','trancafulani.JPG','50€')">
-            <div class="img-box"><img src="trancafulani.JPG" alt="Tranças Fulani"></div>
-            <div class="card-legenda"><b>Tranças "Fulani"</b><span>A partir de 50€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Cornrows','3H/4H','trancacornrowNago.JPG','25€')">
-            <div class="img-box"><img src="trancacornrowNago.JPG" alt="Cornrows"></div>
-            <div class="card-legenda"><b>Tranças "Cornrows"</b><span>A partir de 25€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Trança estilo mohawk','4H/6H','trancaestilomohank.JPG','35€')">
-            <div class="img-box"><img src="trancaestilomohank.JPG" alt="Trança estilo mohawk"></div>
-            <div class="card-legenda"><b>Trança estilo mohawk</b><span>A partir de 35€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Dreads','5H/6H','trancadreads.JPG','40€')">
-            <div class="img-box"><img src="trancadreads.JPG" alt="Tranças Dreads"></div>
-            <div class="card-legenda"><b>Tranças "Dreads"</b><span>A partir de 40€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Knotless','6H/8H','trancaknotless.JPG','40€')">
-            <div class="img-box"><img src="trancaknotless.JPG" alt="Tranças Knotless"></div>
-            <div class="card-legenda"><b>Tranças "Knotless"</b><span>A partir de 40€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Gypsy','5H/7H','trancagypsy.JPG','40€')">
-            <div class="img-box"><img src="trancagypsy.JPG" alt="Tranças Gypsy"></div>
-            <div class="card-legenda"><b>Trança "Gypsy"</b><span>A partir de 40€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças Twist','4H/6H','trancatwists.JPG','35€')">
-            <div class="img-box"><img src="trancatwists.JPG" alt="Tranças Twist"></div>
-            <div class="card-legenda"><b>Tranças "Twists"</b><span>A partir de 35€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Tranças French','5H/8H','trancafrench.JPG','50€')">
-            <div class="img-box"><img src="trancafrench.JPG" alt="Tranças French"></div>
-            <div class="card-legenda"><b>Tranças "French"</b><span>A partir de 50€</span></div>
-        </div>
-        <div class="card" onclick="abrirModal('Manutenção Rasta + Penteado','5H/8H','manutencaorastas.JPG','25€')">
-            <div class="img-box"><img src="manutencaorastas.JPG" alt="Manutenção Rasta + Penteado"></div>
-            <div class="card-legenda"><b>Manutenção Rasta + Penteado</b><span>A partir de 25€</span></div>
-        </div>
+    <div class="grid" id="gridServicos">
+        <!-- Cards gerados por JS -->
     </div>
 </div>
+
+<!-- TOAST FAVORITO -->
+<div class="fav-toast" id="favToast"></div>
 
 <!-- MODAL INFO -->
 <div class="modal-info-overlay" id="modalInfo">
@@ -364,7 +341,6 @@
             </div>
         </div>
 
-        <!-- IMAGEM DE REFERÊNCIA -->
         <div class="ref-img-secao">
             <label>IMAGEM DE REFERÊNCIA (OPCIONAL)</label>
             <p>Carregue uma foto do estilo que deseja para ajudar a nossa equipa.</p>
@@ -399,6 +375,7 @@
 </div>
 
 <script>
+    // ── AUTH ──────────────────────────────────────────────
     const ulog = localStorage.getItem('ulog');
     const btn  = document.getElementById('btnAuth');
     const btnT = document.getElementById('btnAuthText');
@@ -415,6 +392,114 @@
         m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
     }
 
+    // ── SERVIÇOS DATA ─────────────────────────────────────
+    const servicos = [
+        { nome:"Tranças Fulani X Lemonade", duracao:"4H/6H", img:"trancafulanixlemonade.JPG", preco:"60€" },
+        { nome:"Tranças Lemonade",          duracao:"5H/6H", img:"trancalemonade.JPG",         preco:"30€" },
+        { nome:"Tranças Fulani",            duracao:"5H/7H", img:"trancafulani.JPG",            preco:"50€" },
+        { nome:"Tranças Cornrows",          duracao:"3H/4H", img:"trancacornrowNago.JPG",       preco:"25€" },
+        { nome:"Trança estilo mohawk",      duracao:"4H/6H", img:"trancaestilomohank.JPG",      preco:"35€" },
+        { nome:"Tranças Dreads",            duracao:"5H/6H", img:"trancadreads.JPG",            preco:"40€" },
+        { nome:"Tranças Knotless",          duracao:"6H/8H", img:"trancaknotless.JPG",          preco:"40€" },
+        { nome:"Trança Gypsy",             duracao:"5H/7H", img:"trancagypsy.JPG",             preco:"40€" },
+        { nome:"Tranças Twists",            duracao:"4H/6H", img:"trancatwists.JPG",            preco:"35€" },
+        { nome:"Tranças French",            duracao:"5H/8H", img:"trancafrench.JPG",            preco:"50€" },
+        { nome:"Manutenção Rasta + Penteado", duracao:"5H/8H", img:"manutencaorastas.JPG",     preco:"25€" }
+    ];
+
+    // ── FAVORITOS HELPERS ─────────────────────────────────
+    function getFavs() {
+        if (!ulog) return [];
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        return ud.favoritos || [];
+    }
+
+    function saveFavs(favs) {
+        if (!ulog) return;
+        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
+        ud.favoritos = favs;
+        localStorage.setItem(ulog, JSON.stringify(ud));
+    }
+
+    function isFav(nome) { return getFavs().includes(nome); }
+
+    function toggleFav(e, nome) {
+        e.stopPropagation(); // não abrir o modal
+        if (!ulog) {
+            showFavToast('Faz login para guardar favoritos ❤', true);
+            setTimeout(() => location.href = 'login.html', 1200);
+            return;
+        }
+        let favs = getFavs();
+        let adicionado;
+        if (favs.includes(nome)) {
+            favs = favs.filter(f => f !== nome);
+            adicionado = false;
+        } else {
+            favs.push(nome);
+            adicionado = true;
+        }
+        saveFavs(favs);
+        // atualizar botão visualmente
+        const btn = document.querySelector(`.btn-fav[data-nome="${CSS.escape(nome)}"]`);
+        if (btn) atualizarBtnFav(btn, adicionado);
+        showFavToast(adicionado ? '♥ Adicionado aos favoritos!' : '♡ Removido dos favoritos');
+    }
+
+    function atualizarBtnFav(btn, ativo) {
+        btn.classList.toggle('ativo', ativo);
+        btn.querySelector('.heart-icon').textContent = ativo ? '♥' : '♡';
+        btn.title = ativo ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+    }
+
+    function showFavToast(msg, isError) {
+        const t = document.getElementById('favToast');
+        t.textContent = msg;
+        t.style.background = isError ? '#c0392b' : '#111';
+        t.style.display = 'block';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.style.display = 'none', 2200);
+    }
+
+    // ── RENDER GRID ───────────────────────────────────────
+function renderGrid() {
+    const grid = document.getElementById('gridServicos');
+
+    grid.innerHTML = servicos.map(s => {
+        const fav = isFav(s.nome);
+
+        return `
+        <div class="card" onclick="abrirModal('${s.nome}','${s.duracao}','${s.img}','${s.preco}')">
+
+            <button 
+                class="btn-fav ${fav ? 'ativo' : ''}" 
+                data-nome="${s.nome}"
+                title="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}"
+                onclick="toggleFav(event, '${s.nome}')">
+
+                <span class="heart-icon">
+                    ${fav ? '♥' : '♡'}
+                </span>
+
+            </button>
+
+            <div class="img-box">
+                <img src="${s.img}" alt="${s.nome}">
+            </div>
+
+            <div class="card-legenda">
+                <b>${s.nome}</b>
+                <span>A partir de ${s.preco}</span>
+            </div>
+
+        </div>
+        `;
+    }).join('');
+}
+
+    renderGrid();
+
+    // ── INFO MODAL ────────────────────────────────────────
     const infoData = {
         reparticao: { img:'reparticao.png', titulo:'REPARTIÇÃO', sub:'DO COURO CABELUDO', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>BRICK-LAY</strong> → colocação de tijolo','<strong>SQUARE/BOX</strong> → quadrado-box','<strong>DIAMOND</strong> → losango','<strong>TRIANGLE</strong> → triângulo','<strong>ORGANIC/FREEFORM</strong> → orgânico / forma livre'] },
         divisao: { img:'divisao.png', titulo:'DIVISÃO', sub:'SEPARAÇÃO DO CABELO EM PARTES', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>EXTRA LARGE</strong> → tranças muito grossas','<strong>LARGE</strong> → tranças grossas','<strong>MEDIUM</strong> → tranças médias','<strong>SMALL</strong> → tranças finas','<strong>EXTRA SMALL</strong> → tranças muito finas'] },
@@ -444,7 +529,6 @@
             }
         }
         document.getElementById('modalInfo').classList.add('active');
-        // Scroll para o topo do modal ao abrir
         document.getElementById('modalInfo').scrollTop = 0;
     }
 
@@ -483,6 +567,7 @@
     function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto=false; }
     document.getElementById('modalInfo').addEventListener('click', function(e){ if(e.target===this) fecharInfoModal(); });
 
+    // ── MODAL SERVIÇO ─────────────────────────────────────
     let _nomeAtual = '';
 
     function abrirModal(nome, duracao, img, preco) {

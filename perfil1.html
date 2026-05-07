@@ -73,6 +73,46 @@
         .status.cancelado  { background: #ffcaca; color: #c0392b; }
         .status.rejeitado  { background: #f8d7da; color: #7f1d1d; }
         .empty { text-align: center; color: #aaa; padding: 10px; }
+
+        /* FAVORITOS GRID */
+        .fav-grid { display: flex; flex-wrap: wrap; gap: 14px; }
+        .fav-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            width: 150px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .fav-card:hover { transform: translateY(-3px); }
+        .fav-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
+        .fav-card-info { padding: 8px 10px 10px; }
+        .fav-card-info b { font-size: 12px; display: block; line-height: 1.4; }
+        .fav-card-info span { font-size: 11px; color: #888; }
+        .btn-remov-fav {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            transition: background 0.2s;
+            line-height: 1;
+        }
+        .btn-remov-fav:hover { background: #fff0f0; }
+        .fav-empty { text-align: center; color: #aaa; padding: 20px 0; font-size: 14px; }
+        .fav-empty a { color: #111; font-weight: bold; }
+
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; cursor: pointer; }
         .modal-content { background: #fff; padding: 30px 25px; border-radius: 20px; width: 320px; max-width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 10px; cursor: auto; }
         .modal-content h3 { margin: 0 0 8px; font-size: 20px; color: #333; }
@@ -100,6 +140,7 @@
             .footer { flex-direction: column; padding: 24px 16px; }
             .info-row { gap: 16px; }
             .info-field input { width: 100%; }
+            .fav-card { width: calc(50% - 7px); }
         }
     </style>
 </head>
@@ -187,8 +228,9 @@
         <h3 style="margin-bottom:12px;">Histórico de marcações</h3>
         <div class="box" id="historicoLista"></div>
 
-        <h3 style="margin-bottom:12px;">Favoritos</h3>
-        <div class="box empty" id="favoritosLista">Ainda não adicionou favoritos.</div>
+        <!-- FAVORITOS -->
+        <h3 style="margin-bottom:12px;">Os meus favoritos</h3>
+        <div class="box" id="favoritosLista"></div>
     </div>
 </div>
 
@@ -233,6 +275,21 @@
     const btnAuth  = document.getElementById('btnAuth');
     const btnAuthT = document.getElementById('btnAuthText');
     const btnAuthM = document.getElementById('btnAuthMobile');
+
+    // Mapa de imagens dos serviços para mostrar no perfil
+    const servicosImgs = {
+        "Tranças Fulani X Lemonade": "trancafulanixlemonade.JPG",
+        "Tranças Lemonade":          "trancalemonade.JPG",
+        "Tranças Fulani":            "trancafulani.JPG",
+        "Tranças Cornrows":          "trancacornrowNago.JPG",
+        "Trança estilo mohawk":      "trancaestilomohank.JPG",
+        "Tranças Dreads":            "trancadreads.JPG",
+        "Tranças Knotless":          "trancaknotless.JPG",
+        "Trança Gypsy":             "trancagypsy.JPG",
+        "Tranças Twists":            "trancatwists.JPG",
+        "Tranças French":            "trancafrench.JPG",
+        "Manutenção Rasta + Penteado": "manutencaorastas.JPG"
+    };
 
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
@@ -361,18 +418,37 @@
         alert(`Serviço: ${m.servico}\nData: ${m.data}\nHora: ${m.hora}\nNome: ${m.nome}\nEstado: ${m.estado || 'Confirmado'}`);
     }
 
+    // ── FAVORITOS ─────────────────────────────────────────
     function carregarFavoritos() {
         const lista = document.getElementById('favoritosLista');
         const favs = userData.favoritos || [];
-        if (!favs.length) { lista.innerHTML = 'Ainda não adicionou favoritos.'; lista.className = 'box empty'; return; }
-        lista.className = 'box';
-        lista.innerHTML = favs.map(f =>
-            `<span style="display:inline-block;margin:4px 8px 4px 0;padding:5px 14px;background:#fff;border-radius:20px;font-size:13px;cursor:pointer" onclick="removerFav('${f}')">❤ ${f}</span>`
-        ).join('');
+
+        if (!favs.length) {
+            lista.innerHTML = `
+                <div class="fav-empty">
+                    Ainda não adicionaste favoritos.<br>
+                    <a href="servicos.html">Ver serviços </a>
+                </div>`;
+            return;
+        }
+
+        lista.innerHTML = `<div class="fav-grid">` +
+            favs.map(nome => {
+                const img = servicosImgs[nome] || '';
+                return `
+                <div class="fav-card" onclick="location.href='servicos.html'">
+                    ${img ? `<img src="${img}" alt="${nome}">` : `<div style="height:120px;background:#ddd;"></div>`}
+                    <button class="btn-remov-fav" title="Remover dos favoritos" onclick="event.stopPropagation(); removerFav('${nome.replace(/'/g,"\\'")}')">❤</button>
+                    <div class="fav-card-info">
+                        <b>${nome}</b>
+                    </div>
+                </div>`;
+            }).join('') +
+        `</div>`;
     }
 
-    function removerFav(f) {
-        userData.favoritos = (userData.favoritos || []).filter(x => x !== f);
+    function removerFav(nome) {
+        userData.favoritos = (userData.favoritos || []).filter(x => x !== nome);
         saveUser(); carregarFavoritos(); toast('Removido dos favoritos.');
     }
 
