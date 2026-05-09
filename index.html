@@ -417,6 +417,7 @@
         }
 
         .sub-form button:hover { opacity: 0.85; }
+        .sub-form button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .msg-sub {
             display: none;
@@ -616,7 +617,7 @@
                 <p class="sub-desc">Subscreva a nossa newsletter e receba ofertas exclusivas, novos estilos e dicas de cuidados capilares.</p>
                 <div class="sub-form">
                     <input type="email" id="emailInput" placeholder="O seu email">
-                    <button onclick="subscrever()">SUBSCREVER</button>
+                    <button id="btnSubscrever" onclick="subscrever()">SUBSCREVER</button>
                 </div>
                 <div class="msg-sub" id="msgSub">✔ Subscrito com sucesso! Obrigada.</div>
             </div>
@@ -633,7 +634,49 @@
         <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
     </div>
 
+    <!-- ══════════════════════════════════════════
+         SUPABASE SDK
+    ══════════════════════════════════════════ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ── SUPABASE CONFIG ──────────────────────────────
+        const SUPA_URL    = 'https://wonkioqayeekzcuoepcb.supabase.co';
+        const SUPA_ANON   = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+        const supabase    = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+        // ── AUTH STATE ───────────────────────────────────
+        // Verifica sessão activa no Supabase (substitui localStorage ulog)
+        async function initAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            const btn  = document.getElementById('btnAuth');
+            const btnT = document.getElementById('btnAuthText');
+            const btnM = document.getElementById('btnAuthMobile');
+
+            if (session && session.user) {
+                const user = session.user;
+                // Tenta buscar o nome do perfil
+                const { data: perfil } = await supabase
+                    .from('profiles')
+                    .select('nome')
+                    .eq('id', user.id)
+                    .single();
+
+                btn.href  = 'perfil1.html';
+                btnM.href = 'perfil1.html';
+                const nome = perfil?.nome ? perfil.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+                btnT.textContent = nome;
+                btnM.textContent = nome;
+            } else {
+                btn.href  = 'login.html';
+                btnM.href = 'login.html';
+                btnT.textContent = 'LOGIN';
+                btnM.textContent = 'LOGIN';
+            }
+        }
+
+        initAuth();
+
+        // ── VÍDEOS MUTED ─────────────────────────────────
         document.querySelectorAll('video').forEach(v => {
             v.muted = true; v.volume = 0;
             v.addEventListener('volumechange', function() {
@@ -641,6 +684,7 @@
             });
         });
 
+        // ── MENU MOBILE ───────────────────────────────────
         function toggleMenu() {
             const m = document.getElementById('menuMobile');
             const navbar = document.getElementById('navbar');
@@ -661,36 +705,65 @@
             }
         });
 
-        const ulog = localStorage.getItem('ulog');
-        const btn  = document.getElementById('btnAuth');
-        const btnT = document.getElementById('btnAuthText');
-        const btnM = document.getElementById('btnAuthMobile');
-
-        if (ulog) {
-            const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-            btn.href  = 'perfil1.html';
-            btnM.href = 'perfil1.html';
-            const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-            btnT.textContent  = nome;
-            btnM.textContent  = nome;
-        } else {
-            btn.href = 'login.html'; btnM.href = 'login.html';
-        }
-
-        document.querySelector('.btn-agendar-banner').onclick = function() {
-            if (localStorage.getItem('ulog')) { location.href = 'agendar.html'; }
-            else { localStorage.setItem('redirectAfterLogin', 'agendar.html'); location.href = 'login.html'; }
+        // ── BOTÃO AGENDAR ─────────────────────────────────
+        document.querySelector('.btn-agendar-banner').onclick = async function() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                location.href = 'agendar.html';
+            } else {
+                localStorage.setItem('redirectAfterLogin', 'agendar.html');
+                location.href = 'login.html';
+            }
         };
 
-        function subscrever() {
+        // ── NEWSLETTER → SUPABASE ─────────────────────────
+        // Necessita de tabela: subscribers (id, email, created_at)
+        async function subscrever() {
             const email = document.getElementById('emailInput').value.trim();
-            if (!email || !email.includes('@')) { alert('Por favor introduza um email válido.'); return; }
-            const msg = document.getElementById('msgSub');
-            msg.style.display = 'block';
-            document.getElementById('emailInput').value = '';
-            setTimeout(() => msg.style.display = 'none', 4000);
+            if (!email || !email.includes('@')) {
+                alert('Por favor introduza um email válido.');
+                return;
+            }
+
+            const btn = document.getElementById('btnSubscrever');
+            btn.disabled = true;
+            btn.textContent = '...';
+
+            try {
+                // Verifica se o email já existe
+                const { data: existe } = await supabase
+                    .from('subscribers')
+                    .select('id')
+                    .eq('email', email)
+                    .single();
+
+                if (existe) {
+                    alert('Este email já está subscrito!');
+                    btn.disabled = false;
+                    btn.textContent = 'SUBSCREVER';
+                    return;
+                }
+
+                const { error } = await supabase
+                    .from('subscribers')
+                    .insert([{ email: email }]);
+
+                if (error) throw error;
+
+                const msg = document.getElementById('msgSub');
+                msg.style.display = 'block';
+                document.getElementById('emailInput').value = '';
+                setTimeout(() => msg.style.display = 'none', 4000);
+            } catch (err) {
+                console.error('Erro ao subscrever:', err);
+                alert('Erro ao subscrever. Tente novamente.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'SUBSCREVER';
+            }
         }
 
+        // ── GALERIA ───────────────────────────────────────
         const galeria  = document.getElementById('galeria');
         const dotsEl   = document.getElementById('galeriaDots');
         const cardW    = 185 + 14;

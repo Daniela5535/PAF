@@ -171,17 +171,9 @@
 
 <div style="padding: 12px 20px;">
     <button onclick="history.back()" style="
-        background: none;
-        border: none;
-        font-size: 13px;
-        font-weight: bold;
-        color: #111;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.5px;
-    ">← VOLTAR</button>
+        background: none; border: none; font-size: 13px; font-weight: bold;
+        color: #111; cursor: pointer; display: flex; align-items: center;
+        gap: 6px; letter-spacing: 0.5px;">← VOLTAR</button>
 </div>
 
 <div class="Marcacoestitulo">A MINHA AGENDA</div>
@@ -210,139 +202,166 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SUPABASE SDK
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const ulogRaw = localStorage.getItem('ulog');
-const ulog = ulogRaw ? JSON.parse(ulogRaw) : null;
+    // ── SUPABASE CONFIG ──────────────────────────────────
+    const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const supabase  = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
-if (!ulog || !ulog.id) {
-    localStorage.setItem('redirectAfterLogin', 'marcacoes.html');
-    location.href = 'login.html';
-}
+    // ── AUTH (localStorage) ───────────────────────────────
+    // Esta página usa localStorage para compatibilidade com o resto do site
+    const ulogRaw = localStorage.getItem('ulog');
+    const ulog = ulogRaw ? JSON.parse(ulogRaw) : null;
 
-const btn  = document.getElementById('btnAuth');
-const btnT = document.getElementById('btnAuthText');
-const btnM = document.getElementById('btnAuthMobile');
-
-if (ulog) {
-    btn.href  = 'perfil1.html';
-    btnM.href = 'perfil1.html';
-    const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-    btnT.textContent = nome;
-    btnM.textContent = nome;
-}
-
-function toggleMenu() {
-    const m = document.getElementById('menuMobile');
-    const navbar = document.getElementById('navbar');
-    const navbarHeight = navbar.offsetHeight;
-    if (m.style.display === 'flex') {
-        m.style.display = 'none';
-    } else {
-        m.style.top = navbarHeight + 'px';
-        m.style.display = 'flex';
-    }
-}
-
-document.addEventListener('click', function(e) {
-    const m = document.getElementById('menuMobile');
-    const toggle = document.querySelector('.menu-toggle');
-    if (m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
-        m.style.display = 'none';
-    }
-});
-
-let cancelarIndex = null;
-
-function badgeClasse(estado) {
-    const map = { 'pendente':'pendente','confirmado':'confirmado','cancelado':'cancelado','rejeitado':'rejeitado' };
-    return 'badge badge-' + (map[estado.toLowerCase()] || 'pendente');
-}
-
-async function renderizar() {
-    const lista = document.getElementById('listaMarcacoes');
-    lista.innerHTML = '<p style="text-align:center;padding:40px;color:#aaa;">A carregar...</p>';
-
-    const res = await fetch("api/marcacoes.php?id_utilizador=" + ulog.id);
-    const marcacoes = await res.json();
-
-    if (!marcacoes.length) {
-        lista.innerHTML = `
-            <div class="sem-marcacoes">
-                Ainda não tem marcações.<br><br>
-                <a href="agendar.html">Fazer primeira marcação →</a>
-            </div>`;
-        return;
+    if (!ulog || !ulog.id) {
+        localStorage.setItem('redirectAfterLogin', 'marcacoes.html');
+        location.href = 'login.html';
     }
 
-    lista.innerHTML = marcacoes.map((m, i) => `
-        ${i > 0 ? '<hr class="separador">' : ''}
-        <div class="topo-agendamento">
-            <div class="cancelar-info">
-                ${m.estado === 'pendente' || m.estado === 'confirmado' ? `
-                    <p>Caso pretenda cancelar o agendamento, clique em
-                    <a onclick="abrirModal(${m.id})">cancelar</a>.<br>
-                    Após o cancelamento, o agendamento não pode ser recuperado.</p>
-                ` : `
-                    <p>Este agendamento encontra-se <strong>${m.estado}</strong>.</p>
-                `}
-            </div>
-            <div class="estado-wrap">
-                <span class="${badgeClasse(m.estado)}">${m.estado.toUpperCase()}</span>
-                ${m.estado === 'pendente' ? `
-                    <div class="aviso-pendente">⏳ A aguardar confirmação do funcionário.</div>
-                ` : ''}
-                ${m.estado === 'rejeitado' ? `
-                    <div class="aviso-pendente" style="background:#fff0f0;border-color:#f5aaaa;color:#c0392b;">
-                        ✖ Marcação rejeitada pelo administrador.
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-        <div class="card-agendamento">
-            <div class="info">
-                <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
-                <p>Serviço: <strong>${m.servico}</strong></p>
-                ${m.reparticao  ? `<p>Repartição: <strong>${m.reparticao}</strong></p>`  : ''}
-                ${m.divisao     ? `<p>Divisão: <strong>${m.divisao}</strong></p>`         : ''}
-                ${m.cumprimento ? `<p>Cumprimento: <strong>${m.cumprimento}</strong></p>` : ''}
-            </div>
-            <div class="acoes">
-                ${m.estado !== 'cancelado' && m.estado !== 'rejeitado' ? `
-                    <button class="btn-cancel" onclick="abrirModal(${m.id})">Cancelar</button>
-                ` : ''}
-                <button onclick="location.href='agendar.html'">Nova marcação</button>
-            </div>
-        </div>
-    `).join('');
-}
+    const btn  = document.getElementById('btnAuth');
+    const btnT = document.getElementById('btnAuthText');
+    const btnM = document.getElementById('btnAuthMobile');
 
-function abrirModal(id) {
-    cancelarIndex = id;
-    document.getElementById('modalCancelar').classList.add('active');
-}
+    if (ulog) {
+        btn.href  = 'perfil1.html';
+        btnM.href = 'perfil1.html';
+        const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+        btnT.textContent = nome;
+        btnM.textContent = nome;
+    }
 
-function fecharModal() {
-    document.getElementById('modalCancelar').classList.remove('active');
-    cancelarIndex = null;
-}
+    // ── MENU MOBILE ───────────────────────────────────────
+    function toggleMenu() {
+        const m = document.getElementById('menuMobile');
+        const navbar = document.getElementById('navbar');
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbar.offsetHeight + 'px';
+            m.style.display = 'flex';
+        }
+    }
 
-async function confirmarCancelamento() {
-    fecharModal();
-    const res = await fetch("api/cancelar_marcacao.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: cancelarIndex, id_utilizador: ulog.id })
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
     });
-    const result = await res.json();
-    if (result.sucesso) renderizar();
-    else alert("Erro ao cancelar marcação.");
-}
 
-document.getElementById('modalCancelar').addEventListener('click', function(e) {
-    if (e.target === this) fecharModal();
-});
+    let cancelarIndex = null;
 
-renderizar();
+    function badgeClasse(estado) {
+        const map = { 'pendente':'pendente', 'confirmado':'confirmado', 'cancelado':'cancelado', 'rejeitado':'rejeitado' };
+        return 'badge badge-' + (map[estado.toLowerCase()] || 'pendente');
+    }
+
+    // ── CARREGAR MARCAÇÕES → SUPABASE ─────────────────────
+    async function renderizar() {
+        const lista = document.getElementById('listaMarcacoes');
+        lista.innerHTML = '<p style="text-align:center;padding:40px;color:#aaa;">A carregar...</p>';
+
+        const { data: marcacoes, error } = await supabase
+            .from('marcacoes')
+            .select('*')
+            .eq('id_utilizador', ulog.id)
+            .order('data', { ascending: false });
+
+        if (error) {
+            lista.innerHTML = '<p style="text-align:center;padding:40px;color:#c0392b;">Erro ao carregar marcações.</p>';
+            return;
+        }
+
+        if (!marcacoes || !marcacoes.length) {
+            lista.innerHTML = `
+                <div class="sem-marcacoes">
+                    Ainda não tem marcações.<br><br>
+                    <a href="agendar.html">Fazer primeira marcação →</a>
+                </div>`;
+            return;
+        }
+
+        lista.innerHTML = marcacoes.map((m, i) => `
+            ${i > 0 ? '<hr class="separador">' : ''}
+            <div class="topo-agendamento">
+                <div class="cancelar-info">
+                    ${m.estado === 'pendente' || m.estado === 'confirmado' ? `
+                        <p>Caso pretenda cancelar o agendamento, clique em
+                        <a onclick="abrirModal(${m.id})">cancelar</a>.<br>
+                        Após o cancelamento, o agendamento não pode ser recuperado.</p>
+                    ` : `
+                        <p>Este agendamento encontra-se <strong>${m.estado}</strong>.</p>
+                    `}
+                </div>
+                <div class="estado-wrap">
+                    <span class="${badgeClasse(m.estado)}">${m.estado.toUpperCase()}</span>
+                    ${m.estado === 'pendente' ? `
+                        <div class="aviso-pendente">⏳ A aguardar confirmação do funcionário.</div>
+                    ` : ''}
+                    ${m.estado === 'rejeitado' ? `
+                        <div class="aviso-pendente" style="background:#fff0f0;border-color:#f5aaaa;color:#c0392b;">
+                            ✖ Marcação rejeitada pelo administrador.
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="card-agendamento">
+                <div class="info">
+                    <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
+                    <p>Serviço: <strong>${m.servico}</strong></p>
+                    ${m.reparticao  ? `<p>Repartição: <strong>${m.reparticao}</strong></p>`  : ''}
+                    ${m.divisao     ? `<p>Divisão: <strong>${m.divisao}</strong></p>`         : ''}
+                    ${m.cumprimento ? `<p>Cumprimento: <strong>${m.cumprimento}</strong></p>` : ''}
+                </div>
+                <div class="acoes">
+                    ${m.estado !== 'cancelado' && m.estado !== 'rejeitado' ? `
+                        <button class="btn-cancel" onclick="abrirModal(${m.id})">Cancelar</button>
+                    ` : ''}
+                    <button onclick="location.href='agendar.html'">Nova marcação</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── MODAL ─────────────────────────────────────────────
+    function abrirModal(id) {
+        cancelarIndex = id;
+        document.getElementById('modalCancelar').classList.add('active');
+    }
+
+    function fecharModal() {
+        document.getElementById('modalCancelar').classList.remove('active');
+        cancelarIndex = null;
+    }
+
+    // ── CANCELAR MARCAÇÃO → SUPABASE ──────────────────────
+    async function confirmarCancelamento() {
+        fecharModal();
+
+        const { error } = await supabase
+            .from('marcacoes')
+            .update({ estado: 'cancelado' })
+            .eq('id', cancelarIndex)
+            .eq('id_utilizador', ulog.id);
+
+        if (!error) {
+            renderizar();
+        } else {
+            alert('Erro ao cancelar marcação. Tente novamente.');
+        }
+    }
+
+    document.getElementById('modalCancelar').addEventListener('click', function(e) {
+        if (e.target === this) fecharModal();
+    });
+
+    // ── INIT ─────────────────────────────────────────────
+    renderizar();
 </script>
 </body>
 </html>

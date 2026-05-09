@@ -20,26 +20,15 @@
             src: url('fonts/HighCruiser.otf.otf') format('truetype');
         }
 
-        /* ── NAVBAR ── */
         .logotipo {
-            width: 100%;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            width: 100%; padding: 10px 20px; display: flex; align-items: center;
+            justify-content: space-between; background: #fff; border-bottom: 1px solid #eee;
+            position: sticky; top: 0; z-index: 1000;
         }
-
         .logo img { width: 150px; display: block; }
-
         .menu { display: flex; align-items: center; gap: 22px; }
         .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
         .menu a:hover { color: #888; }
-
         .mais-menu { position: relative; cursor: pointer; }
         .mais-links {
             display: none; position: absolute; top: calc(100% + 10px); right: 0;
@@ -49,34 +38,25 @@
         .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
         .mais-links a:hover { background: #f5f5f5; }
         .mais-menu:hover .mais-links { display: flex; }
-
         .btn-login {
             background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
             font-size: 13px; font-weight: bold; text-decoration: none;
             display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
         }
         .btn-login:hover { opacity: 0.8; }
-
         .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
-
-        .menu-mobile { 
-            display: none; flex-direction: column; background: #fff; 
-            border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; 
-            position: fixed; left: 0; width: 100%; z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .menu-mobile {
+            display: none; flex-direction: column; background: #fff;
+            border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px;
+            position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
 
-        /* ── BANNER ── */
         .contact-header {
-            background: linear-gradient(180deg,
-                rgba(36,32,28,0.175),
-                rgba(248,222,187,0.175),
-                rgba(196,175,154,0.175));
-            text-align: center;
-            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(36,32,28,0.175), rgba(248,222,187,0.175), rgba(196,175,154,0.175));
+            text-align: center; padding: 40px 20px;
             font-family: 'High Cruiser', Arial, sans-serif;
         }
         .contact-header h1 { margin: 0; letter-spacing: 2px; font-size: 30px; }
@@ -84,132 +64,51 @@
         .contact-header p { margin: 10px 0; font-weight: bold; }
         .contact-header span { display: block; margin-top: 5px; }
 
-        /* ── FORMULÁRIO ── */
         .form-container { display: flex; justify-content: center; margin: 50px 0; }
-
         .form-box {
-            background-color: #d6d3cf;
-            border-radius: 20px;
-            padding: 30px;
-            width: 650px;
-            max-width: 94%;
-            text-align: center;
+            background-color: #d6d3cf; border-radius: 20px; padding: 30px;
+            width: 650px; max-width: 94%; text-align: center;
         }
         .form-box p { margin-bottom: 15px; }
-
         .campos-topo { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
         .campos-topo input {
             flex: 1; min-width: 140px; padding: 12px 16px; border-radius: 12px;
             border: none; font-size: 14px; outline: none; font-family: Arial, sans-serif;
         }
-
         .message-area { background-color: #ffffff; border-radius: 20px; padding: 20px; position: relative; }
         textarea { width: 100%; height: 140px; border: none; resize: none; outline: none; font-size: 14px; padding: 10px; box-sizing: border-box; font-family: Arial, sans-serif; }
-
         .send-btn {
             position: absolute; bottom: 15px; right: 15px;
             background-color: #111; color: white; border: none; border-radius: 20px;
             padding: 8px 20px; cursor: pointer; font-weight: bold; font-size: 13px;
+            transition: background 0.2s;
         }
         .send-btn:hover { background-color: #333; }
+        .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* TOAST */
         .toast { display: none; position: fixed; bottom: 28px; right: 28px; background: #111; color: #fff; padding: 14px 24px; border-radius: 12px; z-index: 3000; font-size: 14px; font-weight: bold; }
 
-        /* ── HISTÓRICO DE MENSAGENS ── */
+        /* ── MENSAGENS DO UTILIZADOR ── */
         .minhas-msgs { display: none; max-width: 650px; margin: 0 auto 50px; padding: 0 20px; }
-        .minhas-msgs h3 { 
-            font-size: 13px; color: #888; margin-bottom: 16px; 
-            text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold;
-        }
-
-        /* card de cada mensagem enviada */
-        .msg-item {
-            background: #f4efe9;
-            border-radius: 14px;
-            padding: 16px 20px;
-            margin-bottom: 14px;
-            border-left: 4px solid #c4b9a8;
-        }
+        .minhas-msgs h3 { font-size: 13px; color: #888; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; }
+        .msg-item { background: #f4efe9; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; border-left: 4px solid #c4b9a8; }
         .msg-item .msg-texto { font-size: 14px; color: #333; line-height: 1.5; }
         .msg-item .msg-meta { font-size: 11px; color: #999; margin-top: 8px; }
-
-        /* resposta do admin */
-        .resposta-admin {
-            margin-top: 14px;
-            background: #fff;
-            border-radius: 10px;
-            padding: 14px 18px;
-            border-left: 4px solid #27ae60;
-            position: relative;
-        }
-        .resposta-admin .resposta-label {
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #27ae60;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .resposta-admin .resposta-label::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #27ae60;
-        }
-        .resposta-admin .resposta-texto {
-            font-size: 14px;
-            color: #222;
-            line-height: 1.6;
-        }
-        .resposta-admin .resposta-data {
-            font-size: 11px;
-            color: #bbb;
-            margin-top: 8px;
-        }
-
-        /* sem resposta ainda */
-        .aguardar-resposta {
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #999;
-        }
-        .dot-pulse {
-            display: flex; gap: 4px; align-items: center;
-        }
-        .dot-pulse span {
-            width: 5px; height: 5px; border-radius: 50%; background: #ccc;
-            display: inline-block; animation: pulse 1.4s infinite;
-        }
+        .resposta-admin { margin-top: 14px; background: #fff; border-radius: 10px; padding: 14px 18px; border-left: 4px solid #27ae60; }
+        .resposta-admin .resposta-label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #27ae60; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .resposta-admin .resposta-label::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #27ae60; }
+        .resposta-admin .resposta-texto { font-size: 14px; color: #222; line-height: 1.6; }
+        .resposta-admin .resposta-data { font-size: 11px; color: #bbb; margin-top: 8px; }
+        .aguardar-resposta { margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; }
+        .dot-pulse { display: flex; gap: 4px; align-items: center; }
+        .dot-pulse span { width: 5px; height: 5px; border-radius: 50%; background: #ccc; display: inline-block; animation: pulse 1.4s infinite; }
         .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
         .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes pulse {
-            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
-            40% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes pulse { 0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
 
-        /* nova resposta (badge) */
-        .badge-nova-resposta {
-            display: inline-block;
-            background: #d4edda;
-            color: #155724;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
+        /* ── LOADER MSGS ── */
+        .msgs-loading { text-align: center; padding: 20px; color: #aaa; font-size: 13px; }
 
-        /* ── FOOTER ── */
         .contactos {
             background: #f8f8f8; color: #555; text-align: center; padding: 20px;
             display: flex; justify-content: center; align-items: center; gap: 10px;
@@ -221,7 +120,6 @@
         .icon { width: 26px; }
         .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
 
-        /* ── MOBILE ── */
         @media (max-width: 768px) {
             .menu { display: none; }
             .menu-toggle { display: flex; }
@@ -232,7 +130,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
@@ -254,12 +151,9 @@
             <span id="btnAuthText">LOGIN</span>
         </a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
 
-<!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
     <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
@@ -270,13 +164,9 @@
 </div>
 
 <div style="padding: 12px 20px;">
-    <button onclick="history.back()" style="
-        background: none; border: none; font-size: 13px; font-weight: bold;
-        color: #111; cursor: pointer; display: flex; align-items: center;
-        gap: 6px; letter-spacing: 0.5px;">← VOLTAR</button>
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
-<!-- BANNER -->
 <div class="contact-header">
     <h1>CONTACTO</h1>
     <div class="contact-header1">
@@ -285,7 +175,6 @@
     </div>
 </div>
 
-<!-- FORMULÁRIO -->
 <div class="form-container">
     <div class="form-box">
         <p>Pode também enviar-nos uma mensagem pelo formulário:</p>
@@ -295,12 +184,11 @@
         </div>
         <div class="message-area">
             <textarea id="contactMsg" placeholder="Escreva a sua mensagem aqui..."></textarea>
-            <button class="send-btn" onclick="enviarMensagem()">ENVIAR</button>
+            <button class="send-btn" id="sendBtn" onclick="enviarMensagem()">ENVIAR</button>
         </div>
     </div>
 </div>
 
-<!-- HISTÓRICO DE MENSAGENS (com respostas) -->
 <div class="minhas-msgs" id="minhasMsgs">
     <h3>As suas mensagens</h3>
     <div id="listaMsgs"></div>
@@ -308,7 +196,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- FOOTER -->
 <div class="contactos">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
     <div class="insta">
@@ -318,23 +205,60 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SUPABASE SDK
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    /* ── LOGIN / PERFIL ── */
-    const ulog = localStorage.getItem('ulog');
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
+    // ── SUPABASE CONFIG ──────────────────────────────────
+    const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const supabase  = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
-    if (ulog) {
-        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href  = 'perfil1.html';
-        btnM.href = 'perfil1.html';
-        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = nome;
-        btnM.textContent = nome;
+    let _userId  = null;
+    let _userNome  = '';
+    let _userEmail = '';
+
+    // ── AUTH + INIT ───────────────────────────────────────
+    async function initAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const btn  = document.getElementById('btnAuth');
+        const btnT = document.getElementById('btnAuthText');
+        const btnM = document.getElementById('btnAuthMobile');
+
+        if (session && session.user) {
+            _userId    = session.user.id;
+            _userEmail = session.user.email || '';
+
+            const { data: perfil } = await supabase
+                .from('profiles')
+                .select('nome')
+                .eq('id', _userId)
+                .single();
+
+            _userNome = perfil?.nome || '';
+
+            btn.href  = 'perfil1.html';
+            btnM.href = 'perfil1.html';
+            const nome = _userNome ? _userNome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btnT.textContent = nome;
+            btnM.textContent = nome;
+
+            // Pré-preenche o formulário
+            document.getElementById('contactNome').value  = _userNome;
+            document.getElementById('contactEmail').value = _userEmail;
+
+            // Carrega mensagens anteriores
+            carregarMensagens();
+        } else {
+            btn.href  = 'login.html';
+            btnM.href = 'login.html';
+            btnT.textContent = 'LOGIN';
+            btnM.textContent = 'LOGIN';
+        }
     }
 
-    /* ── HAMBURGER ── */
+    // ── MENU MOBILE ───────────────────────────────────────
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
@@ -345,6 +269,7 @@
             m.style.display = 'flex';
         }
     }
+
     document.addEventListener('click', function(e) {
         const m = document.getElementById('menuMobile');
         const toggle = document.querySelector('.menu-toggle');
@@ -353,24 +278,19 @@
         }
     });
 
-    /* ── PRÉ-PREENCHER ── */
-    window.onload = function() {
-        if (ulog) {
-            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-            if (ud.nome)  document.getElementById('contactNome').value  = ud.nome;
-            if (ud.email) document.getElementById('contactEmail').value = ud.email;
-            carregarMensagens(ulog);
-        }
-    };
-
+    // ── TOAST ─────────────────────────────────────────────
     function toast(msg, tipo) {
         const t = document.getElementById('toast');
-        t.innerText = msg; t.style.display = 'block';
+        t.innerText = msg;
+        t.style.display = 'block';
         t.style.background = tipo === 'erro' ? '#c0392b' : '#111';
-        setTimeout(() => t.style.display = 'none', 3500);
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.style.display = 'none', 3500);
     }
 
-    function enviarMensagem() {
+    // ── ENVIAR MENSAGEM → SUPABASE ────────────────────────
+    // Tabela: mensagens (id, nome, email, mensagem, id_utilizador, enviado_em, resposta, resposta_data)
+    async function enviarMensagem() {
         const nome  = document.getElementById('contactNome').value.trim();
         const email = document.getElementById('contactEmail').value.trim();
         const msg   = document.getElementById('contactMsg').value.trim();
@@ -379,102 +299,95 @@
         if (!email || !email.includes('@')) { toast('Por favor indique um email válido.', 'erro'); return; }
         if (!msg)   { toast('Por favor escreva a sua mensagem.', 'erro'); return; }
 
-        const nova = {
-            id:   Date.now(), nome, email, msg,
-            data: new Date().toLocaleDateString('pt-PT'),
-            hora: new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }),
-            lida: false
-        };
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.disabled = true;
+        sendBtn.innerText = 'A enviar...';
 
-        // Guardar para o admin
-        const todasAdmin = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
-        todasAdmin.unshift(nova);
-        localStorage.setItem('admin_mensagens', JSON.stringify(todasAdmin));
+        const { error } = await supabase
+            .from('mensagens')
+            .insert([{
+                nome,
+                email,
+                mensagem:      msg,
+                id_utilizador: _userId || null
+            }]);
 
-        // Guardar no perfil do utilizador (para ver as respostas)
-        if (ulog) {
-            const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-            if (!ud.mensagens) ud.mensagens = [];
-            ud.mensagens.unshift(nova);
-            localStorage.setItem(ulog, JSON.stringify(ud));
-            carregarMensagens(ulog);
+        if (!error) {
+            document.getElementById('contactMsg').value = '';
+            sendBtn.innerText = 'ENVIADO ✔';
+            sendBtn.style.background = '#27ae60';
+            toast('Mensagem enviada com sucesso!');
+            setTimeout(() => {
+                sendBtn.innerText = 'ENVIAR';
+                sendBtn.style.background = '#111';
+                sendBtn.disabled = false;
+            }, 3000);
+            if (_userId) carregarMensagens();
+        } else {
+            console.error('Erro ao enviar:', error);
+            toast('Erro ao enviar mensagem. Tente novamente.', 'erro');
+            sendBtn.disabled = false;
+            sendBtn.innerText = 'ENVIAR';
         }
-
-        document.getElementById('contactMsg').value = '';
-        const btn2 = document.querySelector('.send-btn');
-        btn2.innerText = 'ENVIADO ✔'; btn2.style.background = '#27ae60'; btn2.disabled = true;
-        setTimeout(() => { btn2.innerText = 'ENVIAR'; btn2.style.background = '#111'; btn2.disabled = false; }, 3000);
     }
 
-    function carregarMensagens(ulog) {
-        // Sincronizar respostas do admin para o perfil do utilizador
-        sincronizarRespostas(ulog);
+    // ── CARREGAR MENSAGENS DO UTILIZADOR ─────────────────
+    async function carregarMensagens() {
+        if (!_userId) return;
 
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        const msgs = ud.mensagens || [];
-        if (!msgs.length) return;
+        const secao  = document.getElementById('minhasMsgs');
+        const lista  = document.getElementById('listaMsgs');
+        secao.style.display = 'block';
+        lista.innerHTML = '<div class="msgs-loading">A carregar mensagens...</div>';
 
-        document.getElementById('minhasMsgs').style.display = 'block';
-        document.getElementById('listaMsgs').innerHTML = msgs.map(m => {
-            // bloco de resposta
+        const { data: msgs, error } = await supabase
+            .from('mensagens')
+            .select('*')
+            .eq('id_utilizador', _userId)
+            .order('enviado_em', { ascending: false });
+
+        if (error || !msgs || !msgs.length) {
+            lista.innerHTML = '<div class="msgs-loading">Ainda não enviou nenhuma mensagem.</div>';
+            return;
+        }
+
+        lista.innerHTML = msgs.map(m => {
+            const dataEnvio = m.enviado_em
+                ? new Date(m.enviado_em).toLocaleString('pt-PT')
+                : '';
+
             let respostaHtml = '';
             if (m.resposta) {
+                const dataResp = m.resposta_data
+                    ? new Date(m.resposta_data).toLocaleString('pt-PT')
+                    : '';
                 respostaHtml = `
                     <div class="resposta-admin">
                         <div class="resposta-label">Resposta da Easy Glow</div>
                         <div class="resposta-texto">${m.resposta}</div>
-                        <div class="resposta-data">${m.respostaData || ''}</div>
+                        ${dataResp ? `<div class="resposta-data">${dataResp}</div>` : ''}
                     </div>`;
             } else {
                 respostaHtml = `
                     <div class="aguardar-resposta">
-                        <div class="dot-pulse"><span></span><span></span><span></span></div>
+                        <div class="dot-pulse">
+                            <span></span><span></span><span></span>
+                        </div>
                         A aguardar resposta
                     </div>`;
             }
 
-            const novaResposta = m.resposta && !m.respostaVista
-                ? `<span class="badge-nova-resposta">Nova resposta</span>` : '';
-
             return `
                 <div class="msg-item">
-                    <div class="msg-texto">${m.msg}${novaResposta}</div>
-                    <div class="msg-meta">Enviada em ${m.data} às ${m.hora}</div>
+                    <div class="msg-texto">${m.mensagem}</div>
+                    <div class="msg-meta">Enviada em ${dataEnvio}</div>
                     ${respostaHtml}
                 </div>`;
         }).join('');
-
-        // Marcar respostas como vistas (após render)
-        setTimeout(() => marcarRespostasVistas(ulog), 1500);
     }
 
-    function sincronizarRespostas(ulog) {
-        // Vai buscar as respostas do admin e sincroniza com o perfil do utilizador
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        if (!ud.mensagens || !ud.mensagens.length) return;
-
-        const todasAdmin = JSON.parse(localStorage.getItem('admin_mensagens') || '[]');
-
-        ud.mensagens.forEach((m, idx) => {
-            const adminMsg = todasAdmin.find(a => a.id === m.id);
-            if (adminMsg && adminMsg.resposta && adminMsg.resposta !== m.resposta) {
-                ud.mensagens[idx].resposta     = adminMsg.resposta;
-                ud.mensagens[idx].respostaData = adminMsg.respostaData;
-                ud.mensagens[idx].respostaVista = false; // nova resposta não vista
-            }
-        });
-
-        localStorage.setItem(ulog, JSON.stringify(ud));
-    }
-
-    function marcarRespostasVistas(ulog) {
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        if (!ud.mensagens) return;
-        ud.mensagens.forEach(m => {
-            if (m.resposta) m.respostaVista = true;
-        });
-        localStorage.setItem(ulog, JSON.stringify(ud));
-    }
+    // ── INIT ─────────────────────────────────────────────
+    initAuth();
 </script>
 </body>
-</html> 
+</html>

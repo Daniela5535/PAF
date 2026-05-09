@@ -118,15 +118,53 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SUPABASE SDK
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+    // ── SUPABASE CONFIG ──────────────────────────────────
+    const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const supabase  = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+    // ── AUTH ─────────────────────────────────────────────
+    async function initAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const btn  = document.getElementById('btnAuth');
+        const btnT = document.getElementById('btnAuthText');
+        const btnM = document.getElementById('btnAuthMobile');
+
+        if (session && session.user) {
+            const { data: perfil } = await supabase
+                .from('profiles')
+                .select('nome')
+                .eq('id', session.user.id)
+                .single();
+
+            btn.href  = 'perfil1.html';
+            btnM.href = 'perfil1.html';
+            const nome = perfil?.nome ? perfil.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btnT.textContent = nome;
+            btnM.textContent = nome;
+        } else {
+            btn.href  = 'login.html';
+            btnM.href = 'login.html';
+            btnT.textContent = 'LOGIN';
+            btnM.textContent = 'LOGIN';
+        }
+    }
+
+    initAuth();
+
+    // ── MENU MOBILE ───────────────────────────────────────
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
-        const navbarHeight = navbar.offsetHeight;
         if (m.style.display === 'flex') {
             m.style.display = 'none';
         } else {
-            m.style.top = navbarHeight + 'px';
+            m.style.top = navbar.offsetHeight + 'px';
             m.style.display = 'flex';
         }
     }
@@ -138,19 +176,6 @@
             m.style.display = 'none';
         }
     });
-
-    const ulog = localStorage.getItem('ulog');
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
-    if (ulog) {
-        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href  = 'perfil1.html';
-        btnM.href = 'perfil1.html';
-        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = nome;
-        btnM.textContent = nome;
-    }
 </script>
 </body>
 </html>

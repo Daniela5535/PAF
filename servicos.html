@@ -23,19 +23,20 @@
         .btn-login { background:#111; color:white !important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity 0.2s; white-space:nowrap; }
         .btn-login:hover { opacity:0.8; }
         .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
-        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
+        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; transition:0.3s; }
+
+        /* MENU MOBILE */
         .menu-mobile { 
-            display:none; 
-            flex-direction:column; 
-            background:#fff; 
-            border-bottom:1px solid #eee; 
-            padding:16px 20px; 
-            gap:14px; 
-            position:fixed;
-            top:57px;
-            left:0;
-            width:100%;
-            z-index:999;
+            display: none; 
+            flex-direction: column; 
+            background: #fff; 
+            border-bottom: 1px solid #eee; 
+            padding: 16px 20px; 
+            gap: 14px; 
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
@@ -61,7 +62,7 @@
         .container { padding:40px 20px; max-width:1200px; margin:0 auto; }
         .grid { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
 
-        /* CARD com favorito */
+        /* CARD */
         .card { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:20px; overflow:hidden; background:#faf8f5; box-shadow:0 2px 10px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; width:260px; position:relative; }
         .card:hover { transform:translateY(-4px); box-shadow:0 6px 18px rgba(0,0,0,0.13); }
         .img-box { width:100%; height:340px; overflow:hidden; }
@@ -71,47 +72,14 @@
         .card-legenda span { font-size:13px; color:#888; }
 
         /* BOTÃO FAVORITO */
-        .btn-fav {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.92);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            transition: transform 0.2s, background 0.2s;
-            z-index: 10;
-            line-height: 1;
-        }
-        .btn-fav:hover { transform: scale(1.15); background: white; }
-        .btn-fav.ativo { background: #fff0f8; }
-        .btn-fav .heart-icon { transition: transform 0.2s; }
-        .btn-fav.ativo .heart-icon { transform: scale(1.2); }
+        .btn-fav { position:absolute; top:12px; right:12px; width:36px; height:36px; background:rgba(255,255,255,0.92); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.15); transition:transform 0.2s, background 0.2s; z-index:10; line-height:1; }
+        .btn-fav:hover { transform:scale(1.15); background:white; }
+        .btn-fav.ativo { background:#fff0f8; }
+        .btn-fav .heart-icon { transition:transform 0.2s; }
+        .btn-fav.ativo .heart-icon { transform:scale(1.2); }
 
-        /* TOAST FAVORITO */
-        .fav-toast {
-            display: none;
-            position: fixed;
-            bottom: 28px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #111;
-            color: #fff;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 3000;
-            white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-        }
+        /* TOAST */
+        .fav-toast { display:none; position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#111; color:#fff; padding:10px 22px; border-radius:30px; font-size:14px; font-weight:bold; z-index:3000; white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
 
         /* MODAL INFO */
         .modal-info-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); justify-content:center; align-items:center; z-index:2000; overflow-y:auto; padding:16px; }
@@ -201,23 +169,13 @@
             .modal-topo { flex-direction:column; }
             .modal-img { width:100%; height:220px; border-radius:12px; }
             .modal-info-overlay { align-items:flex-start; padding:16px; }
-            .modal-info-box { 
-                flex-direction:column; 
-                width:100%; 
-                max-width:100%;
-                max-height:85vh; 
-                overflow-y:auto; 
-                margin:auto;
-                padding:20px 16px;
-                gap:16px;
-                border-radius:16px;
-            }
+            .modal-info-box { flex-direction:column; width:100%; max-width:100%; max-height:85vh; overflow-y:auto; margin:auto; padding:20px 16px; gap:16px; border-radius:16px; }
             .modal-info-img { width:100%; height:180px; flex-shrink:0; }
             .modal-info-img img { width:100%; height:100%; object-fit:cover; }
             .modal-info-content { width:100%; gap:12px; }
             .modal-info-titulo { font-size:16px; }
-            .opcoes-selector { max-height:220px; overflow-y:auto; -webkit-overflow-scrolling: touch; }
-            .modal-info-lista { max-height:200px; overflow-y:auto; -webkit-overflow-scrolling: touch; }
+            .opcoes-selector { max-height:220px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+            .modal-info-lista { max-height:200px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
             .btn-escolha { width:100%; justify-content:center; }
             .contactos { flex-direction:column; padding:24px 16px; }
         }
@@ -226,7 +184,7 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="logotipo">
+<div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
@@ -257,14 +215,14 @@
     <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
 </div>
 
-<div style="padding: 12px 20px;">
+<div style="padding:12px 20px;">
     <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
 <!-- BANNER -->
 <div class="banner">
     <h1>O QUE OFERECEMOS</h1>
-    <p>Vem e descubre os estilos de tranças africanas!</p>
+    <p>Vem e descobre os estilos de tranças africanas!</p>
 </div>
 
 <!-- INFO SECÇÃO -->
@@ -292,12 +250,10 @@
 
 <!-- GRID SERVIÇOS -->
 <div class="container">
-    <div class="grid" id="gridServicos">
-        <!-- Cards gerados por JS -->
-    </div>
+    <div class="grid" id="gridServicos"></div>
 </div>
 
-<!-- TOAST FAVORITO -->
+<!-- TOAST -->
 <div class="fav-toast" id="favToast"></div>
 
 <!-- MODAL INFO -->
@@ -374,23 +330,67 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SUPABASE SDK
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // ── AUTH ──────────────────────────────────────────────
-    const ulog = localStorage.getItem('ulog');
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
-    if (ulog) {
-        const dados = JSON.parse(localStorage.getItem(ulog) || '{}');
-        btn.href = btnM.href = 'perfil1.html';
-        const nome = dados.nome ? dados.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = btnM.textContent = nome;
-    } else { btn.href = 'login.html'; btnM.href = 'login.html'; }
+    // ── SUPABASE CONFIG ──────────────────────────────────
+    const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const supabase  = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
+    let _userId = null;  // ID do utilizador autenticado (null se não logado)
+
+    // ── AUTH ─────────────────────────────────────────────
+    async function initAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const btn  = document.getElementById('btnAuth');
+        const btnT = document.getElementById('btnAuthText');
+        const btnM = document.getElementById('btnAuthMobile');
+
+        if (session && session.user) {
+            _userId = session.user.id;
+            const { data: perfil } = await supabase
+                .from('profiles')
+                .select('nome')
+                .eq('id', _userId)
+                .single();
+
+            btn.href = btnM.href = 'perfil1.html';
+            const nome = perfil?.nome ? perfil.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btnT.textContent = nome;
+            btnM.textContent = nome;
+
+            // Carrega favoritos e preferências do Supabase
+            await carregarPreferencias();
+        } else {
+            btn.href  = 'login.html';
+            btnM.href = 'login.html';
+        }
+
+        renderGrid();
+    }
+
+    // ── MENU MOBILE ───────────────────────────────────────
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
-        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        const navbar = document.getElementById('navbar');
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbar.offsetHeight + 'px';
+            m.style.display = 'flex';
+        }
     }
+
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
 
     // ── SERVIÇOS DATA ─────────────────────────────────────
     const servicos = [
@@ -407,43 +407,53 @@
         { nome:"Manutenção Rasta + Penteado", duracao:"5H/8H", img:"manutencaorastas.JPG",     preco:"25€" }
     ];
 
-    // ── FAVORITOS HELPERS ─────────────────────────────────
-    function getFavs() {
-        if (!ulog) return [];
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        return ud.favoritos || [];
+    // ── FAVORITOS → SUPABASE ──────────────────────────────
+    // Tabela: favoritos (id, user_id, servico_nome, created_at)
+    let _favoritosCache = [];
+
+    async function carregarFavoritos() {
+        if (!_userId) return;
+        const { data } = await supabase
+            .from('favoritos')
+            .select('servico_nome')
+            .eq('user_id', _userId);
+        _favoritosCache = (data || []).map(f => f.servico_nome);
     }
 
-    function saveFavs(favs) {
-        if (!ulog) return;
-        const ud = JSON.parse(localStorage.getItem(ulog) || '{}');
-        ud.favoritos = favs;
-        localStorage.setItem(ulog, JSON.stringify(ud));
+    function isFav(nome) {
+        return _favoritosCache.includes(nome);
     }
 
-    function isFav(nome) { return getFavs().includes(nome); }
-
-    function toggleFav(e, nome) {
-        e.stopPropagation(); // não abrir o modal
-        if (!ulog) {
+    async function toggleFav(e, nome) {
+        e.stopPropagation();
+        if (!_userId) {
             showFavToast('Faz login para guardar favoritos ❤', true);
             setTimeout(() => location.href = 'login.html', 1200);
             return;
         }
-        let favs = getFavs();
-        let adicionado;
-        if (favs.includes(nome)) {
-            favs = favs.filter(f => f !== nome);
-            adicionado = false;
+
+        const jaFav = isFav(nome);
+
+        if (jaFav) {
+            // Remove favorito
+            await supabase
+                .from('favoritos')
+                .delete()
+                .eq('user_id', _userId)
+                .eq('servico_nome', nome);
+            _favoritosCache = _favoritosCache.filter(f => f !== nome);
         } else {
-            favs.push(nome);
-            adicionado = true;
+            // Adiciona favorito
+            await supabase
+                .from('favoritos')
+                .insert([{ user_id: _userId, servico_nome: nome }]);
+            _favoritosCache.push(nome);
         }
-        saveFavs(favs);
-        // atualizar botão visualmente
-        const btn = document.querySelector(`.btn-fav[data-nome="${CSS.escape(nome)}"]`);
-        if (btn) atualizarBtnFav(btn, adicionado);
-        showFavToast(adicionado ? '♥ Adicionado aos favoritos!' : '♡ Removido dos favoritos');
+
+        // Atualiza botão visualmente
+        const btnFav = document.querySelector(`.btn-fav[data-nome="${CSS.escape(nome)}"]`);
+        if (btnFav) atualizarBtnFav(btnFav, !jaFav);
+        showFavToast(!jaFav ? '♥ Adicionado aos favoritos!' : '♡ Removido dos favoritos');
     }
 
     function atualizarBtnFav(btn, ativo) {
@@ -461,50 +471,86 @@
         t._timer = setTimeout(() => t.style.display = 'none', 2200);
     }
 
+    // ── PREFERÊNCIAS → SUPABASE ───────────────────────────
+    // Tabela: preferencias (id, user_id, reparticao, divisao, cumprimento)
+    let _prefs = { reparticao: '', divisao: '', cumprimento: '' };
+
+    async function carregarPreferencias() {
+        if (!_userId) return;
+        await carregarFavoritos();
+
+        const { data } = await supabase
+            .from('preferencias')
+            .select('reparticao, divisao, cumprimento')
+            .eq('user_id', _userId)
+            .single();
+
+        if (data) {
+            _prefs.reparticao  = data.reparticao  || '';
+            _prefs.divisao     = data.divisao     || '';
+            _prefs.cumprimento = data.cumprimento || '';
+        }
+    }
+
+    async function guardarPreferencia(campo, valor) {
+        if (!_userId) {
+            // Fallback para localStorage se não logado
+            localStorage.setItem(campo + 'Escolhida', valor);
+            return;
+        }
+
+        // Upsert: cria ou atualiza
+        const { data: existe } = await supabase
+            .from('preferencias')
+            .select('id')
+            .eq('user_id', _userId)
+            .single();
+
+        if (existe) {
+            await supabase
+                .from('preferencias')
+                .update({ [campo]: valor })
+                .eq('user_id', _userId);
+        } else {
+            await supabase
+                .from('preferencias')
+                .insert([{ user_id: _userId, [campo]: valor }]);
+        }
+
+        _prefs[campo] = valor;
+    }
+
     // ── RENDER GRID ───────────────────────────────────────
-function renderGrid() {
-    const grid = document.getElementById('gridServicos');
-
-    grid.innerHTML = servicos.map(s => {
-        const fav = isFav(s.nome);
-
-        return `
-        <div class="card" onclick="abrirModal('${s.nome}','${s.duracao}','${s.img}','${s.preco}')">
-
-            <button 
-                class="btn-fav ${fav ? 'ativo' : ''}" 
-                data-nome="${s.nome}"
-                title="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}"
-                onclick="toggleFav(event, '${s.nome}')">
-
-                <span class="heart-icon">
-                    ${fav ? '♥' : '♡'}
-                </span>
-
-            </button>
-
-            <div class="img-box">
-                <img src="${s.img}" alt="${s.nome}">
-            </div>
-
-            <div class="card-legenda">
-                <b>${s.nome}</b>
-                <span>A partir de ${s.preco}</span>
-            </div>
-
-        </div>
-        `;
-    }).join('');
-}
-
-    renderGrid();
+    function renderGrid() {
+        const grid = document.getElementById('gridServicos');
+        grid.innerHTML = servicos.map(s => {
+            const fav = isFav(s.nome);
+            return `
+            <div class="card" onclick="abrirModal('${s.nome}','${s.duracao}','${s.img}','${s.preco}')">
+                <button 
+                    class="btn-fav ${fav ? 'ativo' : ''}" 
+                    data-nome="${s.nome}"
+                    title="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}"
+                    onclick="toggleFav(event, '${s.nome}')">
+                    <span class="heart-icon">${fav ? '♥' : '♡'}</span>
+                </button>
+                <div class="img-box">
+                    <img src="${s.img}" alt="${s.nome}">
+                </div>
+                <div class="card-legenda">
+                    <b>${s.nome}</b>
+                    <span>A partir de ${s.preco}</span>
+                </div>
+            </div>`;
+        }).join('');
+    }
 
     // ── INFO MODAL ────────────────────────────────────────
     const infoData = {
-        reparticao: { img:'reparticao.png', titulo:'REPARTIÇÃO', sub:'DO COURO CABELUDO', temSelector:true, chave:'reparticaoEscolhida', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>BRICK-LAY</strong> → colocação de tijolo','<strong>SQUARE/BOX</strong> → quadrado-box','<strong>DIAMOND</strong> → losango','<strong>TRIANGLE</strong> → triângulo','<strong>ORGANIC/FREEFORM</strong> → orgânico / forma livre'] },
-        divisao: { img:'divisao.png', titulo:'DIVISÃO', sub:'SEPARAÇÃO DO CABELO EM PARTES', temSelector:true, chave:'divisaoEscolhida', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>EXTRA LARGE</strong> → tranças muito grossas','<strong>LARGE</strong> → tranças grossas','<strong>MEDIUM</strong> → tranças médias','<strong>SMALL</strong> → tranças finas','<strong>EXTRA SMALL</strong> → tranças muito finas'] },
-        cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'DAS TRANÇAS', temSelector:true, chave:'cumprimentoEscolhido', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>NECK LENGTH</strong> → altura do pescoço','<strong>SHOULDER LENGTH</strong> → altura dos ombros','<strong>ARMPIT LENGTH</strong> → altura das axilas','<strong>BRA STRAP LENGTH</strong> → altura do soutien','<strong>MID-BACK LENGTH</strong> → meio das costas','<strong>WAIST LENGTH</strong> → altura da cintura','<strong>HIP LENGTH</strong> → altura das ancas','<strong>TAILBONE LENGTH</strong> → altura do cóccix','<strong>CLASSIC LENGTH</strong> → comprimento clássico','<strong>MID-THIGH LENGTH</strong> → meio da coxa','<strong>KNEE LENGTH</strong> → altura do joelho','<strong>CALF LENGTH</strong> → altura da barriga da perna','<strong>ANKLE LENGTH</strong> → altura do tornozelo','<strong>FLOOR LENGTH</strong> → comprimento até ao chão'] },
-        preparacao: { img:'preparacao.jpg', titulo:'PREPARAÇÃO', sub:'DO CABELO', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O CABELO DEVE ESTAR:</strong>','&#10004; LIMPO','&#10004; SECO','&#10004; SEM CREME','&#10004; DESEMBARAÇADO'] }
+        reparticao:  { img:'reparticao.png',  titulo:'REPARTIÇÃO',  sub:'DO COURO CABELUDO', temSelector:true, campo:'reparticao', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>BRICK-LAY</strong> → colocação de tijolo','<strong>SQUARE/BOX</strong> → quadrado-box','<strong>DIAMOND</strong> → losango','<strong>TRIANGLE</strong> → triângulo','<strong>ORGANIC/FREEFORM</strong> → orgânico / forma livre'] },
+        divisao:     { img:'divisao.png',     titulo:'DIVISÃO',     sub:'SEPARAÇÃO DO CABELO EM PARTES', temSelector:true, campo:'divisao', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>EXTRA LARGE</strong> → tranças muito grossas','<strong>LARGE</strong> → tranças grossas','<strong>MEDIUM</strong> → tranças médias','<strong>SMALL</strong> → tranças finas','<strong>EXTRA SMALL</strong> → tranças muito finas'] },
+        cumprimento: { img:'cumprimento.png', titulo:'CUMPRIMENTO', sub:'DAS TRANÇAS', temSelector:true, campo:'cumprimento', opcoes:['Neck length','Shoulder length','Armpit length','Bra Strap length','Mid-back length','Waist length','Hip length','Tailbone length','Classic length','Mid-thigh length','Knee length','Calf length','Ankle length','Floor length'], items:['<strong>NECK LENGTH</strong> → altura do pescoço','<strong>SHOULDER LENGTH</strong> → altura dos ombros','<strong>ARMPIT LENGTH</strong> → altura das axilas','<strong>BRA STRAP LENGTH</strong> → altura do soutien','<strong>MID-BACK LENGTH</strong> → meio das costas','<strong>WAIST LENGTH</strong> → altura da cintura','<strong>HIP LENGTH</strong> → altura das ancas','<strong>TAILBONE LENGTH</strong> → altura do cóccix','<strong>CLASSIC LENGTH</strong> → comprimento clássico','<strong>MID-THIGH LENGTH</strong> → meio da coxa','<strong>KNEE LENGTH</strong> → altura do joelho','<strong>CALF LENGTH</strong> → altura da barriga da perna','<strong>ANKLE LENGTH</strong> → altura do tornozelo','<strong>FLOOR LENGTH</strong> → comprimento até ao chão'] },
+        preparacao:  { img:'preparacao.jpg',  titulo:'PREPARAÇÃO',  sub:'DO CABELO', temSelector:false, items:['Quando o cabelo está molhado, a raiz fica mais sensível e pode favorecer a proliferação de fungos e bactérias.','Além disso, os fios ficam mais frágeis, podendo quebrar ou até causar queda capilar.','<strong>O CABELO DEVE ESTAR:</strong>','&#10004; LIMPO','&#10004; SECO','&#10004; SEM CREME','&#10004; DESEMBARAÇADO'] }
     };
 
     let _tipoAtual = '', _selectorAberto = false;
@@ -521,8 +567,8 @@ function renderGrid() {
         document.getElementById('escolhaConfirmada').style.display = 'none';
         document.getElementById('btnEscolhaWrap').style.display = d.temSelector ? 'block' : 'none';
         document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
-        if (d.temSelector && d.chave) {
-            const guardada = localStorage.getItem(d.chave);
+        if (d.temSelector && d.campo) {
+            const guardada = _prefs[d.campo] || localStorage.getItem(d.campo + 'Escolhida') || '';
             if (guardada) {
                 document.getElementById('escolhaConfirmada').innerText = '✔ ESCOLHA ATUAL: ' + guardada.toUpperCase();
                 document.getElementById('escolhaConfirmada').style.display = 'block';
@@ -536,11 +582,11 @@ function renderGrid() {
         const d = infoData[_tipoAtual];
         if (!d || !d.temSelector) return;
         _selectorAberto = !_selectorAberto;
-        const lista = document.getElementById('infoLista');
+        const lista    = document.getElementById('infoLista');
         const selector = document.getElementById('opcoesSelector');
         if (_selectorAberto) {
             lista.style.display = 'none';
-            const guardada = localStorage.getItem(d.chave) || '';
+            const guardada = _prefs[d.campo] || localStorage.getItem(d.campo + 'Escolhida') || '';
             selector.innerHTML = d.opcoes.map(op=>`<button class="opcao-btn ${op===guardada?'escolhido':''}" onclick="escolherOpcao('${op}')">${op.toUpperCase()}</button>`).join('');
             selector.classList.add('visivel');
             document.getElementById('btnEscolha').innerHTML = 'FECHAR <span class="btn-seta"></span>';
@@ -551,21 +597,28 @@ function renderGrid() {
         }
     }
 
-    function escolherOpcao(opcao) {
+    async function escolherOpcao(opcao) {
         const d = infoData[_tipoAtual];
-        localStorage.setItem(d.chave, opcao);
-        document.querySelectorAll('.opcao-btn').forEach(b=>b.classList.remove('escolhido'));
+        // Guarda no Supabase (ou localStorage se não logado)
+        await guardarPreferencia(d.campo, opcao);
+        // Fallback localStorage
+        localStorage.setItem(d.campo + 'Escolhida', opcao);
+
+        document.querySelectorAll('.opcao-btn').forEach(b => b.classList.remove('escolhido'));
         event.target.classList.add('escolhido');
         const conf = document.getElementById('escolhaConfirmada');
         conf.innerText = '✔ ESCOLHA GUARDADA: ' + opcao.toUpperCase();
         conf.style.display = 'block';
-        setTimeout(()=>{ _selectorAberto=false; document.getElementById('infoLista').style.display='flex';
-        document.getElementById('opcoesSelector').classList.remove('visivel'); 
-        document.getElementById('btnEscolha').innerHTML='ESCOLHA AQUI <span class="btn-seta"></span>'; }, 800);
+        setTimeout(() => {
+            _selectorAberto = false;
+            document.getElementById('infoLista').style.display = 'flex';
+            document.getElementById('opcoesSelector').classList.remove('visivel');
+            document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
+        }, 800);
     }
 
-    function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto=false; }
-    document.getElementById('modalInfo').addEventListener('click', function(e){ if(e.target===this) fecharInfoModal(); });
+    function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto = false; }
+    document.getElementById('modalInfo').addEventListener('click', function(e) { if (e.target === this) fecharInfoModal(); });
 
     // ── MODAL SERVIÇO ─────────────────────────────────────
     let _nomeAtual = '';
@@ -576,9 +629,9 @@ function renderGrid() {
         document.getElementById('modalDuracao').innerText = duracao;
         document.getElementById('modalImg').src           = img;
         document.getElementById('modalPreco').innerText   = 'A PARTIR DE ' + preco;
-        const rep  = localStorage.getItem('reparticaoEscolhida');
-        const div  = localStorage.getItem('divisaoEscolhida');
-        const cump = localStorage.getItem('cumprimentoEscolhido');
+        const rep  = _prefs.reparticao  || localStorage.getItem('reparticaoEscolhida')  || '';
+        const div  = _prefs.divisao     || localStorage.getItem('divisaoEscolhida')     || '';
+        const cump = _prefs.cumprimento || localStorage.getItem('cumprimentoEscolhido') || '';
         const prefsBox = document.getElementById('modalPrefs');
         if (rep || div || cump) {
             prefsBox.style.display = 'block';
@@ -614,7 +667,10 @@ function renderGrid() {
     }
 
     function fecharModal() { document.getElementById('modalDetalhe').classList.remove('active'); }
-    document.getElementById('modalDetalhe').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
+    document.getElementById('modalDetalhe').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
+
+    // ── INIT ─────────────────────────────────────────────
+    initAuth();
 </script>
 </body>
 </html>

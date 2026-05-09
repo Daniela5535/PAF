@@ -6,130 +6,53 @@
     <title>Easy Glow — Conta</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
+        body { font-family: Arial, sans-serif; background: #fff; display: flex; flex-direction: column; min-height: 100vh; }
         @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
-
-        /* ── NAVBAR ── */
-        .logotipo {
-            width: 100%; padding: 10px 20px; display: flex; align-items: center;
-            justify-content: space-between; background: #fff; border-bottom: 1px solid #eee;
-            position: sticky; top: 0; z-index: 1000;
-        }
+        .logotipo { width: 100%; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
         .logo img { width: 150px; display: block; }
         .menu { display: flex; align-items: center; gap: 22px; }
         .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
         .menu a:hover { color: #888; }
         .mais-menu { position: relative; cursor: pointer; }
-        .mais-links {
-            display: none; position: absolute; top: calc(100% + 10px); right: 0;
-            background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
-        }
+        .mais-links { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden; }
         .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
         .mais-links a:hover { background: #f5f5f5; }
         .mais-menu:hover .mais-links { display: flex; }
-
-        .btn-login {
-            background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
-            font-size: 13px; font-weight: bold; text-decoration: none;
-            display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
-        }
+        .btn-login { background: #111; color: white !important; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap; }
         .btn-login:hover { opacity: 0.8; }
-
         .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
         .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
-
-        .menu-mobile { 
-            display: none; 
-            flex-direction: column; 
-            background: #fff; 
-            border-bottom: 1px solid #eee; 
-            padding: 16px 20px; 
-            gap: 14px; 
-            position: fixed;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .menu-mobile { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
-
-        /* ── FORMULÁRIO ── */
-        .form-wrap {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .cnt {
-            background: linear-gradient(to bottom, #dcd6cf, #f9f7f3);
-            padding: 40px;
-            border-radius: 12px;
-            width: 420px;
-            max-width: 100%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
+        .form-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .cnt { background: linear-gradient(to bottom, #dcd6cf, #f9f7f3); padding: 40px; border-radius: 12px; width: 420px; max-width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         h2 { text-align: center; margin-bottom: 20px; font-size: 22px; }
-
         label { display: block; font-weight: bold; font-size: 14px; margin-top: 12px; margin-bottom: 4px; }
-
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%; padding: 13px; border-radius: 8px; border: 1px solid #ccc;
-            font-size: 14px; outline: none; transition: border-color 0.2s;
-        }
+        input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 13px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; outline: none; transition: border-color 0.2s; }
         input:focus { border-color: #000; }
-
-        button.btn-main {
-            width: 100%; padding: 14px; margin-top: 20px; background: #000; color: white;
-            border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
+        button.btn-main { width: 100%; padding: 14px; margin-top: 20px; background: #000; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
         button.btn-main:hover { opacity: 0.85; }
-
+        button.btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
         .lnk { text-align: center; margin-top: 14px; font-size: 14px; color: #555; cursor: pointer; }
         .lnk span { color: black; font-weight: bold; text-decoration: underline; cursor: pointer; }
-
-        .msg-erro { background: #ffe0e0; color: #c0392b; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center; display: none; }
+        .msg-erro    { background: #ffe0e0; color: #c0392b; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center; display: none; }
         .msg-sucesso { background: #e0ffe0; color: #27ae60; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center; display: none; }
-
-        /* ── FOOTER ── */
-        .footer {
-            background: #f8f8f8; color: #555; text-align: center; padding: 20px;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            flex-wrap: wrap; border-top: 1px solid #eee;
-        }
+        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; }
         .footer p { font-size: 15px; color: #555; }
         .insta { display: flex; align-items: center; gap: 6px; }
         .insta span { font-size: 14px; color: #555; }
         .icon { width: 26px; }
         .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
-
-        @media (max-width: 768px) {
-            .menu { display: none; }
-            .menu-toggle { display: flex; }
-            .footer { flex-direction: column; padding: 24px 16px; }
-        }
+        @media (max-width: 768px) { .menu { display: none; } .menu-toggle { display: flex; } .footer { flex-direction: column; padding: 24px 16px; } }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
     <div class="menu">
         <a href="servicos.html">SERVIÇOS</a>
-        <a href="preços.html">PREÇOS</a>
         <a href="agendar.html">AGENDAR</a>
         <div class="mais-menu">
             <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
@@ -140,19 +63,13 @@
             </div>
         </div>
         <a href="login.html" class="btn-login">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             LOGIN
         </a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
 
-<!-- MENU MOBILE -->
 <div class="menu-mobile" id="menuMobile">
     <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
@@ -163,26 +80,13 @@
 </div>
 
 <div style="padding: 12px 20px;">
-    <button onclick="history.back()" style="
-        background: none;
-        border: none;
-        font-size: 13px;
-        font-weight: bold;
-        color: #111;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.5px;
-    ">← VOLTAR</button>
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
 </div>
 
 <div class="form-wrap">
-
-    <!-- FORMULÁRIO PRINCIPAL -->
     <div class="cnt" id="formPrincipal">
         <h2 id="hd">Criar Conta</h2>
-        <div class="msg-erro" id="msgErro"></div>
+        <div class="msg-erro"    id="msgErro"></div>
         <div class="msg-sucesso" id="msgSucesso"></div>
         <div id="campoNome">
             <label for="n">Nome completo</label>
@@ -201,17 +105,16 @@
         <div class="lnk" id="rec" style="display:none;"><span onclick="abrirRecuperacao()">Esqueci-me da palavra-passe</span></div>
     </div>
 
-    <!-- FORMULÁRIO RECUPERAÇÃO -->
     <div class="cnt" id="formRecuperacao" style="display:none;">
         <h2>Recuperar Palavra-Passe</h2>
-        <div class="msg-erro" id="msgErroRec"></div>
+        <div class="msg-erro"    id="msgErroRec"></div>
         <div class="msg-sucesso" id="msgSucessoRec"></div>
         <label for="re">Email</label>
         <input type="text" id="re" placeholder="Digite o seu email">
         <button class="btn-main" onclick="sendCode()">Enviar Código</button>
         <div id="cbx" style="display:none;">
             <label for="cd" style="margin-top:14px;">Código recebido</label>
-            <input type="text" id="cd" placeholder="Digite o código de 6 dígitos">
+            <input type="text" id="cd" placeholder="Código de 6 dígitos">
             <label for="np">Nova palavra-passe</label>
             <input type="password" id="np" placeholder="Nova palavra-passe">
             <label for="cnp">Confirmar nova palavra-passe</label>
@@ -220,185 +123,151 @@
         </div>
         <div class="lnk"><span onclick="fecharRecuperacao()">← Voltar ao login</span></div>
     </div>
-
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
-    <div class="insta">
-        <img src="iconinstagram.PNG" class="icon" alt="Instagram">
-        <span>@easyglow._</span>
-    </div>
+    <div class="insta"><img src="iconinstagram.PNG" class="icon" alt="Instagram"><span>@easyglow._</span></div>
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
 <script>
+    const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+
+    async function supaFetch(method, table, body = null, filter = '') {
+        const res = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPA_KEY,
+                'Authorization': `Bearer ${SUPA_KEY}`,
+                'Prefer': method === 'POST' ? 'return=representation' : ''
+            },
+            body: body ? JSON.stringify(body) : null
+        });
+        if (!res.ok) { const e = await res.json().catch(() => ({})); console.error(e); return null; }
+        return res.json();
+    }
+
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
-        const navbarHeight = navbar.offsetHeight;
-        if (m.style.display === 'flex') {
-            m.style.display = 'none';
-        } else {
-            m.style.top = navbarHeight + 'px';
-            m.style.display = 'flex';
-        }
+        if (m.style.display === 'flex') { m.style.display = 'none'; }
+        else { m.style.top = navbar.offsetHeight + 'px'; m.style.display = 'flex'; }
     }
-
     document.addEventListener('click', function(e) {
         const m = document.getElementById('menuMobile');
         const toggle = document.querySelector('.menu-toggle');
-        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
-            m.style.display = 'none';
-        }
+        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) m.style.display = 'none';
     });
 
-    let modoLogin = false, codigoGerado = "";
+    let modoLogin = false, codigoGerado = '';
 
-    function mostrarErro(msg) {
-        const el=document.getElementById("msgErro");      
-        el.innerText=msg; 
-        el.style.display="block"; 
-        document.getElementById("msgSucesso").style.display="none";    
-        setTimeout(()=>el.style.display="none",4000); 
-    }
-    function mostrarSucesso(msg) { 
-        const el=document.getElementById("msgSucesso");   
-        el.innerText=msg; el.style.display="block";
-        document.getElementById("msgErro").style.display="none"; 
-    }
-    function mostrarErroRec(msg) { 
-        const el=document.getElementById("msgErroRec");   
-        el.innerText=msg; el.style.display="block"; 
-        document.getElementById("msgSucessoRec").style.display="none"; 
-        setTimeout(()=>el.style.display="none",4000); 
-    }
-    function mostrarSucessoRec(msg){ 
-        const el=document.getElementById("msgSucessoRec");
-        el.innerText=msg; el.style.display="block"; 
-        document.getElementById("msgErroRec").style.display="none"; 
-    }
+    function mostrarErro(msg)      { const el=document.getElementById('msgErro');    el.innerText=msg; el.style.display='block'; document.getElementById('msgSucesso').style.display='none'; setTimeout(()=>el.style.display='none',4000); }
+    function mostrarSucesso(msg)   { const el=document.getElementById('msgSucesso'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErro').style.display='none'; }
+    function mostrarErroRec(msg)   { const el=document.getElementById('msgErroRec'); el.innerText=msg; el.style.display='block'; document.getElementById('msgSucessoRec').style.display='none'; setTimeout(()=>el.style.display='none',4000); }
+    function mostrarSucessoRec(msg){ const el=document.getElementById('msgSucessoRec'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErroRec').style.display='none'; }
 
     function switchMode() {
         modoLogin = !modoLogin;
-        document.getElementById("msgErro").style.display = "none";
-        document.getElementById("msgSucesso").style.display = "none";
+        document.getElementById('msgErro').style.display = 'none';
+        document.getElementById('msgSucesso').style.display = 'none';
         if (modoLogin) {
-            document.getElementById("hd").innerText = "Iniciar Sessão";
-            document.getElementById("ac").innerText = "ENTRAR";
-            document.getElementById("campoNome").style.display = "none";
-            document.getElementById("campoConfirmar").style.display = "none";
-            document.getElementById("alt").innerHTML = 'Não tem conta? <span onclick="switchMode()">Criar conta</span>';
-            document.getElementById("rec").style.display = "block";
+            document.getElementById('hd').innerText = 'Iniciar Sessão';
+            document.getElementById('ac').innerText = 'ENTRAR';
+            document.getElementById('campoNome').style.display = 'none';
+            document.getElementById('campoConfirmar').style.display = 'none';
+            document.getElementById('alt').innerHTML = 'Não tem conta? <span onclick="switchMode()">Criar conta</span>';
+            document.getElementById('rec').style.display = 'block';
         } else {
-            document.getElementById("hd").innerText = "Criar Conta";
-            document.getElementById("ac").innerText = "CRIAR CONTA";
-            document.getElementById("campoNome").style.display = "block";
-            document.getElementById("campoConfirmar").style.display = "block";
-            document.getElementById("alt").innerHTML = 'Já tenho conta? <span onclick="switchMode()">Iniciar sessão</span>';
-            document.getElementById("rec").style.display = "none";
+            document.getElementById('hd').innerText = 'Criar Conta';
+            document.getElementById('ac').innerText = 'CRIAR CONTA';
+            document.getElementById('campoNome').style.display = 'block';
+            document.getElementById('campoConfirmar').style.display = 'block';
+            document.getElementById('alt').innerHTML = 'Já tenho conta? <span onclick="switchMode()">Iniciar sessão</span>';
+            document.getElementById('rec').style.display = 'none';
         }
     }
 
-    function abrirRecuperacao() {
-        document.getElementById("formPrincipal").style.display = "none";
-        document.getElementById("formRecuperacao").style.display = "block";
-        document.getElementById("cbx").style.display = "none";
-        document.getElementById("msgErroRec").style.display = "none";
-        document.getElementById("msgSucessoRec").style.display = "none";
-    }
+    function abrirRecuperacao()  { document.getElementById('formPrincipal').style.display='none'; document.getElementById('formRecuperacao').style.display='block'; }
+    function fecharRecuperacao() { document.getElementById('formRecuperacao').style.display='none'; document.getElementById('formPrincipal').style.display='block';
+     if (!modoLogin) switchMode(); }
 
-    function fecharRecuperacao() {
-        document.getElementById("formRecuperacao").style.display = "none";
-        document.getElementById("formPrincipal").style.display = "block";
-        if (!modoLogin) switchMode();
-    }
-
-async function act() {
-    const email = document.getElementById("e").value.trim();
-    const pass  = document.getElementById("p").value;
-
-    if (modoLogin) {
-        if (!email || !pass) { mostrarErro("Por favor preencha todos os campos."); return; }
-        const res  = await fetch("api/login.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password: pass })
-        });
-        const data = await res.json();
-        if (data.sucesso) {
-            localStorage.setItem("ulog", JSON.stringify({ id: data.id, nome: data.nome, email: data.email }));
-            mostrarSucesso("Login efetuado!");
-            const redir = localStorage.getItem('redirectAfterLogin');
-            if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 1000); }
-            else setTimeout(() => location.href = "index.html", 1000);
-        } else {
-            mostrarErro(data.erro);
-        }
-    } else {
-        const nome     = document.getElementById("n").value.trim();
-        const confirma = document.getElementById("cp").value;
-        if (!nome || !email || !pass || !confirma) { mostrarErro("Por favor preencha todos os campos."); return; }
-        if (!email.includes("@")) { mostrarErro("Email inválido."); return; }
-        if (pass.length < 6)      { mostrarErro("A palavra-passe deve ter pelo menos 6 caracteres."); return; }
-        if (pass !== confirma)    { mostrarErro("As palavras-passe não coincidem."); return; }
-
-        const res  = await fetch("api/registar.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nome, email, password: pass })
-        });
-        const data = await res.json();
-        if (data.sucesso) {
-            localStorage.setItem("ulog", JSON.stringify({ id: data.id, nome: data.nome, email: data.email }));
-            mostrarSucesso("Conta criada! A redirecionar...");
-            setTimeout(() => location.href = "index.html", 1200);
-        } else {
-            mostrarErro(data.erro);
+    async function act() {
+        const btn   = document.getElementById('ac');
+        const email = document.getElementById('e').value.trim();
+        const pass  = document.getElementById('p').value;
+        btn.disabled = true;
+        btn.innerText = 'A aguardar...';
+        try {
+            if (modoLogin) {
+                if (!email || !pass) { mostrarErro('Preencha todos os campos.'); return; }
+                const data = await supaFetch('GET', 'utilizadores', null,
+                    `?email=eq.${encodeURIComponent(email)}&password=eq.${encodeURIComponent(pass)}&select=id,nome,email,telefone`);
+                if (data && data.length > 0) {
+                    const user = data[0];
+                    localStorage.setItem('ulog', JSON.stringify({ id: user.id, nome: user.nome, email: user.email, telefone: user.telefone }));
+                    mostrarSucesso('Login efetuado! A redirecionar...');
+                    const redir = localStorage.getItem('redirectAfterLogin');
+                    if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 1000); }
+                    else setTimeout(() => location.href = 'index.html', 1000);
+                } else {
+                    mostrarErro('Email ou palavra-passe incorretos.');
+                }
+            } else {
+                const nome     = document.getElementById('n').value.trim();
+                const confirma = document.getElementById('cp').value;
+                if (!nome || !email || !pass || !confirma) { mostrarErro('Preencha todos os campos.'); return; }
+                if (!email.includes('@'))  { mostrarErro('Email inválido.'); return; }
+                if (pass.length < 6)       { mostrarErro('A palavra-passe deve ter pelo menos 6 caracteres.'); return; }
+                if (pass !== confirma)     { mostrarErro('As palavras-passe não coincidem.'); return; }
+                const existe = await supaFetch('GET', 'utilizadores', null, `?email=eq.${encodeURIComponent(email)}&select=id`);
+                if (existe && existe.length > 0) { mostrarErro('Este email já está registado.'); return; }
+                const data = await supaFetch('POST', 'utilizadores', { nome, email, password: pass });
+                if (data && data.length > 0) {
+                    const user = data[0];
+                    localStorage.setItem('ulog', JSON.stringify({ id: user.id, nome: user.nome, email: user.email }));
+                    mostrarSucesso('Conta criada! A redirecionar...');
+                    setTimeout(() => location.href = 'index.html', 1200);
+                } else {
+                    mostrarErro('Erro ao criar conta. Tente novamente.');
+                }
+            }
+        } finally {
+            btn.disabled = false;
+            btn.innerText = modoLogin ? 'ENTRAR' : 'CRIAR CONTA';
         }
     }
-}
 
     function sendCode() {
-        const em = document.getElementById("re").value.trim();
-        if (!em) { mostrarErroRec("Por favor introduza o seu email."); return; }
+        const em = document.getElementById('re').value.trim();
+        if (!em) { mostrarErroRec('Introduza o seu email.'); return; }
         codigoGerado = Math.floor(100000 + Math.random() * 900000).toString();
-        document.getElementById("cbx").style.display = "block";
-        mostrarSucessoRec("Código enviado! (demonstração: " + codigoGerado + ")");
+        document.getElementById('cbx').style.display = 'block';
+        mostrarSucessoRec('Código de demonstração: ' + codigoGerado);
     }
 
-    function confCode() {
-        const cd = document.getElementById("cd").value.trim();
-        const np  = document.getElementById("np").value;
-        const cnp = document.getElementById("cnp").value;
-        if (cd !== codigoGerado) { 
-            mostrarErroRec("Código incorreto."); return; 
-        }
-        if (np.length < 6)       { 
-            mostrarErroRec("A senha deve ter pelo menos 6 caracteres."); return; 
-        }
-        if (np !== cnp)          { 
-            mostrarErroRec("As palavras-passe não coincidem."); return; 
-        }
-        const em   = document.getElementById("re").value.trim();
-        const user = JSON.parse(localStorage.getItem(em));
-        if (user) { 
-            user.password = np; localStorage.setItem(em, JSON.stringify(user)); 
-            mostrarSucessoRec("Palavra-passe alterada!"); 
-            setTimeout(() => fecharRecuperacao(), 1500); 
-        }
-        else mostrarErroRec("Conta não encontrada.");
+    async function confCode() {
+        const cd  = document.getElementById('cd').value.trim();
+        const np  = document.getElementById('np').value;
+        const cnp = document.getElementById('cnp').value;
+        const em  = document.getElementById('re').value.trim();
+        if (cd !== codigoGerado) { mostrarErroRec('Código incorreto.'); return; }
+        if (np.length < 6)       { mostrarErroRec('Mínimo 6 caracteres.'); return; }
+        if (np !== cnp)          { mostrarErroRec('As palavras-passe não coincidem.'); return; }
+        // Atualizar a password no Supabase
+        await supaFetch('PATCH', 'utilizadores', { password: np }, `?email=eq.${encodeURIComponent(em)}`);
+        mostrarSucessoRec('Palavra-passe alterada com sucesso!');
+        setTimeout(() => fecharRecuperacao(), 1500);
     }
 
-    // Se já tem sessão iniciada, redirecionar para perfil
-   const ulogRaw = localStorage.getItem('ulog');
-    if (ulogRaw) {
-    try { const u = JSON.parse(ulogRaw); if (u && u.id) location.href = 'perfil1.html'; } catch(e) {}
-    }
+    // Se já tem sessão, redireciona
+    const ulogRaw = localStorage.getItem('ulog');
+    if (ulogRaw) { try { const u = JSON.parse(ulogRaw); if (u && u.id) location.href = 'perfil1.html'; } catch(e) {} }
 
-    document.addEventListener("keydown", e => {
-        if (e.key === "Enter" && document.getElementById("formPrincipal").style.display !== "none") act();
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && document.getElementById('formPrincipal').style.display !== 'none') act();
     });
 </script>
 </body>

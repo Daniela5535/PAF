@@ -4,34 +4,27 @@
     <title>Easy Glow – Admin</title>
     <style>
         body { margin:0; padding:0; font-family:Arial,sans-serif; background:#f5f5f5; min-height:100vh; }
-
         .admin-header { background:#111; color:#fff; padding:18px 30px; display:flex; justify-content:space-between; align-items:center; }
         .admin-header h1 { margin:0; font-size:20px; letter-spacing:1px; }
         .admin-header button { background:#c0392b; color:#fff; border:none; border-radius:20px; padding:8px 18px; cursor:pointer; font-size:13px; font-weight:bold; }
-
         .login-wrap { display:flex; justify-content:center; align-items:center; min-height:80vh; }
         .login-box { background:#fff; padding:40px; border-radius:14px; width:320px; box-shadow:0 4px 16px rgba(0,0,0,0.1); text-align:center; }
         .login-box h2 { margin:0 0 20px; }
         .login-box input { width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px; outline:none; margin-bottom:12px; box-sizing:border-box; }
         .login-box button { width:100%; padding:12px; background:#111; color:#fff; border:none; border-radius:25px; font-size:15px; font-weight:bold; cursor:pointer; }
         .login-box .msg-erro { color:#c0392b; font-size:13px; margin-top:8px; display:none; }
-
         .painel { padding:30px 40px; display:none; }
-
         .tabs { display:flex; gap:0; margin-bottom:30px; border-bottom:2px solid #ddd; }
         .tab-btn { padding:11px 28px; background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; cursor:pointer; font-size:14px; font-weight:bold; color:#888; transition:0.2s; }
         .tab-btn.ativo { color:#111; border-bottom-color:#111; }
         .tab-btn:hover:not(.ativo) { color:#444; }
-
         .secao { display:none; }
         .secao.ativa { display:block; }
         .secao h2 { font-size:22px; margin:0 0 24px; }
-
         .filtros { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; }
         .filtros button { padding:7px 18px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:13px; font-weight:bold; }
         .filtros button.ativo { background:#111; color:#fff; border-color:#111; }
         .filtros button:hover:not(.ativo) { background:#f5f5f5; }
-
         .card { background:#fff; border-radius:14px; padding:20px 24px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.07); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
         .card-info p { margin:5px 0; font-size:14px; color:#333; }
         .card-info p strong { color:#111; }
@@ -43,15 +36,12 @@
         .btn-cancelar:hover  { background:#f5aaaa; }
         .btn-rejeitar  { background:#f8d7da; color:#7f1d1d; }
         .btn-rejeitar:hover  { background:#f0b8bc; }
-
         .badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; }
         .badge-pendente   { background:#fff3cd; color:#856404; }
         .badge-confirmado { background:#d4edda; color:#155724; }
         .badge-cancelado  { background:#ffcaca; color:#c0392b; }
         .badge-rejeitado  { background:#f8d7da; color:#7f1d1d; }
-
         .sem-resultados { text-align:center; color:#aaa; padding:40px; font-size:15px; }
-
         .contador { display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
         .cnt-card { background:#fff; border-radius:12px; padding:14px 20px; text-align:center; flex:1; min-width:100px; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
         .cnt-card .num { font-size:28px; font-weight:bold; }
@@ -61,7 +51,6 @@
         .cnt-cancelado  .num { color:#c0392b; }
         .cnt-rejeitado  .num { color:#7f1d1d; }
         .cnt-msgs .num { color:#2980b9; }
-
         .msg-card { background:#fff; border-radius:14px; padding:18px 24px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
         .msg-topo { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
         .msg-nome  { font-weight:bold; font-size:15px; }
@@ -71,7 +60,6 @@
         .badge-nova { background:#fff3cd; color:#856404; }
         .badge-lida { background:#e9ecef; color:#555; }
         .badge-respondida { background:#d4edda; color:#155724; }
-
         .btn-lida { padding:6px 16px; border-radius:14px; border:none; background:#d4edda; color:#155724; cursor:pointer; font-size:12px; font-weight:bold; }
         .btn-lida:hover { background:#b8dfc4; }
         .btn-apagar-msg { padding:6px 16px; border-radius:14px; border:none; background:#ffcaca; color:#c0392b; cursor:pointer; font-size:12px; font-weight:bold; }
@@ -82,22 +70,17 @@
         .btn-enviar-resposta:hover { background:#333; }
         .btn-cancelar-resposta { padding:7px 16px; border-radius:14px; border:1px solid #ccc; background:#fff; color:#555; cursor:pointer; font-size:13px; font-weight:bold; }
         .btn-cancelar-resposta:hover { background:#f5f5f5; }
-
-        .resposta-area { margin-top:14px; background:#f0f4ff; border-radius:10px; padding:14px 16px; border-left:4px solid #1a5fb4; animation:fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+        .resposta-area { margin-top:14px; background:#f0f4ff; border-radius:10px; padding:14px 16px; border-left:4px solid #1a5fb4; }
         .resposta-area textarea { width:100%; border:1px solid #c5d5f0; border-radius:8px; padding:10px 12px; font-size:13px; font-family:Arial,sans-serif; resize:vertical; min-height:80px; outline:none; background:#fff; box-sizing:border-box; }
         .resposta-area textarea:focus { border-color:#1a5fb4; }
         .resposta-area .resposta-acoes { display:flex; gap:8px; margin-top:10px; }
-
         .resposta-enviada { margin-top:12px; background:#eaf4ea; border-radius:10px; padding:12px 16px; border-left:4px solid #27ae60; font-size:13px; color:#155724; }
         .resposta-enviada .resposta-label { font-weight:bold; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#27ae60; margin-bottom:6px; }
         .resposta-enviada .resposta-texto { color:#333; line-height:1.5; }
         .resposta-enviada .resposta-data  { font-size:11px; color:#999; margin-top:4px; }
-
         .pesquisa-wrap { margin-bottom:16px; }
         .pesquisa-wrap input { padding:10px 16px; border-radius:20px; border:1px solid #ccc; font-size:14px; outline:none; width:280px; }
         .pesquisa-wrap input:focus { border-color:#111; }
-
         .tabela-wrap { overflow-x:auto; }
         table { width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
         thead { background:#111; color:#fff; }
@@ -106,15 +89,12 @@
         tbody tr:last-child { border-bottom:none; }
         tbody tr:hover { background:#fafafa; }
         tbody td { padding:13px 16px; font-size:13px; color:#333; }
-
         .user-avatar { width:32px; height:32px; border-radius:50%; background:#c4b9a8; display:inline-flex; align-items:center; justify-content:center; font-weight:bold; font-size:13px; color:#fff; margin-right:8px; vertical-align:middle; }
         .user-nome { vertical-align:middle; }
-
         .btn-ver    { padding:5px 14px; border-radius:14px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:12px; font-weight:bold; }
         .btn-ver:hover { background:#f5f5f5; }
         .btn-apagar { padding:5px 14px; border-radius:14px; border:none; background:#ffcaca; color:#c0392b; cursor:pointer; font-size:12px; font-weight:bold; }
         .btn-apagar:hover { background:#f5aaaa; }
-
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; }
         .modal-overlay.ativo { display:flex; }
         .modal-user { background:#fff; border-radius:16px; padding:30px; width:420px; max-width:92%; box-shadow:0 8px 30px rgba(0,0,0,0.15); }
@@ -128,71 +108,56 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
     <div class="login-box">
         <h2>🔒 Área Admin</h2>
         <input type="email"    id="adminEmail" placeholder="Email">
         <input type="password" id="adminPass"  placeholder="Palavra-passe">
-        <button onclick="fazerLogin()">Entrar</button>
+        <button id="btnEntrar">Entrar</button>
         <div class="msg-erro" id="loginErro">Credenciais incorretas.</div>
     </div>
 </div>
 
-<!-- PAINEL -->
 <div id="painelWrap" style="display:none;">
     <div class="admin-header">
         <h1>Easy Glow — Painel Admin</h1>
-        <button onclick="sairAdmin()">Sair</button>
+        <button id="btnSair">Sair</button>
     </div>
-
     <div class="painel" id="painel">
         <div class="tabs">
-            <button class="tab-btn ativo" onclick="mudarAba('marcacoes', this)">Marcações</button>
-            <button class="tab-btn"       onclick="mudarAba('mensagens', this)">Mensagens</button>
-            <button class="tab-btn"       onclick="mudarAba('utilizadores', this)">Utilizadores</button>
+            <button class="tab-btn ativo" id="tabMarcacoes">Marcações</button>
+            <button class="tab-btn"       id="tabMensagens">Mensagens</button>
+            <button class="tab-btn"       id="tabUtilizadores">Utilizadores</button>
         </div>
 
-        <!-- MARCAÇÕES -->
         <div class="secao ativa" id="secao-marcacoes">
             <h2>Marcações</h2>
             <div class="contador" id="contadores"></div>
             <div class="filtros">
-                <button class="ativo" onclick="filtrar('todas', this)">Todas</button>
-                <button onclick="filtrar('pendente',    this)">Pendentes</button>
-                <button onclick="filtrar('confirmado',  this)">Confirmadas</button>
-                <button onclick="filtrar('cancelado',   this)">Canceladas</button>
-                <button onclick="filtrar('rejeitado',   this)">Rejeitadas</button>
+                <button class="ativo" id="filtroTodas">Todas</button>
+                <button id="filtroPendente">Pendentes</button>
+                <button id="filtroConfirmado">Confirmadas</button>
+                <button id="filtroCancelado">Canceladas</button>
+                <button id="filtroRejeitado">Rejeitadas</button>
             </div>
             <div id="listaMarcacoes"></div>
         </div>
 
-        <!-- MENSAGENS -->
         <div class="secao" id="secao-mensagens">
             <h2>Mensagens de Contacto</h2>
             <div class="contador" id="contadoresMsgs"></div>
             <div id="listaMensagens"></div>
         </div>
 
-        <!-- UTILIZADORES -->
         <div class="secao" id="secao-utilizadores">
             <h2>Utilizadores</h2>
             <div class="contador" id="contadoresUser"></div>
             <div class="pesquisa-wrap">
-                <input type="text" id="pesquisaUser" placeholder="Pesquisar por nome ou email..." oninput="renderizarUsers()">
+                <input type="text" id="pesquisaUser" placeholder="Pesquisar por nome ou email...">
             </div>
             <div class="tabela-wrap">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Utilizador</th>
-                            <th>Email</th>
-                            <th>Telemóvel</th>
-                            <th>Marcações</th>
-                            <th>Registado em</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Utilizador</th><th>Email</th><th>Telemóvel</th><th>Marcações</th><th>Registado em</th><th>Ações</th></tr></thead>
                     <tbody id="tabelaUsers"></tbody>
                 </table>
             </div>
@@ -200,10 +165,9 @@
     </div>
 </div>
 
-<!-- MODAL DETALHE UTILIZADOR -->
 <div class="modal-overlay" id="modalUser">
     <div class="modal-user">
-        <button class="modal-fechar" onclick="fecharModal()">&#x2715;</button>
+        <button class="modal-fechar" id="btnFecharModal">&#x2715;</button>
         <h3 id="modalUserNome">—</h3>
         <p><strong>Email:</strong> <span id="modalUserEmail">—</span></p>
         <p><strong>Telemóvel:</strong> <span id="modalUserTel">—</span></p>
@@ -213,56 +177,68 @@
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const SUPABASE_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
     let filtroAtivo = 'todas';
     let todasMarcacoes = [];
     let todasMensagens = [];
 
-    // ── LOGIN ────────────────────────────────────────────────────────────────
+    // ── LOGIN ──
+    document.getElementById('btnEntrar').addEventListener('click', fazerLogin);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') fazerLogin();
+    });
+
     async function fazerLogin() {
         const email = document.getElementById('adminEmail').value.trim();
         const pass  = document.getElementById('adminPass').value;
         const erro  = document.getElementById('loginErro');
         erro.style.display = 'none';
-
         if (!email || !pass) { erro.innerText = 'Preencha todos os campos.'; erro.style.display = 'block'; return; }
 
-        const res  = await fetch("api/admin_login.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password: pass })
-        });
-        const data = await res.json();
+        const { data, error } = await supabase
+            .from('funcionarios')
+            .select('id, nome, password')
+            .eq('email', email)
+            .single();
 
-        if (data.sucesso) {
-            sessionStorage.setItem('adminLog', JSON.stringify({ id: data.id, nome: data.nome }));
-            document.getElementById('loginWrap').style.display  = 'none';
-            document.getElementById('painelWrap').style.display = 'block';
-            document.getElementById('painel').style.display     = 'block';
-            renderizar();
-        } else {
-            erro.innerText = data.erro || 'Credenciais incorretas.';
+        if (error || !data || data.password !== pass) {
+            erro.innerText = 'Credenciais incorretas.';
             erro.style.display = 'block';
+            return;
         }
+
+        sessionStorage.setItem('adminLog', JSON.stringify({ id: data.id, nome: data.nome }));
+        mostrarPainel();
     }
 
-    function sairAdmin() {
-        sessionStorage.removeItem('adminLog');
-        document.getElementById('loginWrap').style.display  = 'flex';
-        document.getElementById('painelWrap').style.display = 'none';
-        document.getElementById('adminEmail').value = '';
-        document.getElementById('adminPass').value  = '';
-    }
-
-    // Verificar se já tem sessão admin ativa
-    if (sessionStorage.getItem('adminLog')) {
+    function mostrarPainel() {
         document.getElementById('loginWrap').style.display  = 'none';
         document.getElementById('painelWrap').style.display = 'block';
         document.getElementById('painel').style.display     = 'block';
         renderizar();
     }
 
-    // ── ABAS ─────────────────────────────────────────────────────────────────
+    if (sessionStorage.getItem('adminLog')) mostrarPainel();
+
+    document.getElementById('btnSair').addEventListener('click', () => {
+        sessionStorage.removeItem('adminLog');
+        document.getElementById('loginWrap').style.display  = 'flex';
+        document.getElementById('painelWrap').style.display = 'none';
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPass').value  = '';
+    });
+
+    // ── ABAS ──
+    document.getElementById('tabMarcacoes').addEventListener('click',    function() { mudarAba('marcacoes', this); });
+    document.getElementById('tabMensagens').addEventListener('click',    function() { mudarAba('mensagens', this); });
+    document.getElementById('tabUtilizadores').addEventListener('click', function() { mudarAba('utilizadores', this); });
+
     function mudarAba(aba, btn) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
         document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
@@ -273,48 +249,12 @@
         if (aba === 'utilizadores') renderizarUsers();
     }
 
-    // ── MARCAÇÕES ────────────────────────────────────────────────────────────
-    async function renderizar() {
-        const lista = document.getElementById('listaMarcacoes');
-        lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
-
-        const res = await fetch("api/admin_marcacoes.php");
-        todasMarcacoes = await res.json();
-
-        const cnt = { pendente:0, confirmado:0, cancelado:0, rejeitado:0 };
-        todasMarcacoes.forEach(m => { if (cnt[m.estado] !== undefined) cnt[m.estado]++; });
-
-        document.getElementById('contadores').innerHTML = `
-            <div class="cnt-card cnt-pendente">  <div class="num">${cnt.pendente}</div>   <div class="label">Pendentes</div></div>
-            <div class="cnt-card cnt-confirmado"><div class="num">${cnt.confirmado}</div> <div class="label">Confirmadas</div></div>
-            <div class="cnt-card cnt-cancelado"> <div class="num">${cnt.cancelado}</div>  <div class="label">Canceladas</div></div>
-            <div class="cnt-card cnt-rejeitado"> <div class="num">${cnt.rejeitado}</div>  <div class="label">Rejeitadas</div></div>
-        `;
-
-        renderizarListaMarcacoes();
-    }
-
-    function renderizarListaMarcacoes() {
-        const filtradas = filtroAtivo === 'todas' ? todasMarcacoes : todasMarcacoes.filter(m => m.estado === filtroAtivo);
-        const lista = document.getElementById('listaMarcacoes');
-        if (!filtradas.length) { lista.innerHTML = '<div class="sem-resultados">Sem marcações para mostrar.</div>'; return; }
-
-        lista.innerHTML = filtradas.map(m => `
-            <div class="card">
-                <div class="card-info">
-                    <p><strong>${m.nome}</strong> &nbsp; <span class="badge badge-${m.estado}">${m.estado.toUpperCase()}</span></p>
-                    <p>Serviço: <strong>${m.servico}</strong></p>
-                    <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
-                    <p style="font-size:12px;color:#999;">Email: ${m.email || '—'}</p>
-                </div>
-                <div class="card-acoes">
-                    ${m.estado !== 'confirmado' ? `<button class="btn-confirmar" onclick="mudarEstado(${m.id},'confirmado')">✔ Confirmar</button>` : ''}
-                    ${m.estado !== 'cancelado'  ? `<button class="btn-cancelar"  onclick="mudarEstado(${m.id},'cancelado')">✖ Cancelar</button>`  : ''}
-                    ${m.estado !== 'rejeitado'  ? `<button class="btn-rejeitar"  onclick="mudarEstado(${m.id},'rejeitado')">⊘ Rejeitar</button>`  : ''}
-                </div>
-            </div>
-        `).join('');
-    }
+    // ── FILTROS ──
+    document.getElementById('filtroTodas').addEventListener('click',      function() { filtrar('todas', this); });
+    document.getElementById('filtroPendente').addEventListener('click',   function() { filtrar('pendente', this); });
+    document.getElementById('filtroConfirmado').addEventListener('click', function() { filtrar('confirmado', this); });
+    document.getElementById('filtroCancelado').addEventListener('click',  function() { filtrar('cancelado', this); });
+    document.getElementById('filtroRejeitado').addEventListener('click',  function() { filtrar('rejeitado', this); });
 
     function filtrar(f, btn) {
         filtroAtivo = f;
@@ -323,207 +263,204 @@
         renderizarListaMarcacoes();
     }
 
-    async function mudarEstado(id, novoEstado) {
-        const res  = await fetch("api/admin_marcacoes.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, estado: novoEstado })
-        });
-        const data = await res.json();
-        if (data.sucesso) renderizar();
-        else alert("Erro ao atualizar estado.");
+    // ── MARCAÇÕES ──
+    async function renderizar() {
+        const lista = document.getElementById('listaMarcacoes');
+        lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
+
+        const { data, error } = await supabase
+            .from('marcacoes')
+            .select('id, data, hora, estado, servico, reparticao, divisao, cumprimento, id_utilizador, utilizadores(nome, email)')
+            .order('data', { ascending: false });
+
+        if (error) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações.</div>'; return; }
+
+        todasMarcacoes = (data || []).map(m => ({
+            id:      m.id,
+            nome:    m.utilizadores?.nome  || '—',
+            email:   m.utilizadores?.email || '—',
+            servico: m.servico || '—',
+            data:    m.data,
+            hora:    m.hora,
+            estado:  m.estado || 'pendente'
+        }));
+
+        const cnt = { pendente:0, confirmado:0, cancelado:0, rejeitado:0 };
+        todasMarcacoes.forEach(m => { if (cnt[m.estado] !== undefined) cnt[m.estado]++; });
+
+        document.getElementById('contadores').innerHTML = `
+            <div class="cnt-card cnt-pendente">  <div class="num">${cnt.pendente}</div>   <div class="label">Pendentes</div></div>
+            <div class="cnt-card cnt-confirmado"><div class="num">${cnt.confirmado}</div> <div class="label">Confirmadas</div></div>
+            <div class="cnt-card cnt-cancelado"> <div class="num">${cnt.cancelado}</div>  <div class="label">Canceladas</div></div>
+            <div class="cnt-card cnt-rejeitado"> <div class="num">${cnt.rejeitado}</div>  <div class="label">Rejeitadas</div></div>`;
+        renderizarListaMarcacoes();
     }
 
-    // ── MENSAGENS ────────────────────────────────────────────────────────────
+    function renderizarListaMarcacoes() {
+        const filtradas = filtroAtivo === 'todas' ? todasMarcacoes : todasMarcacoes.filter(m => m.estado === filtroAtivo);
+        const lista = document.getElementById('listaMarcacoes');
+        if (!filtradas.length) { lista.innerHTML = '<div class="sem-resultados">Sem marcações para mostrar.</div>'; return; }
+        lista.innerHTML = filtradas.map(m => `
+            <div class="card">
+                <div class="card-info">
+                    <p><strong>${m.nome}</strong> &nbsp; <span class="badge badge-${m.estado}">${m.estado.toUpperCase()}</span></p>
+                    <p>Serviço: <strong>${m.servico}</strong></p>
+                    <p>Data: <strong>${m.data}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
+                    <p style="font-size:12px;color:#999;">Email: ${m.email}</p>
+                </div>
+                <div class="card-acoes">
+                    ${m.estado !== 'confirmado' ? `<button class="btn-confirmar" data-id="${m.id}" data-estado="confirmado">✔ Confirmar</button>` : ''}
+                    ${m.estado !== 'cancelado'  ? `<button class="btn-cancelar"  data-id="${m.id}" data-estado="cancelado" >✖ Cancelar</button>`  : ''}
+                    ${m.estado !== 'rejeitado'  ? `<button class="btn-rejeitar"  data-id="${m.id}" data-estado="rejeitado" >⊘ Rejeitar</button>`  : ''}
+                </div>
+            </div>`).join('');
+        document.querySelectorAll('.card-acoes button').forEach(btn => {
+            btn.addEventListener('click', () => mudarEstado(btn.dataset.id, btn.dataset.estado));
+        });
+    }
+
+    async function mudarEstado(id, novoEstado) {
+        const { error } = await supabase.from('marcacoes').update({ estado: novoEstado }).eq('id', id);
+        if (error) { alert('Erro ao atualizar estado.'); return; }
+        renderizar();
+    }
+
+    // ── MENSAGENS ──
     async function renderizarMensagens() {
         const lista = document.getElementById('listaMensagens');
         lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
-
-        const res = await fetch("api/admin_mensagens.php");
-        todasMensagens = await res.json();
-
+        const { data, error } = await supabase.from('mensagens').select('*').order('enviado_em', { ascending: false });
+        if (error) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar mensagens.</div>'; return; }
+        todasMensagens = data || [];
         const novas       = todasMensagens.filter(m => !m.lida && !m.resposta).length;
         const respondidas = todasMensagens.filter(m => m.resposta).length;
-
         document.getElementById('contadoresMsgs').innerHTML = `
             <div class="cnt-card cnt-msgs">      <div class="num">${todasMensagens.length}</div> <div class="label">Total</div></div>
             <div class="cnt-card cnt-pendente">  <div class="num">${novas}</div>                  <div class="label">Por responder</div></div>
-            <div class="cnt-card cnt-confirmado"><div class="num">${respondidas}</div>             <div class="label">Respondidas</div></div>
-        `;
-
+            <div class="cnt-card cnt-confirmado"><div class="num">${respondidas}</div>             <div class="label">Respondidas</div></div>`;
         if (!todasMensagens.length) { lista.innerHTML = '<div class="sem-resultados">Sem mensagens de contacto.</div>'; return; }
-
         lista.innerHTML = todasMensagens.map(m => {
-            let badgeHtml = m.resposta
+            const badgeHtml = m.resposta
                 ? `<span class="badge badge-respondida">Respondida</span>`
-                : m.lida
-                    ? `<span class="badge badge-lida">Lida</span>`
-                    : `<span class="badge badge-nova">Nova</span>`;
-
+                : m.lida ? `<span class="badge badge-lida">Lida</span>` : `<span class="badge badge-nova">Nova</span>`;
             const respostaHtml = m.resposta ? `
                 <div class="resposta-enviada">
                     <div class="resposta-label">✔ Resposta enviada</div>
                     <div class="resposta-texto">${m.resposta}</div>
                     <div class="resposta-data">Enviada em ${m.resposta_data || '—'}</div>
-                    <div style="margin-top:8px;">
-                        <button class="btn-responder" onclick="abrirResposta(${m.id})">✏ Editar resposta</button>
-                    </div>
                 </div>` : `
                 <div id="area-resposta-${m.id}" style="display:none;" class="resposta-area">
                     <div style="font-size:12px;font-weight:bold;color:#1a5fb4;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">✉ Responder ao cliente</div>
                     <textarea id="texto-resposta-${m.id}" placeholder="Escreva a sua resposta aqui..."></textarea>
                     <div class="resposta-acoes">
-                        <button class="btn-enviar-resposta" onclick="enviarResposta(${m.id})">Enviar resposta</button>
-                        <button class="btn-cancelar-resposta" onclick="fecharResposta(${m.id})">Cancelar</button>
+                        <button class="btn-enviar-resposta" data-id="${m.id}">Enviar resposta</button>
+                        <button class="btn-cancelar-resposta" data-id="${m.id}">Cancelar</button>
                     </div>
                 </div>`;
-
             return `
             <div class="msg-card" id="msg-card-${m.id}">
                 <div class="msg-topo">
-                    <div>
-                        <span class="msg-nome">${m.nome}</span>
-                        <span class="msg-email"> — ${m.email}</span>
-                    </div>
-                    <div style="display:flex;gap:8px;align-items:center;">
-                        ${badgeHtml}
-                        <span class="msg-data">${m.data} às ${m.hora}</span>
-                    </div>
+                    <div><span class="msg-nome">${m.nome}</span><span class="msg-email"> — ${m.email}</span></div>
+                    <div style="display:flex;gap:8px;align-items:center;">${badgeHtml}<span class="msg-data">${new Date(m.enviado_em).toLocaleDateString('pt-PT')}</span></div>
                 </div>
-                ${m.assunto ? `<p style="font-size:13px;color:#666;margin-bottom:8px;"><strong>Assunto:</strong> ${m.assunto}</p>` : ''}
                 <div class="msg-texto">${m.mensagem}</div>
                 <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                    ${!m.lida    ? `<button class="btn-lida"        onclick="marcarLida(${m.id})">✔ Marcar como lida</button>` : ''}
-                    ${!m.resposta ? `<button class="btn-responder"  onclick="abrirResposta(${m.id})">✉ Responder</button>` : ''}
-                    <button class="btn-apagar-msg" onclick="apagarMensagem(${m.id})">✖ Apagar</button>
+                    ${!m.lida     ? `<button class="btn-lida"      data-id="${m.id}">✔ Marcar como lida</button>` : ''}
+                    ${!m.resposta ? `<button class="btn-responder"  data-id="${m.id}">✉ Responder</button>` : ''}
+                    <button class="btn-apagar-msg" data-id="${m.id}">✖ Apagar</button>
                 </div>
                 ${respostaHtml}
             </div>`;
         }).join('');
+        document.querySelectorAll('.btn-lida').forEach(btn       => btn.addEventListener('click', () => marcarLida(btn.dataset.id)));
+        document.querySelectorAll('.btn-responder').forEach(btn  => btn.addEventListener('click', () => abrirResposta(btn.dataset.id)));
+        document.querySelectorAll('.btn-apagar-msg').forEach(btn => btn.addEventListener('click', () => apagarMensagem(btn.dataset.id)));
+        document.querySelectorAll('.btn-enviar-resposta').forEach(btn    => btn.addEventListener('click', () => enviarResposta(btn.dataset.id)));
+        document.querySelectorAll('.btn-cancelar-resposta').forEach(btn  => btn.addEventListener('click', () => fecharResposta(btn.dataset.id)));
     }
 
     function abrirResposta(id) {
         const area = document.getElementById('area-resposta-' + id);
         if (area) {
             area.style.display = area.style.display === 'none' ? 'block' : 'none';
-            if (area.style.display === 'block') {
-                const ta = document.getElementById('texto-resposta-' + id);
-                if (ta) ta.focus();
-            }
+            if (area.style.display === 'block') document.getElementById('texto-resposta-' + id)?.focus();
         }
     }
-
     function fecharResposta(id) {
         const area = document.getElementById('area-resposta-' + id);
         if (area) area.style.display = 'none';
     }
-
     async function enviarResposta(id) {
         const ta = document.getElementById('texto-resposta-' + id);
         if (!ta) return;
         const texto = ta.value.trim();
         if (!texto) { alert('Por favor escreva uma resposta antes de enviar.'); return; }
-
-        const res  = await fetch("api/admin_mensagens.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, acao: 'responder', resposta: texto })
-        });
-        const data = await res.json();
-        if (data.sucesso) renderizarMensagens();
-        else alert("Erro ao enviar resposta.");
-    }
-
-    async function marcarLida(id) {
-        await fetch("api/admin_mensagens.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, acao: 'lida' })
-        });
+        const agora = new Date().toLocaleDateString('pt-PT') + ' às ' + new Date().toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit' });
+        const { error } = await supabase.from('mensagens').update({ resposta: texto, resposta_data: agora, lida: true }).eq('id', id);
+        if (error) { alert('Erro ao enviar resposta.'); return; }
         renderizarMensagens();
     }
-
+    async function marcarLida(id)     { await supabase.from('mensagens').update({ lida: true }).eq('id', id); renderizarMensagens(); }
     async function apagarMensagem(id) {
         if (!confirm('Apagar esta mensagem?')) return;
-        await fetch("api/admin_mensagens.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, acao: 'apagar' })
-        });
+        await supabase.from('mensagens').delete().eq('id', id);
         renderizarMensagens();
     }
 
-    // ── UTILIZADORES ─────────────────────────────────────────────────────────
+    // ── UTILIZADORES ──
+    document.getElementById('pesquisaUser').addEventListener('input', renderizarUsers);
+
     async function renderizarUsers() {
-        const pesquisa = document.getElementById('pesquisaUser')?.value || '';
-        const url = pesquisa
-            ? `api/admin_utilizadores.php?pesquisa=${encodeURIComponent(pesquisa)}`
-            : `api/admin_utilizadores.php`;
-
-        const res   = await fetch(url);
-        const users = await res.json();
-
+        const pesquisa = document.getElementById('pesquisaUser')?.value.trim() || '';
+        let query = supabase.from('utilizadores').select('id, nome, email, telefone, criado_em').order('criado_em', { ascending: false });
+        if (pesquisa) query = query.or(`nome.ilike.%${pesquisa}%,email.ilike.%${pesquisa}%`);
+        const { data: users, error } = await query;
+        if (error) return;
+        const { data: marcacoes } = await supabase.from('marcacoes').select('id_utilizador');
+        const contagem = {};
+        (marcacoes || []).forEach(m => { contagem[m.id_utilizador] = (contagem[m.id_utilizador] || 0) + 1; });
         document.getElementById('contadoresUser').innerHTML = `
-            <div class="cnt-card"><div class="num">${users.length}</div><div class="label">Contas registadas</div></div>
-        `;
-
+            <div class="cnt-card"><div class="num">${users.length}</div><div class="label">Contas registadas</div></div>`;
         const tbody = document.getElementById('tabelaUsers');
         if (!users.length) {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:30px">Nenhum utilizador encontrado.</td></tr>';
             return;
         }
-
         tbody.innerHTML = users.map(u => `
             <tr>
-                <td>
-                    <span class="user-avatar">${u.nome ? u.nome[0].toUpperCase() : '?'}</span>
-                    <span class="user-nome">${u.nome || '—'}</span>
-                </td>
+                <td><span class="user-avatar">${u.nome ? u.nome[0].toUpperCase() : '?'}</span><span class="user-nome">${u.nome || '—'}</span></td>
                 <td>${u.email}</td>
                 <td>${u.telefone || '—'}</td>
-                <td>${u.total_marcacoes}</td>
-                <td>${u.criado_em || '—'}</td>
+                <td>${contagem[u.id] || 0}</td>
+                <td>${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-PT') : '—'}</td>
                 <td style="display:flex;gap:6px;">
-                    <button class="btn-ver"    onclick="verUser(${JSON.stringify(u).replace(/"/g,'&quot;')})">Ver</button>
-                    <button class="btn-apagar" onclick="apagarUser(${u.id}, '${u.email}')">Apagar</button>
+                    <button class="btn-ver"    data-user='${JSON.stringify(u).replace(/'/g,"&#39;")}'>Ver</button>
+                    <button class="btn-apagar" data-id="${u.id}" data-email="${u.email}">Apagar</button>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
+        document.querySelectorAll('.btn-ver').forEach(btn    => btn.addEventListener('click', () => verUser(JSON.parse(btn.dataset.user))));
+        document.querySelectorAll('button.btn-apagar').forEach(btn => btn.addEventListener('click', () => apagarUser(btn.dataset.id, btn.dataset.email)));
     }
 
     function verUser(u) {
-        document.getElementById('modalUserNome').innerText      = u.nome       || '—';
-        document.getElementById('modalUserEmail').innerText     = u.email      || '—';
-        document.getElementById('modalUserTel').innerText       = u.telefone   || 'Não definido';
-        document.getElementById('modalUserMarcacoes').innerText = u.total_marcacoes;
-        document.getElementById('modalUserData').innerText      = u.criado_em  || '—';
+        document.getElementById('modalUserNome').innerText      = u.nome     || '—';
+        document.getElementById('modalUserEmail').innerText     = u.email    || '—';
+        document.getElementById('modalUserTel').innerText       = u.telefone || 'Não definido';
+        document.getElementById('modalUserMarcacoes').innerText = '—';
+        document.getElementById('modalUserData').innerText      = u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-PT') : '—';
         document.getElementById('modalUser').classList.add('ativo');
     }
 
+    document.getElementById('btnFecharModal').addEventListener('click', fecharModal);
+    document.getElementById('modalUser').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
     function fecharModal() { document.getElementById('modalUser').classList.remove('ativo'); }
 
     async function apagarUser(id, email) {
         if (!confirm(`Apagar a conta de ${email}? Esta ação não pode ser desfeita.`)) return;
-        const res  = await fetch("api/admin_utilizadores.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, acao: 'apagar' })
-        });
-        const data = await res.json();
-        if (data.sucesso) renderizarUsers();
-        else alert("Erro ao apagar utilizador.");
+        const { error } = await supabase.from('utilizadores').delete().eq('id', id);
+        if (error) { alert('Erro ao apagar utilizador.'); return; }
+        renderizarUsers();
     }
-
-    document.getElementById('modalUser').addEventListener('click', function(e) {
-        if (e.target === this) fecharModal();
-    });
-
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            const loginWrap = document.getElementById('loginWrap');
-            if (loginWrap.style.display !== 'none') fazerLogin();
-        }
-    });
 </script>
 </body>
 </html>
