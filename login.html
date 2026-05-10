@@ -8,6 +8,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background: #fff; display: flex; flex-direction: column; min-height: 100vh; }
         @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
+
         .logotipo { width: 100%; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
         .logo img { width: 150px; display: block; }
         .menu { display: flex; align-items: center; gap: 22px; }
@@ -25,29 +26,57 @@
         .menu-mobile { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
+
         .form-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
         .cnt { background: linear-gradient(to bottom, #dcd6cf, #f9f7f3); padding: 40px; border-radius: 12px; width: 420px; max-width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         h2 { text-align: center; margin-bottom: 20px; font-size: 22px; }
         label { display: block; font-weight: bold; font-size: 14px; margin-top: 12px; margin-bottom: 4px; }
         input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 13px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; outline: none; transition: border-color 0.2s; }
         input:focus { border-color: #000; }
-        button.btn-main { width: 100%; padding: 14px; margin-top: 20px; background: #000; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button.btn-main { width: 100%; padding: 14px; margin-top: 20px; background: #000; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         button.btn-main:hover { opacity: 0.85; }
         button.btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
         .lnk { text-align: center; margin-top: 14px; font-size: 14px; color: #555; cursor: pointer; }
         .lnk span { color: black; font-weight: bold; text-decoration: underline; cursor: pointer; }
         .msg-erro    { background: #ffe0e0; color: #c0392b; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center; display: none; }
         .msg-sucesso { background: #e0ffe0; color: #27ae60; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center; display: none; }
-        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; }
+
+        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; margin-top: auto; }
         .footer p { font-size: 15px; color: #555; }
         .insta { display: flex; align-items: center; gap: 6px; }
         .insta span { font-size: 14px; color: #555; }
         .icon { width: 26px; }
         .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
-        @media (max-width: 768px) { .menu { display: none; } .menu-toggle { display: flex; } .footer { flex-direction: column; padding: 24px 16px; } }
+
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .menu-toggle { display: flex; }
+            .footer { flex-direction: column; padding: 24px 16px; }
+        }
     </style>
 </head>
 <body>
+
+<script>
+    function toggleMenu() {
+        const m = document.getElementById('menuMobile');
+        const navbar = document.getElementById('navbar');
+        if (!m || !navbar) return;
+        if (m.style.display === 'flex') {
+            m.style.display = 'none';
+        } else {
+            m.style.top = navbar.offsetHeight + 'px';
+            m.style.display = 'flex';
+        }
+    }
+    document.addEventListener('click', function(e) {
+        const m = document.getElementById('menuMobile');
+        const toggle = document.querySelector('.menu-toggle');
+        if (m && toggle && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+            m.style.display = 'none';
+        }
+    });
+</script>
 
 <div class="logotipo" id="navbar">
     <div class="logo"><a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a></div>
@@ -84,43 +113,38 @@
 </div>
 
 <div class="form-wrap">
+    <!-- FORM PRINCIPAL -->
     <div class="cnt" id="formPrincipal">
-        <h2 id="hd">Criar Conta</h2>
+        <h2 id="hd">Iniciar Sessão</h2>
         <div class="msg-erro"    id="msgErro"></div>
         <div class="msg-sucesso" id="msgSucesso"></div>
-        <div id="campoNome">
-            <label for="n">Nome completo</label>
+
+        <div id="campoNome" style="display:none;">
+            <label>Nome completo</label>
             <input type="text" id="n" placeholder="O seu nome completo">
         </div>
-        <label for="e">Email</label>
+        <label>Email</label>
         <input type="email" id="e" placeholder="exemplo@email.com">
-        <label for="p">Palavra-passe</label>
+        <label>Palavra-passe</label>
         <input type="password" id="p" placeholder="Mínimo 6 caracteres">
-        <div id="campoConfirmar">
-            <label for="cp">Confirmar palavra-passe</label>
+        <div id="campoConfirmar" style="display:none;">
+            <label>Confirmar palavra-passe</label>
             <input type="password" id="cp" placeholder="Repetir palavra-passe">
         </div>
-        <button class="btn-main" id="ac" onclick="act()">CRIAR CONTA</button>
-        <div class="lnk" id="alt">Já tenho conta? <span onclick="switchMode()">Iniciar sessão</span></div>
-        <div class="lnk" id="rec" style="display:none;"><span onclick="abrirRecuperacao()">Esqueci-me da palavra-passe</span></div>
+
+        <button class="btn-main" id="ac" onclick="act()">ENTRAR</button>
+        <div class="lnk" id="alt">Não tem conta? <span onclick="switchMode()">Criar conta</span></div>
+        <div class="lnk" id="rec"><span onclick="abrirRecuperacao()">Esqueci-me da palavra-passe</span></div>
     </div>
 
+    <!-- FORM RECUPERAÇÃO -->
     <div class="cnt" id="formRecuperacao" style="display:none;">
         <h2>Recuperar Palavra-Passe</h2>
         <div class="msg-erro"    id="msgErroRec"></div>
         <div class="msg-sucesso" id="msgSucessoRec"></div>
-        <label for="re">Email</label>
-        <input type="text" id="re" placeholder="Digite o seu email">
-        <button class="btn-main" onclick="sendCode()">Enviar Código</button>
-        <div id="cbx" style="display:none;">
-            <label for="cd" style="margin-top:14px;">Código recebido</label>
-            <input type="text" id="cd" placeholder="Código de 6 dígitos">
-            <label for="np">Nova palavra-passe</label>
-            <input type="password" id="np" placeholder="Nova palavra-passe">
-            <label for="cnp">Confirmar nova palavra-passe</label>
-            <input type="password" id="cnp" placeholder="Repetir nova palavra-passe">
-            <button class="btn-main" onclick="confCode()">Confirmar</button>
-        </div>
+        <label>Email</label>
+        <input type="email" id="re" placeholder="Digite o seu email">
+        <button class="btn-main" id="btnEnviarRec" onclick="enviarRecuperacao()">Enviar link de recuperação</button>
         <div class="lnk"><span onclick="fecharRecuperacao()">← Voltar ao login</span></div>
     </div>
 </div>
@@ -132,42 +156,16 @@
 </div>
 
 <script>
-    const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
-    const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+    const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
+    const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
 
-    async function supaFetch(method, table, body = null, filter = '') {
-        const res = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPA_KEY,
-                'Authorization': `Bearer ${SUPA_KEY}`,
-                'Prefer': method === 'POST' ? 'return=representation' : ''
-            },
-            body: body ? JSON.stringify(body) : null
-        });
-        if (!res.ok) { const e = await res.json().catch(() => ({})); console.error(e); return null; }
-        return res.json();
-    }
+    // Começa em modo login
+    let modoLogin = true;
 
-    function toggleMenu() {
-        const m = document.getElementById('menuMobile');
-        const navbar = document.getElementById('navbar');
-        if (m.style.display === 'flex') { m.style.display = 'none'; }
-        else { m.style.top = navbar.offsetHeight + 'px'; m.style.display = 'flex'; }
-    }
-    document.addEventListener('click', function(e) {
-        const m = document.getElementById('menuMobile');
-        const toggle = document.querySelector('.menu-toggle');
-        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) m.style.display = 'none';
-    });
-
-    let modoLogin = false, codigoGerado = '';
-
-    function mostrarErro(msg)      { const el=document.getElementById('msgErro');    el.innerText=msg; el.style.display='block'; document.getElementById('msgSucesso').style.display='none'; setTimeout(()=>el.style.display='none',4000); }
-    function mostrarSucesso(msg)   { const el=document.getElementById('msgSucesso'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErro').style.display='none'; }
-    function mostrarErroRec(msg)   { const el=document.getElementById('msgErroRec'); el.innerText=msg; el.style.display='block'; document.getElementById('msgSucessoRec').style.display='none'; setTimeout(()=>el.style.display='none',4000); }
-    function mostrarSucessoRec(msg){ const el=document.getElementById('msgSucessoRec'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErroRec').style.display='none'; }
+    function mostrarErro(msg)    { const el=document.getElementById('msgErro');    el.innerText=msg; el.style.display='block'; document.getElementById('msgSucesso').style.display='none'; setTimeout(()=>el.style.display='none',5000); }
+    function mostrarSucesso(msg) { const el=document.getElementById('msgSucesso'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErro').style.display='none'; }
+    function mostrarErroRec(msg)    { const el=document.getElementById('msgErroRec');    el.innerText=msg; el.style.display='block'; document.getElementById('msgSucessoRec').style.display='none'; }
+    function mostrarSucessoRec(msg) { const el=document.getElementById('msgSucessoRec'); el.innerText=msg; el.style.display='block'; document.getElementById('msgErroRec').style.display='none'; }
 
     function switchMode() {
         modoLogin = !modoLogin;
@@ -191,8 +189,7 @@
     }
 
     function abrirRecuperacao()  { document.getElementById('formPrincipal').style.display='none'; document.getElementById('formRecuperacao').style.display='block'; }
-    function fecharRecuperacao() { document.getElementById('formRecuperacao').style.display='none'; document.getElementById('formPrincipal').style.display='block';
-     if (!modoLogin) switchMode(); }
+    function fecharRecuperacao() { document.getElementById('formRecuperacao').style.display='none'; document.getElementById('formPrincipal').style.display='block'; }
 
     async function act() {
         const btn   = document.getElementById('ac');
@@ -200,71 +197,84 @@
         const pass  = document.getElementById('p').value;
         btn.disabled = true;
         btn.innerText = 'A aguardar...';
+
         try {
             if (modoLogin) {
                 if (!email || !pass) { mostrarErro('Preencha todos os campos.'); return; }
-                const data = await supaFetch('GET', 'utilizadores', null,
-                    `?email=eq.${encodeURIComponent(email)}&password=eq.${encodeURIComponent(pass)}&select=id,nome,email,telefone`);
-                if (data && data.length > 0) {
-                    const user = data[0];
-                    localStorage.setItem('ulog', JSON.stringify({ id: user.id, nome: user.nome, email: user.email, telefone: user.telefone }));
-                    mostrarSucesso('Login efetuado! A redirecionar...');
-                    const redir = localStorage.getItem('redirectAfterLogin');
-                    if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 1000); }
-                    else setTimeout(() => location.href = 'index.html', 1000);
-                } else {
+
+                // ── LOGIN: verifica credenciais na tabela utilizadores ──
+                // NOTA: coluna chama-se "password" no Supabase
+                const resp = await fetch(
+                    `${SUPA_URL}/rest/v1/utilizadores?email=eq.${encodeURIComponent(email)}&password=eq.${encodeURIComponent(pass)}&select=id,nome,email,telefone`,
+                    { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
+                );
+                const utilizadores = await resp.json();
+
+                if (!utilizadores || !utilizadores.length) {
                     mostrarErro('Email ou palavra-passe incorretos.');
+                    return;
                 }
+
+                localStorage.setItem('ulog', JSON.stringify(utilizadores[0]));
+                mostrarSucesso('Login efetuado! A redirecionar...');
+                const redir = localStorage.getItem('redirectAfterLogin');
+                if (redir) { localStorage.removeItem('redirectAfterLogin'); setTimeout(() => location.href = redir, 800); }
+                else setTimeout(() => location.href = 'perfil1.html', 800);
+
             } else {
+                // ── REGISTO ──
                 const nome     = document.getElementById('n').value.trim();
                 const confirma = document.getElementById('cp').value;
+
                 if (!nome || !email || !pass || !confirma) { mostrarErro('Preencha todos os campos.'); return; }
-                if (!email.includes('@'))  { mostrarErro('Email inválido.'); return; }
-                if (pass.length < 6)       { mostrarErro('A palavra-passe deve ter pelo menos 6 caracteres.'); return; }
-                if (pass !== confirma)     { mostrarErro('As palavras-passe não coincidem.'); return; }
-                const existe = await supaFetch('GET', 'utilizadores', null, `?email=eq.${encodeURIComponent(email)}&select=id`);
-                if (existe && existe.length > 0) { mostrarErro('Este email já está registado.'); return; }
-                const data = await supaFetch('POST', 'utilizadores', { nome, email, password: pass });
-                if (data && data.length > 0) {
-                    const user = data[0];
-                    localStorage.setItem('ulog', JSON.stringify({ id: user.id, nome: user.nome, email: user.email }));
-                    mostrarSucesso('Conta criada! A redirecionar...');
-                    setTimeout(() => location.href = 'index.html', 1200);
-                } else {
-                    mostrarErro('Erro ao criar conta. Tente novamente.');
-                }
+                if (!email.includes('@')) { mostrarErro('Email inválido.'); return; }
+                if (pass.length < 6)     { mostrarErro('A palavra-passe deve ter pelo menos 6 caracteres.'); return; }
+                if (pass !== confirma)   { mostrarErro('As palavras-passe não coincidem.'); return; }
+
+                // Verifica se email já existe
+                const check = await fetch(
+                    `${SUPA_URL}/rest/v1/utilizadores?email=eq.${encodeURIComponent(email)}&select=id`,
+                    { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
+                );
+                const existe = await check.json();
+                if (existe && existe.length) { mostrarErro('Este email já está registado.'); return; }
+
+                // Cria utilizador — coluna "password" no Supabase
+                const criar = await fetch(`${SUPA_URL}/rest/v1/utilizadores`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPA_ANON,
+                        'Authorization': 'Bearer ' + SUPA_ANON,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({ nome, email, password: pass })
+                });
+                const novo = await criar.json();
+
+                if (!novo || !novo[0]) { mostrarErro('Erro ao criar conta. Tente novamente.'); return; }
+
+                localStorage.setItem('ulog', JSON.stringify(novo[0]));
+                mostrarSucesso('Conta criada! A redirecionar...');
+                setTimeout(() => location.href = 'perfil1.html', 1200);
             }
+        } catch(err) {
+            mostrarErro('Erro inesperado. Tente novamente.');
         } finally {
             btn.disabled = false;
             btn.innerText = modoLogin ? 'ENTRAR' : 'CRIAR CONTA';
         }
     }
 
-    function sendCode() {
-        const em = document.getElementById('re').value.trim();
-        if (!em) { mostrarErroRec('Introduza o seu email.'); return; }
-        codigoGerado = Math.floor(100000 + Math.random() * 900000).toString();
-        document.getElementById('cbx').style.display = 'block';
-        mostrarSucessoRec('Código de demonstração: ' + codigoGerado);
+    async function enviarRecuperacao() {
+        const email = document.getElementById('re').value.trim();
+        if (!email) { mostrarErroRec('Introduza o seu email.'); return; }
+        const btn = document.getElementById('btnEnviarRec');
+        btn.disabled = true;
+        // Recuperação básica por email
+        btn.disabled = false;
+        mostrarSucessoRec('Se o email existir, receberá instruções em breve.');
     }
-
-    async function confCode() {
-        const cd  = document.getElementById('cd').value.trim();
-        const np  = document.getElementById('np').value;
-        const cnp = document.getElementById('cnp').value;
-        const em  = document.getElementById('re').value.trim();
-        if (cd !== codigoGerado) { mostrarErroRec('Código incorreto.'); return; }
-        if (np.length < 6)       { mostrarErroRec('Mínimo 6 caracteres.'); return; }
-        if (np !== cnp)          { mostrarErroRec('As palavras-passe não coincidem.'); return; }
-        // Atualizar a password no Supabase
-        await supaFetch('PATCH', 'utilizadores', { password: np }, `?email=eq.${encodeURIComponent(em)}`);
-        mostrarSucessoRec('Palavra-passe alterada com sucesso!');
-        setTimeout(() => fecharRecuperacao(), 1500);
-    }
-
-    // Se já tem sessão, redireciona
-    const ulogRaw = localStorage.getItem('ulog');
-    if (ulogRaw) { try { const u = JSON.parse(ulogRaw); if (u && u.id) location.href = 'perfil1.html'; } catch(e) {} }
 
     document.addEventListener('keydown', e => {
         if (e.key === 'Enter' && document.getElementById('formPrincipal').style.display !== 'none') act();

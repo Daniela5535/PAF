@@ -5,111 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Glow — Perfil</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background: #fff; }
-        @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser.otf.otf') format('truetype'); }
-        .logotipo { width: 100%; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
-        .logo img { width: 150px; display: block; }
-        .menu { display: flex; align-items: center; gap: 22px; font-weight: bold; }
-        .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
-        .menu a:hover { color: #888; }
-        .mais-menu { position: relative; cursor: pointer; }
-        .mais-links { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden; }
-        .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
-        .mais-links a:hover { background: #f5f5f5; }
-        .mais-menu:hover .mais-links { display: flex; }
-        .btn-login { background: #111; color: white !important; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap; }
-        .btn-login:hover { opacity: 0.8; }
-        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-        .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
-        .menu-mobile { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee; padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-        .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
-        .btn-voltar-wrap { padding: 10px 20px; }
-        .btn-voltar { background: none; border: none; font-size: 13px; font-weight: bold; color: #111; cursor: pointer; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
-        .btn-voltar:hover { color: #888; }
-        .spacer { height: 20px; }
-        .container { display: flex; padding: 40px; gap: 40px; flex: 1; }
-        .sidebar { width: 220px; text-align: center; flex-shrink: 0; }
-        .fotoperfil { width: 120px; height: 120px; background: #ccc; border-radius: 50%; margin: 0 auto 14px; overflow: hidden; cursor: pointer; position: relative; }
-        .fotoperfil img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .fotoperfil::after { content: "📷"; position: absolute; bottom: 6px; right: 6px; font-size: 18px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-        .fotoperfil:hover::after { opacity: 1; }
-        .sidebar-nome  { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-        .sidebar-email { font-size: 12px; color: #888; margin-bottom: 14px; word-break: break-all; }
-        .sidebar button { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 8px; font-size: 13px; font-weight: bold; }
-        .sidebar button:hover { background: #f5f5f5; }
-        .sidebar .dark   { background: black; color: white; border-color: black; }
-        .sidebar .dark:hover { background: #333; }
-        .sidebar .danger { color: red; border: 1px solid red; }
-        .sidebar .danger:hover { background: #fff0f0; }
-        .sidebar hr { border: none; border-top: 1px solid #eee; margin: 4px 0 12px; }
-        .content { flex: 1; min-width: 0; }
-        .content h1 { font-size: 40px; margin-bottom: 20px; font-family: 'High Cruiser', Arial, sans-serif; }
-        .box { background: linear-gradient(to bottom, #d9d4cd, #f4efe9); padding: 20px 30px; border-radius: 25px; margin-bottom: 30px; }
-        .box h3 { margin: 0 0 14px; font-size: 13px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
-        .info-row { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 12px; }
-        .info-field { display: flex; flex-direction: column; gap: 4px; }
-        .info-field label { font-size: 12px; color: #888; font-weight: bold; }
-        .info-field span  { font-size: 15px; color: #111; }
-        .info-field input { padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; outline: none; width: 200px; }
-        .edit-row { display: flex; gap: 10px; margin-top: 4px; }
-        .btn-edit   { padding: 7px 18px; border-radius: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 13px; font-weight: bold; }
-        .btn-edit:hover { background: #f5f5f5; }
-        .btn-save   { padding: 7px 18px; border-radius: 20px; border: none; background: #111; color: #fff; cursor: pointer; font-size: 13px; font-weight: bold; display: none; }
-        .btn-save:hover { opacity: 0.85; }
-        .btn-cancel-edit { padding: 7px 14px; border-radius: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 13px; display: none; }
-        .history { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
-        .history:last-child { border-bottom: none; }
-        .history-left { display: flex; gap: 25px; align-items: center; }
-        .date { font-weight: bold; font-size: 14px; }
-        .buttons button { margin-left: 8px; padding: 6px 12px; border: 1px solid #999; background: white; cursor: pointer; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .buttons button:hover { background: #f5f5f5; }
-        .buttons button.cancel { color: red; border-color: red; }
-        .buttons button.cancel:hover { background: #fff0f0; }
-        .status { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .status.confirmado { background: #d4edda; color: #155724; }
-        .status.pendente   { background: #fff3cd; color: #856404; }
-        .status.cancelado  { background: #ffcaca; color: #c0392b; }
-        .status.rejeitado  { background: #f8d7da; color: #7f1d1d; }
-        .empty { text-align: center; color: #aaa; padding: 10px; }
-        .fav-grid { display: flex; flex-wrap: wrap; gap: 14px; }
-        .fav-card { background: white; border-radius: 14px; overflow: hidden; width: 150px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: relative; transition: transform 0.2s; cursor: pointer; }
-        .fav-card:hover { transform: translateY(-3px); }
-        .fav-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
-        .fav-card-info { padding: 8px 10px 10px; }
-        .fav-card-info b { font-size: 12px; display: block; line-height: 1.4; }
-        .btn-remov-fav { position: absolute; top: 7px; right: 7px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,0.15); line-height: 1; }
-        .btn-remov-fav:hover { background: #fff0f0; }
-        .fav-empty { text-align: center; color: #aaa; padding: 20px 0; font-size: 14px; }
-        .fav-empty a { color: #111; font-weight: bold; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; cursor: pointer; }
-        .modal-content { background: #fff; padding: 30px 25px; border-radius: 20px; width: 320px; max-width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 10px; cursor: auto; }
-        .modal-content h3 { margin: 0 0 8px; font-size: 20px; color: #333; }
-        .modal-content p  { font-size: 13px; color: #555; margin: 0; }
-        .modal-content input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 14px; outline: none; }
-        .modal-content input:focus { border-color: #000; }
-        .modal-content button { padding: 12px 0; border: none; border-radius: 20px; background: #000; color: #fff; font-weight: bold; font-size: 15px; cursor: pointer; }
-        .modal-content button:hover { background: #222; }
-        .msg-modal { padding: 8px; border-radius: 8px; font-size: 13px; text-align: center; display: none; }
-        .msg-modal.ok   { background: #e0ffe0; color: #27ae60; }
-        .msg-modal.erro { background: #ffe0e0; color: #c0392b; }
-        .toast { display: none; position: fixed; bottom: 28px; right: 28px; background: #111; color: #fff; padding: 12px 22px; border-radius: 12px; z-index: 3000; font-size: 14px; font-weight: bold; }
-        .footer { background: #f8f8f8; color: #555; text-align: center; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #eee; }
-        .footer p { font-size: 15px; color: #555; }
-        .insta { display: flex; align-items: center; gap: 6px; }
-        .insta span { font-size: 14px; color: #555; }
-        .icon { width: 26px; }
-        .footer-copy { font-size: 12px; color: #aaa; width: 100%; text-align: center; margin-top: 4px; }
-        @media (max-width: 768px) {
-            .menu { display: none; } .menu-toggle { display: flex; }
-            .container { flex-direction: column; padding: 20px 16px; gap: 24px; }
-            .sidebar { width: 100%; }
-            .content h1 { font-size: 28px; }
-            .footer { flex-direction: column; padding: 24px 16px; }
-            .info-row { gap: 16px; }
-            .info-field input { width: 100%; }
-            .fav-card { width: calc(50% - 7px); }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { font-family:Arial,sans-serif; min-height:100vh; display:flex; flex-direction:column; background:#fff; }
+        @font-face { font-family:'High Cruiser'; src:url('fonts/HighCruiser.otf.otf') format('truetype'); }
+        .logotipo { width:100%; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid #eee; position:sticky; top:0; z-index:1000; }
+        .logo img { width:150px; display:block; }
+        .menu { display:flex; align-items:center; gap:22px; font-weight:bold; }
+        .menu a { text-decoration:none; font-size:13px; font-weight:bold; color:#111; letter-spacing:.5px; }
+        .menu a:hover { color:#888; }
+        .mais-menu { position:relative; cursor:pointer; }
+        .mais-links { display:none; position:absolute; top:calc(100% + 10px); right:0; background:white; box-shadow:0 8px 24px rgba(0,0,0,.12); border-radius:10px; flex-direction:column; min-width:160px; z-index:999; overflow:hidden; }
+        .mais-links a { padding:11px 16px; text-decoration:none; font-size:13px; font-weight:bold; color:#111; display:block; }
+        .mais-links a:hover { background:#f5f5f5; }
+        .mais-menu:hover .mais-links { display:flex; }
+        .btn-login { background:#111; color:white!important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity .2s; white-space:nowrap; }
+        .btn-login:hover { opacity:.8; }
+        .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
+        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; position:fixed; left:0; width:100%; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,.1); }
+        .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content:center; margin-top:4px; }
+        .container { display:flex; padding:40px; gap:40px; flex:1; }
+        .sidebar { width:220px; text-align:center; flex-shrink:0; }
+        .fotoperfil { width:120px; height:120px; background:#ccc; border-radius:50%; margin:0 auto 14px; overflow:hidden; cursor:pointer; position:relative; }
+        .fotoperfil img { width:100%; height:100%; object-fit:cover; display:block; }
+        .fotoperfil::after { content:"📷"; position:absolute; bottom:6px; right:6px; font-size:18px; background:rgba(0,0,0,.5); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; }
+        .fotoperfil:hover::after { opacity:1; }
+        .sidebar-nome  { font-weight:bold; font-size:15px; margin-bottom:4px; }
+        .sidebar-email { font-size:12px; color:#888; margin-bottom:14px; word-break:break-all; }
+        .sidebar button { width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; background:white; cursor:pointer; border-radius:8px; font-size:13px; font-weight:bold; }
+        .sidebar button:hover { background:#f5f5f5; }
+        .sidebar .dark   { background:black; color:white; border-color:black; }
+        .sidebar .dark:hover { background:#333; }
+        .sidebar .danger { color:red; border:1px solid red; }
+        .sidebar .danger:hover { background:#fff0f0; }
+        .sidebar hr { border:none; border-top:1px solid #eee; margin:4px 0 12px; }
+        .content { flex:1; min-width:0; }
+        .content h1 { font-size:40px; margin-bottom:20px; font-family:'High Cruiser',Arial,sans-serif; }
+        .box { background:linear-gradient(to bottom,#d9d4cd,#f4efe9); padding:20px 30px; border-radius:25px; margin-bottom:30px; }
+        .box h3 { margin:0 0 14px; font-size:13px; color:#555; text-transform:uppercase; letter-spacing:1px; }
+        .info-row { display:flex; gap:30px; flex-wrap:wrap; margin-bottom:12px; }
+        .info-field { display:flex; flex-direction:column; gap:4px; }
+        .info-field label { font-size:12px; color:#888; font-weight:bold; }
+        .info-field span  { font-size:15px; color:#111; }
+        .info-field input { padding:8px 12px; border-radius:8px; border:1px solid #ccc; font-size:14px; outline:none; width:200px; }
+        .edit-row { display:flex; gap:10px; margin-top:4px; }
+        .btn-edit { padding:7px 18px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:13px; font-weight:bold; }
+        .btn-save { padding:7px 18px; border-radius:20px; border:none; background:#111; color:#fff; cursor:pointer; font-size:13px; font-weight:bold; display:none; }
+        .btn-cancel-edit { padding:7px 14px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:13px; display:none; }
+        .history { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,.08); }
+        .history:last-child { border-bottom:none; }
+        .history-left { display:flex; gap:25px; align-items:center; }
+        .date { font-weight:bold; font-size:14px; }
+        .hist-btns button { margin-left:8px; padding:6px 12px; border:1px solid #999; background:white; cursor:pointer; border-radius:20px; font-size:12px; font-weight:bold; }
+        .hist-btns button:hover { background:#f5f5f5; }
+        .hist-btns button.cancel { color:red; border-color:red; }
+        .hist-btns button.cancel:hover { background:#fff0f0; }
+        .status { display:inline-block; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:bold; }
+        .status.confirmada { background:#d4edda; color:#155724; }
+        .status.pendente   { background:#fff3cd; color:#856404; }
+        .status.cancelada  { background:#ffcaca; color:#c0392b; }
+        .status.rejeitada  { background:#f8d7da; color:#7f1d1d; }
+        .empty { text-align:center; color:#aaa; padding:10px; }
+        .fav-grid { display:flex; flex-wrap:wrap; gap:14px; }
+        .fav-card { background:white; border-radius:14px; overflow:hidden; width:150px; box-shadow:0 2px 8px rgba(0,0,0,.1); position:relative; transition:transform .2s; cursor:pointer; }
+        .fav-card:hover { transform:translateY(-3px); }
+        .fav-card img { width:100%; height:120px; object-fit:cover; display:block; }
+        .fav-card-info { padding:8px 10px 10px; }
+        .fav-card-info b { font-size:12px; display:block; line-height:1.4; }
+        .btn-remov-fav { position:absolute; top:7px; right:7px; background:rgba(255,255,255,.9); border:none; border-radius:50%; width:28px; height:28px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+        .fav-empty { text-align:center; color:#aaa; padding:20px 0; font-size:14px; }
+        .fav-empty a { color:#111; font-weight:bold; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.7); justify-content:center; align-items:center; z-index:2000; cursor:pointer; }
+        .modal-content { background:#fff; padding:30px 25px; border-radius:20px; width:320px; max-width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.2); display:flex; flex-direction:column; gap:10px; cursor:auto; }
+        .modal-content h3 { margin:0 0 8px; font-size:20px; color:#333; }
+        .modal-content p  { font-size:13px; color:#555; margin:0; }
+        .modal-content input { width:100%; padding:12px 15px; border-radius:10px; border:1px solid #ccc; font-size:14px; outline:none; }
+        .modal-content button { padding:12px 0; border:none; border-radius:20px; background:#000; color:#fff; font-weight:bold; font-size:15px; cursor:pointer; }
+        .msg-modal { padding:8px; border-radius:8px; font-size:13px; text-align:center; display:none; }
+        .msg-modal.ok   { background:#e0ffe0; color:#27ae60; }
+        .msg-modal.erro { background:#ffe0e0; color:#c0392b; }
+        .toast { display:none; position:fixed; bottom:28px; right:28px; background:#111; color:#fff; padding:12px 22px; border-radius:12px; z-index:3000; font-size:14px; font-weight:bold; }
+        .footer { background:#f8f8f8; color:#555; text-align:center; padding:20px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #eee; }
+        .footer p { font-size:15px; color:#555; }
+        .insta { display:flex; align-items:center; gap:6px; }
+        .insta span { font-size:14px; color:#555; }
+        .icon { width:26px; }
+        .footer-copy { font-size:12px; color:#aaa; width:100%; text-align:center; margin-top:4px; }
+        @media(max-width:768px){
+            .menu{display:none} .menu-toggle{display:flex}
+            .container{flex-direction:column;padding:20px 16px;gap:24px}
+            .sidebar{width:100%}
+            .content h1{font-size:28px}
+            .footer{flex-direction:column;padding:24px 16px}
+            .info-field input{width:100%}
+            .fav-card{width:calc(50% - 7px)}
         }
     </style>
 </head>
@@ -135,7 +125,6 @@
     </div>
     <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </div>
-
 <div class="menu-mobile" id="menuMobile">
     <a href="servicos.html">SERVIÇOS</a>
     <a href="agendar.html">AGENDAR</a>
@@ -145,24 +134,23 @@
     <a id="btnAuthMobile" href="perfil1.html" class="btn-login">PERFIL</a>
 </div>
 
-<div class="btn-voltar-wrap">
-    <button class="btn-voltar" onclick="location.href='index.html'">← PÁGINA INICIAL</button>
+<div style="padding:10px 20px;">
+    <button onclick="location.href='index.html'" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;">← PÁGINA INICIAL</button>
 </div>
-<div class="spacer"></div>
 
 <div class="container">
     <div class="sidebar">
-        <div class="fotoperfil" id="fotoperfil" onclick="document.getElementById('uploadFoto').click()">
-            <img src="fotoperfil.jpg" id="fotoPerfilImg" alt="Foto de perfil">
+        <div class="fotoperfil" onclick="document.getElementById('uploadFoto').click()">
+            <img src="fotoperfil.jpg" id="fotoImg" alt="Foto de perfil">
         </div>
         <input type="file" id="uploadFoto" style="display:none" accept="image/*">
-        <div class="sidebar-nome"  id="nomeDisplay">—</div>
-        <div class="sidebar-email" id="emailDisplay">—</div>
+        <div class="sidebar-nome"  id="sNome">—</div>
+        <div class="sidebar-email" id="sEmail">—</div>
         <button class="dark" onclick="location.href='agendar.html'">+ Nova marcação</button>
         <button onclick="document.getElementById('modalSenha').style.display='flex'">Alterar palavra-passe</button>
         <hr>
-        <button class="danger" onclick="confirmarEliminar()">Eliminar conta</button>
-        <button onclick="logout()">Terminar sessão</button>
+        <button class="danger" onclick="document.getElementById('modalEliminar').style.display='flex'">Eliminar conta</button>
+        <button onclick="doLogout()">Terminar sessão</button>
     </div>
 
     <div class="content">
@@ -172,50 +160,52 @@
             <div class="info-row">
                 <div class="info-field">
                     <label>Nome</label>
-                    <span id="nomeSpan">—</span>
-                    <input id="nomeInput" style="display:none" placeholder="Nome completo">
+                    <span id="spNome">—</span>
+                    <input id="inNome" style="display:none" placeholder="Nome completo">
                 </div>
                 <div class="info-field">
                     <label>Email</label>
-                    <span id="emailSpan">—</span>
+                    <span id="spEmail">—</span>
                 </div>
                 <div class="info-field">
                     <label>Telemóvel</label>
-                    <span id="telSpan">Não definido</span>
-                    <input id="telInput" style="display:none" placeholder="+351 9XX XXX XXX">
+                    <span id="spTel">Não definido</span>
+                    <input id="inTel" style="display:none" placeholder="+351 9XX XXX XXX">
                 </div>
             </div>
             <div class="edit-row">
-                <button class="btn-edit" id="btnEditar" onclick="ativarEdicao()">Editar</button>
-                <button class="btn-save" id="btnGuardar" onclick="guardarDados()">Guardar</button>
-                <button class="btn-cancel-edit" id="btnCancelar" onclick="cancelarEdicao()">Cancelar</button>
+                <button class="btn-edit" id="btnEd" onclick="ativarEdicao()">Editar</button>
+                <button class="btn-save" id="btnSv" onclick="guardarDados()">Guardar</button>
+                <button class="btn-cancel-edit" id="btnCx" onclick="cancelarEdicao()">Cancelar</button>
             </div>
         </div>
 
         <h3 style="margin-bottom:12px;">Histórico de marcações</h3>
-        <div class="box" id="historicoLista"><p class="empty">A carregar...</p></div>
+        <div class="box" id="histLista"><p class="empty">A carregar...</p></div>
 
         <h3 style="margin-bottom:12px;">❤ Os meus favoritos</h3>
-        <div class="box" id="favoritosLista"></div>
+        <div class="box" id="favLista"></div>
     </div>
 </div>
 
+<!-- MODAL SENHA -->
 <div class="modal" id="modalSenha">
     <div class="modal-content">
         <h3>Alterar Palavra-Passe</h3>
         <div class="msg-modal" id="msgSenha"></div>
-        <input type="password" id="senhaAtual"    placeholder="Senha atual">
-        <input type="password" id="novaSenha"     placeholder="Nova senha (mín. 6 caracteres)">
-        <input type="password" id="confNovaSenha" placeholder="Confirmar senha">
+        <input type="password" id="senhaAtual"    placeholder="Palavra-passe atual">
+        <input type="password" id="senhaNova"     placeholder="Nova (mín. 6 caracteres)">
+        <input type="password" id="senhaConf"     placeholder="Confirmar nova">
         <button onclick="alterarSenha()">Guardar</button>
     </div>
 </div>
 
+<!-- MODAL ELIMINAR -->
 <div class="modal" id="modalEliminar">
     <div class="modal-content">
         <h3>Eliminar Conta</h3>
         <p>Esta ação é permanente e não pode ser desfeita.</p>
-        <input type="password" id="eliminarPass" placeholder="Confirmar palavra-passe">
+        <input type="password" id="elimPass" placeholder="Confirmar palavra-passe">
         <button style="background:#c0392b" onclick="eliminarConta()">Eliminar Conta</button>
     </div>
 </div>
@@ -229,261 +219,216 @@
 </div>
 
 <script>
-    const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
-    const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+const SUPA_URL='https://wonkioqayeekzcuoepcb.supabase.co';
+const SUPA_KEY='sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
 
-    async function supaFetch(method, table, body = null, filter = '') {
-        const res = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPA_KEY,
-                'Authorization': `Bearer ${SUPA_KEY}`,
-                'Prefer': method === 'POST' ? 'return=representation' : ''
-            },
-            body: body ? JSON.stringify(body) : null
-        });
-        if (!res.ok) return null;
-        return res.json();
-    }
+async function supa(method,table,body,filter=''){
+    const h={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+    if(method==='POST'||method==='PATCH') h['Prefer']='return=representation';
+    const r=await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`,{method,headers:h,body:body?JSON.stringify(body):null});
+    const t=await r.text();
+    try{return JSON.parse(t);}catch(e){return null;}
+}
 
-    // Redirecionar se não logado
-    if (!localStorage.getItem('ulog')) {
-        localStorage.setItem('redirectAfterLogin', 'perfil1.html');
-        location.href = 'login.html';
-    }
+// ── AUTH ──
+if(!localStorage.getItem('ulog')){localStorage.setItem('redirectAfterLogin','perfil1.html');location.href='login.html';}
+let ulog=JSON.parse(localStorage.getItem('ulog'));
 
-    const ulog = JSON.parse(localStorage.getItem('ulog') || '{}');
-    const btnAuthT = document.getElementById('btnAuthText');
-    const btnAuthM = document.getElementById('btnAuthMobile');
+function toggleMenu(){
+    const m=document.getElementById('menuMobile'),nb=document.getElementById('navbar');
+    m.style.display=m.style.display==='flex'?'none':'flex';
+    if(m.style.display==='flex')m.style.top=nb.offsetHeight+'px';
+}
+document.addEventListener('click',function(e){
+    const m=document.getElementById('menuMobile'),t=document.querySelector('.menu-toggle');
+    if(m&&m.style.display==='flex'&&!m.contains(e.target)&&t&&!t.contains(e.target))m.style.display='none';
+});
 
-    const servicosImgs = {
-        "Tranças Fulani X Lemonade": "trancafulanixlemonade.JPG",
-        "Tranças Lemonade":          "trancalemonade.JPG",
-        "Tranças Fulani":            "trancafulani.JPG",
-        "Tranças Cornrows":          "trancacornrowNago.JPG",
-        "Trança estilo mohawk":      "trancaestilomohank.JPG",
-        "Tranças Dreads":            "trancadreads.JPG",
-        "Tranças Knotless":          "trancaknotless.JPG",
-        "Trança Gypsy":              "trancagypsy.JPG",
-        "Tranças Twists":            "trancatwists.JPG",
-        "Tranças French":            "trancafrench.JPG",
-        "Manutenção Rasta + Penteado": "manutencaorastas.JPG"
+function toast(msg,tipo){
+    const t=document.getElementById('toast');
+    t.innerText=msg;t.style.display='block';
+    t.style.background=tipo==='erro'?'#c0392b':'#111';
+    setTimeout(()=>t.style.display='none',3000);
+}
+
+const servicosImgs={
+    "Tranças Fulani X Lemonade":"trancafulanixlemonade.JPG",
+    "Tranças Lemonade":"trancalemonade.JPG",
+    "Tranças Fulani":"trancafulani.JPG",
+    "Tranças Cornrows":"trancacornrowNago.JPG",
+    "Trança estilo mohawk":"trancaestilomohank.JPG",
+    "Tranças Dreads":"trancadreads.JPG",
+    "Tranças Knotless":"trancaknotless.JPG",
+    "Tranças Gypsy":"trancagypsy.JPG",
+    "Tranças Twists":"trancatwists.JPG",
+    "Tranças French":"trancafrench.JPG",
+    "Manutenção Rasta + Penteado":"manutencaorastas.JPG"
+};
+
+async function carregarPerfil(){
+    const data=await supa('GET','utilizadores',null,`?id=eq.${ulog.id}&select=id,nome,email,telefone`);
+    const u=data&&data[0]?data[0]:ulog;
+    ulog={...ulog,...u};
+    localStorage.setItem('ulog',JSON.stringify(ulog));
+
+    document.getElementById('sNome').innerText=u.nome||'—';
+    document.getElementById('sEmail').innerText=u.email||'—';
+    document.getElementById('spNome').innerText=u.nome||'—';
+    document.getElementById('spEmail').innerText=u.email||'—';
+    document.getElementById('spTel').innerText=u.telefone||'Não definido';
+
+    const nome=u.nome?u.nome.split(' ')[0].toUpperCase():'PERFIL';
+    document.getElementById('btnAuthText').textContent=nome;
+
+    const foto=localStorage.getItem('foto_'+ulog.id);
+    if(foto) document.getElementById('fotoImg').src=foto;
+
+    carregarHistorico();
+    carregarFavoritos();
+}
+
+document.getElementById('uploadFoto').onchange=function(e){
+    const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=function(ev){
+        localStorage.setItem('foto_'+ulog.id,ev.target.result);
+        document.getElementById('fotoImg').src=ev.target.result;
+        toast('Foto atualizada!');
     };
+    r.readAsDataURL(f);
+};
 
-    function toggleMenu() {
-        const m = document.getElementById('menuMobile');
-        const navbar = document.getElementById('navbar');
-        if (m.style.display === 'flex') { m.style.display = 'none'; }
-        else { m.style.top = navbar.offsetHeight + 'px'; m.style.display = 'flex'; }
+function ativarEdicao(){
+    document.getElementById('spNome').style.display='none';
+    document.getElementById('spTel').style.display='none';
+    document.getElementById('inNome').style.display='block';
+    document.getElementById('inTel').style.display='block';
+    document.getElementById('inNome').value=ulog.nome||'';
+    document.getElementById('inTel').value=ulog.telefone||'';
+    document.getElementById('btnEd').style.display='none';
+    document.getElementById('btnSv').style.display='inline-block';
+    document.getElementById('btnCx').style.display='inline-block';
+}
+
+function cancelarEdicao(){
+    document.getElementById('spNome').style.display='';
+    document.getElementById('spTel').style.display='';
+    document.getElementById('inNome').style.display='none';
+    document.getElementById('inTel').style.display='none';
+    document.getElementById('btnEd').style.display='';
+    document.getElementById('btnSv').style.display='none';
+    document.getElementById('btnCx').style.display='none';
+}
+
+async function guardarDados(){
+    const nome=document.getElementById('inNome').value.trim();
+    const tel=document.getElementById('inTel').value.trim();
+    if(!nome){toast('O nome não pode estar vazio.','erro');return;}
+    const r=await supa('PATCH','utilizadores',{nome,telefone:tel||null},`?id=eq.${ulog.id}`);
+    if(r!==null){
+        ulog={...ulog,nome,telefone:tel};
+        localStorage.setItem('ulog',JSON.stringify(ulog));
+        document.getElementById('spNome').innerText=nome;
+        document.getElementById('spTel').innerText=tel||'Não definido';
+        document.getElementById('sNome').innerText=nome;
+        cancelarEdicao();
+        toast('Dados guardados!');
+    } else { toast('Erro ao guardar.','erro'); }
+}
+
+function formatarData(d){ if(!d)return'—'; const[a,m,dia]=d.split('-'); return`${dia}/${m}/${a}`; }
+function formatarHora(h){ if(!h)return'—'; return h.substring(0,5); }
+
+async function carregarHistorico(){
+    const lista=document.getElementById('histLista');
+    const data=await supa('GET','marcacoes',null,
+        `?id_utilizador=eq.${ulog.id}&select=id,data_agendamento,horario_agendamento,estado,servicos(nome)&order=data_agendamento.desc`);
+    if(!data||!data.length){lista.innerHTML='<p class="empty">Ainda não tem marcações.</p>';return;}
+    const cls={pendente:'pendente',confirmada:'confirmada',cancelada:'cancelada',rejeitada:'rejeitada'};
+    lista.innerHTML=data.map(m=>`
+        <div class="history">
+            <div class="history-left">
+                <div class="date">${formatarData(m.data_agendamento)}<br><small style="font-weight:normal;color:#666">${formatarHora(m.horario_agendamento)}</small></div>
+                <div><strong>${m.servicos?.nome||'—'}</strong></div>
+            </div>
+            <div class="hist-btns">
+                <span class="status ${cls[m.estado]||'pendente'}">${(m.estado||'pendente').toUpperCase()}</span>
+                ${m.estado!=='cancelada'&&m.estado!=='rejeitada'?
+                    `<button class="cancel" onclick="cancelarMarcacao('${m.id}')">Cancelar</button>`:''}
+            </div>
+        </div>`).join('');
+}
+
+async function cancelarMarcacao(id){
+    if(!confirm('Cancelar esta marcação?'))return;
+    await supa('PATCH','marcacoes',{estado:'cancelada'},`?id=eq.${id}&id_utilizador=eq.${ulog.id}`);
+    carregarHistorico();
+    toast('Marcação cancelada.');
+}
+
+function carregarFavoritos(){
+    const lista=document.getElementById('favLista');
+    const favs=JSON.parse(localStorage.getItem('favoritos_'+ulog.id)||'[]');
+    if(!favs.length){
+        lista.innerHTML=`<div class="fav-empty">Ainda não adicionaste favoritos.<br><a href="servicos.html">Ver serviços</a></div>`;
+        return;
     }
-    document.addEventListener('click', function(e) {
-        const m = document.getElementById('menuMobile');
-        const toggle = document.querySelector('.menu-toggle');
-        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) m.style.display = 'none';
-    });
+    lista.innerHTML=`<div class="fav-grid">`+favs.map(nome=>{
+        const img=servicosImgs[nome]||'';
+        return`<div class="fav-card" onclick="location.href='servicos.html'">
+            ${img?`<img src="${img}" alt="${nome}">`:`<div style="height:120px;background:#ddd"></div>`}
+            <button class="btn-remov-fav" onclick="event.stopPropagation();removerFav('${nome.replace(/'/g,"\\'")}')">❤</button>
+            <div class="fav-card-info"><b>${nome}</b></div>
+        </div>`;
+    }).join('')+`</div>`;
+}
 
-    function toast(msg, tipo) {
-        const t = document.getElementById('toast');
-        t.innerText = msg; t.style.display = 'block';
-        t.style.background = tipo === 'erro' ? '#c0392b' : '#111';
-        setTimeout(() => t.style.display = 'none', 3000);
-    }
+function removerFav(nome){
+    let favs=JSON.parse(localStorage.getItem('favoritos_'+ulog.id)||'[]');
+    favs=favs.filter(x=>x!==nome);
+    localStorage.setItem('favoritos_'+ulog.id,JSON.stringify(favs));
+    carregarFavoritos();
+    toast('Removido dos favoritos.');
+}
 
-    async function carregarPerfil() {
-        // Buscar dados frescos do Supabase
-        const data = await supaFetch('GET', 'utilizadores', null,
-            `?id=eq.${ulog.id}&select=id,nome,email,telefone`);
-        const user = (data && data[0]) ? data[0] : ulog;
+async function alterarSenha(){
+    const atual=document.getElementById('senhaAtual').value;
+    const nova=document.getElementById('senhaNova').value;
+    const conf=document.getElementById('senhaConf').value;
+    const el=document.getElementById('msgSenha');
+    const erroS=m=>{el.className='msg-modal erro';el.innerText=m;el.style.display='block';};
+    const okS=m=>{el.className='msg-modal ok';el.innerText=m;el.style.display='block';};
+    // CORRIGIDO: coluna chama-se "password" no Supabase
+    const check=await supa('GET','utilizadores',null,`?id=eq.${ulog.id}&password=eq.${encodeURIComponent(atual)}&select=id`);
+    if(!check||!check.length){erroS('Palavra-passe atual incorreta.');return;}
+    if(nova.length<6){erroS('Mínimo 6 caracteres.');return;}
+    if(nova!==conf){erroS('As senhas não coincidem.');return;}
+    // CORRIGIDO: coluna chama-se "password" no Supabase
+    await supa('PATCH','utilizadores',{password:nova},`?id=eq.${ulog.id}`);
+    okS('Senha alterada com sucesso!');
+    setTimeout(()=>{document.getElementById('modalSenha').style.display='none';el.style.display='none';},1500);
+    ['senhaAtual','senhaNova','senhaConf'].forEach(id=>document.getElementById(id).value='');
+}
 
-        // Atualizar localStorage com dados frescos
-        const updated = { ...ulog, nome: user.nome, email: user.email, telefone: user.telefone };
-        localStorage.setItem('ulog', JSON.stringify(updated));
+async function eliminarConta(){
+    const pass=document.getElementById('elimPass').value;
+    // CORRIGIDO: coluna chama-se "password" no Supabase
+    const check=await supa('GET','utilizadores',null,`?id=eq.${ulog.id}&password=eq.${encodeURIComponent(pass)}&select=id`);
+    if(!check||!check.length){toast('Palavra-passe incorreta.','erro');return;}
+    await supa('DELETE','utilizadores',null,`?id=eq.${ulog.id}`);
+    localStorage.removeItem('ulog');
+    localStorage.removeItem('favoritos_'+ulog.id);
+    localStorage.removeItem('foto_'+ulog.id);
+    toast('Conta eliminada.');
+    setTimeout(()=>location.href='index.html',1200);
+}
 
-        document.getElementById('nomeDisplay').innerText  = user.nome  || '—';
-        document.getElementById('emailDisplay').innerText = user.email || '—';
-        document.getElementById('nomeSpan').innerText     = user.nome  || '—';
-        document.getElementById('emailSpan').innerText    = user.email || '—';
-        document.getElementById('telSpan').innerText      = user.telefone || 'Não definido';
+function doLogout(){ localStorage.removeItem('ulog'); location.href='index.html'; }
 
-        const primeiroNome = user.nome ? user.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnAuthT.textContent = primeiroNome;
-        btnAuthM.textContent = primeiroNome;
+document.getElementById('modalSenha').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+document.getElementById('modalEliminar').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
 
-        // Foto de perfil (localStorage)
-        const foto = localStorage.getItem('foto_' + ulog.id);
-        if (foto) document.getElementById('fotoPerfilImg').src = foto;
-
-        carregarHistorico();
-        carregarFavoritos();
-    }
-
-    document.getElementById('uploadFoto').addEventListener('change', function(e) {
-        const file = e.target.files[0]; if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            localStorage.setItem('foto_' + ulog.id, evt.target.result);
-            document.getElementById('fotoPerfilImg').src = evt.target.result;
-            toast('Foto atualizada!');
-        };
-        reader.readAsDataURL(file);
-    });
-
-    function ativarEdicao() {
-        const ulogAtual = JSON.parse(localStorage.getItem('ulog') || '{}');
-        document.getElementById('nomeSpan').style.display = 'none';
-        document.getElementById('telSpan').style.display  = 'none';
-        document.getElementById('nomeInput').style.display = 'block';
-        document.getElementById('telInput').style.display  = 'block';
-        document.getElementById('nomeInput').value = ulogAtual.nome     || '';
-        document.getElementById('telInput').value  = ulogAtual.telefone || '';
-        document.getElementById('btnEditar').style.display   = 'none';
-        document.getElementById('btnGuardar').style.display  = 'inline-block';
-        document.getElementById('btnCancelar').style.display = 'inline-block';
-    }
-
-    function cancelarEdicao() {
-        document.getElementById('nomeSpan').style.display = '';
-        document.getElementById('telSpan').style.display  = '';
-        document.getElementById('nomeInput').style.display = 'none';
-        document.getElementById('telInput').style.display  = 'none';
-        document.getElementById('btnEditar').style.display   = '';
-        document.getElementById('btnGuardar').style.display  = 'none';
-        document.getElementById('btnCancelar').style.display = 'none';
-    }
-
-    async function guardarDados() {
-        const nome = document.getElementById('nomeInput').value.trim();
-        const tel  = document.getElementById('telInput').value.trim();
-        if (!nome) { toast('O nome não pode estar vazio.', 'erro'); return; }
-
-        const data = await supaFetch('PATCH', 'utilizadores',
-            { nome, telefone: tel || null },
-            `?id=eq.${ulog.id}`);
-
-        if (data !== null) {
-            const updated = { ...JSON.parse(localStorage.getItem('ulog') || '{}'), nome, telefone: tel };
-            localStorage.setItem('ulog', JSON.stringify(updated));
-            document.getElementById('nomeSpan').innerText    = nome;
-            document.getElementById('telSpan').innerText     = tel || 'Não definido';
-            document.getElementById('nomeDisplay').innerText = nome;
-            cancelarEdicao();
-            toast('Dados guardados!');
-        } else {
-            toast('Erro ao guardar dados.', 'erro');
-        }
-    }
-
-    async function carregarHistorico() {
-        const lista = document.getElementById('historicoLista');
-        const data = await supaFetch('GET', 'marcacoes', null,
-            `?id_utilizador=eq.${ulog.id}&order=data.desc,hora.desc`);
-
-        if (!data || !data.length) {
-            lista.innerHTML = '<p class="empty">Ainda não tem marcações.</p>';
-            return;
-        }
-
-        const badgeClasse = e => {
-            const m = { pendente:'pendente', confirmado:'confirmado', cancelado:'cancelado', rejeitado:'rejeitado' };
-            return 'status ' + (m[e] || 'pendente');
-        };
-
-        lista.innerHTML = data.map(m => `
-            <div class="history">
-                <div class="history-left">
-                    <div class="date">${m.data}<br><small style="font-weight:normal;color:#666">${m.hora}</small></div>
-                    <div><strong>${m.servico}</strong></div>
-                </div>
-                <div class="buttons">
-                    <span class="${badgeClasse(m.estado || 'pendente')}">${(m.estado || 'pendente').toUpperCase()}</span>
-                    ${m.estado !== 'cancelado' && m.estado !== 'rejeitado' ? `
-                        <button class="cancel" onclick="cancelarMarcacao(${m.id})">Cancelar</button>
-                    ` : ''}
-                </div>
-            </div>`).join('');
-    }
-
-    async function cancelarMarcacao(id) {
-        if (!confirm('Cancelar esta marcação?')) return;
-        await supaFetch('PATCH', 'marcacoes', { estado: 'cancelado' }, `?id=eq.${id}&id_utilizador=eq.${ulog.id}`);
-        carregarHistorico();
-        toast('Marcação cancelada.');
-    }
-
-    function carregarFavoritos() {
-        const lista = document.getElementById('favoritosLista');
-        const favs  = JSON.parse(localStorage.getItem('favoritos_' + ulog.id) || '[]');
-        if (!favs.length) {
-            lista.innerHTML = `<div class="fav-empty">Ainda não adicionaste favoritos.<br><a href="servicos.html">Ver serviços</a></div>`;
-            return;
-        }
-        lista.innerHTML = `<div class="fav-grid">` +
-            favs.map(nome => {
-                const img = servicosImgs[nome] || '';
-                return `
-                <div class="fav-card" onclick="location.href='servicos.html'">
-                    ${img ? `<img src="${img}" alt="${nome}">` : `<div style="height:120px;background:#ddd;"></div>`}
-                    <button class="btn-remov-fav" title="Remover" onclick="event.stopPropagation(); 
-                    removerFav('${nome.replace(/'/g,"\\'")}')">❤</button>
-                    <div class="fav-card-info"><b>${nome}</b></div>
-                </div>`;
-            }).join('') + `</div>`;
-    }
-
-    function removerFav(nome) {
-        let favs = JSON.parse(localStorage.getItem('favoritos_' + ulog.id) || '[]');
-        favs = favs.filter(x => x !== nome);
-        localStorage.setItem('favoritos_' + ulog.id, JSON.stringify(favs));
-        carregarFavoritos();
-        toast('Removido dos favoritos.');
-    }
-
-    async function alterarSenha() {
-        const atual = document.getElementById('senhaAtual').value;
-        const nova  = document.getElementById('novaSenha').value;
-        const conf  = document.getElementById('confNovaSenha').value;
-        const el    = document.getElementById('msgSenha');
-        const erroS = m => { el.className='msg-modal erro'; el.innerText=m; el.style.display='block'; };
-        const okS   = m => { el.className='msg-modal ok';   el.innerText=m; el.style.display='block'; };
-
-        // Verificar password atual no Supabase
-        const check = await supaFetch('GET', 'utilizadores', null,
-            `?id=eq.${ulog.id}&password=eq.${encodeURIComponent(atual)}&select=id`);
-        if (!check || !check.length) { erroS('Senha atual incorreta.'); return; }
-        if (nova.length < 6)  { erroS('Mínimo 6 caracteres.'); return; }
-        if (nova !== conf)     { erroS('As senhas não coincidem.'); return; }
-
-        await supaFetch('PATCH', 'utilizadores', { password: nova }, `?id=eq.${ulog.id}`);
-        okS('Senha alterada com sucesso!');
-        setTimeout(() => {
-            document.getElementById('modalSenha').style.display = 'none';
-            el.style.display = 'none';
-        }, 1500);
-        ['senhaAtual','novaSenha','confNovaSenha'].forEach(id => document.getElementById(id).value = '');
-    }
-
-    function confirmarEliminar() { document.getElementById('modalEliminar').style.display = 'flex'; }
-
-    async function eliminarConta() {
-        const pass = document.getElementById('eliminarPass').value;
-        const check = await supaFetch('GET', 'utilizadores', null,
-            `?id=eq.${ulog.id}&password=eq.${encodeURIComponent(pass)}&select=id`);
-        if (!check || !check.length) { toast('Palavra-passe incorreta.', 'erro'); return; }
-        await supaFetch('DELETE', 'utilizadores', null, `?id=eq.${ulog.id}`);
-        localStorage.removeItem('ulog');
-        localStorage.removeItem('favoritos_' + ulog.id);
-        localStorage.removeItem('foto_' + ulog.id);
-        toast('Conta eliminada.');
-        setTimeout(() => location.href = 'index.html', 1200);
-    }
-
-    function logout() { localStorage.removeItem('ulog'); location.href = 'index.html'; }
-
-    document.getElementById('modalSenha').addEventListener('click',   function(e) { if (e.target === this) this.style.display = 'none'; });
-    document.getElementById('modalEliminar').addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
-
-    carregarPerfil();
+carregarPerfil();
 </script>
 </body>
 </html>

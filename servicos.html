@@ -23,22 +23,10 @@
         .btn-login { background:#111; color:white !important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity 0.2s; white-space:nowrap; }
         .btn-login:hover { opacity:0.8; }
         .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
-        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; transition:0.3s; }
+        .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
 
         /* MENU MOBILE */
-        .menu-mobile { 
-            display: none; 
-            flex-direction: column; 
-            background: #fff; 
-            border-bottom: 1px solid #eee; 
-            padding: 16px 20px; 
-            gap: 14px; 
-            position: fixed;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; position:fixed; left:0; width:100%; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
         .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content:center; margin-top:4px; }
 
@@ -55,7 +43,7 @@
         .info-card:hover { opacity:0.85; }
         .info-card img { width:100%; height:240px; object-fit:cover; display:block; }
         .info-card-texto { padding:14px 12px; background:white; border-top:1.5px solid #222; }
-        .info-card-texto h3 { font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size:16px; margin:0 0 4px; letter-spacing:1px; }
+        .info-card-texto h3 { font-family:'Franklin Gothic Medium','Arial Narrow',Arial,sans-serif; font-size:16px; margin:0 0 4px; letter-spacing:1px; }
         .info-card-texto p { font-size:12px; color:#555; margin:0; }
 
         /* GRID SERVIÇOS */
@@ -65,8 +53,8 @@
         /* CARD */
         .card { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:20px; overflow:hidden; background:#faf8f5; box-shadow:0 2px 10px rgba(0,0,0,0.08); transition:transform 0.2s, box-shadow 0.2s; width:260px; position:relative; }
         .card:hover { transform:translateY(-4px); box-shadow:0 6px 18px rgba(0,0,0,0.13); }
-        .img-box { width:100%; height:340px; overflow:hidden; }
-        .img-box img { width:100%; height:100%; object-fit:cover; object-position:center center; }
+        .img-box { width:100%; height:340px; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#f5f5f5; }
+        .img-box img { width:100%; height:100%; object-fit:cover; display:block; }
         .card-legenda { width:100%; padding:14px 16px; text-align:center; }
         .card-legenda b { font-size:15px; display:block; margin-bottom:4px; }
         .card-legenda span { font-size:13px; color:#888; }
@@ -75,8 +63,6 @@
         .btn-fav { position:absolute; top:12px; right:12px; width:36px; height:36px; background:rgba(255,255,255,0.92); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 2px 8px rgba(0,0,0,0.15); transition:transform 0.2s, background 0.2s; z-index:10; line-height:1; }
         .btn-fav:hover { transform:scale(1.15); background:white; }
         .btn-fav.ativo { background:#fff0f8; }
-        .btn-fav .heart-icon { transition:transform 0.2s; }
-        .btn-fav.ativo .heart-icon { transform:scale(1.2); }
 
         /* TOAST */
         .fav-toast { display:none; position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#111; color:#fff; padding:10px 22px; border-radius:30px; font-size:14px; font-weight:bold; z-index:3000; white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
@@ -296,7 +282,6 @@
                 </div>
             </div>
         </div>
-
         <div class="ref-img-secao">
             <label>IMAGEM DE REFERÊNCIA (OPCIONAL)</label>
             <p>Carregue uma foto do estilo que deseja para ajudar a nossa equipa.</p>
@@ -307,7 +292,6 @@
                 <span class="ref-img-nome" id="nomeImgRef"></span>
             </div>
         </div>
-
         <div class="modal-obs">
             <span>OBSERVAÇÃO:</span><br>
             Caso não pretenda lavar o cabelo connosco, o cabelo deve estar limpo e desembaraçado,
@@ -330,49 +314,32 @@
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SUPABASE SDK
-══════════════════════════════════════════ -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // ── SUPABASE CONFIG ──────────────────────────────────
+    // ── CONFIG ──
     const SUPA_URL  = 'https://wonkioqayeekzcuoepcb.supabase.co';
     const SUPA_ANON = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
-    const supabase  = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
-    let _userId = null;  // ID do utilizador autenticado (null se não logado)
+    // ── AUTH (localStorage) ──
+    const ulog = JSON.parse(localStorage.getItem('ulog') || 'null');
+    const _userId = ulog ? ulog.id : null;
 
-    // ── AUTH ─────────────────────────────────────────────
-    async function initAuth() {
-        const { data: { session } } = await supabase.auth.getSession();
+    function initAuth() {
         const btn  = document.getElementById('btnAuth');
         const btnT = document.getElementById('btnAuthText');
         const btnM = document.getElementById('btnAuthMobile');
-
-        if (session && session.user) {
-            _userId = session.user.id;
-            const { data: perfil } = await supabase
-                .from('profiles')
-                .select('nome')
-                .eq('id', _userId)
-                .single();
-
-            btn.href = btnM.href = 'perfil1.html';
-            const nome = perfil?.nome ? perfil.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+        if (ulog && ulog.id) {
+            const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+            btn.href  = 'perfil1.html';
+            btnM.href = 'perfil1.html';
             btnT.textContent = nome;
             btnM.textContent = nome;
-
-            // Carrega favoritos e preferências do Supabase
-            await carregarPreferencias();
         } else {
             btn.href  = 'login.html';
             btnM.href = 'login.html';
         }
-
-        renderGrid();
     }
 
-    // ── MENU MOBILE ───────────────────────────────────────
+    // ── MENU MOBILE ──
     function toggleMenu() {
         const m = document.getElementById('menuMobile');
         const navbar = document.getElementById('navbar');
@@ -392,7 +359,7 @@
         }
     });
 
-    // ── SERVIÇOS DATA ─────────────────────────────────────
+    // ── SERVIÇOS ──
     const servicos = [
         { nome:"Tranças Fulani X Lemonade", duracao:"4H/6H", img:"trancafulanixlemonade.JPG", preco:"60€" },
         { nome:"Tranças Lemonade",          duracao:"5H/6H", img:"trancalemonade.JPG",         preco:"30€" },
@@ -407,59 +374,41 @@
         { nome:"Manutenção Rasta + Penteado", duracao:"5H/8H", img:"manutencaorastas.JPG",     preco:"25€" }
     ];
 
-    // ── FAVORITOS → SUPABASE ──────────────────────────────
-    // Tabela: favoritos (id, user_id, servico_nome, created_at)
-    let _favoritosCache = [];
-
-    async function carregarFavoritos() {
-        if (!_userId) return;
-        const { data } = await supabase
-            .from('favoritos')
-            .select('servico_nome')
-            .eq('user_id', _userId);
-        _favoritosCache = (data || []).map(f => f.servico_nome);
+    // ── FAVORITOS (localStorage) ──
+    function getFavs() {
+        const key = _userId ? 'favoritos_' + _userId : 'favoritos_guest';
+        return JSON.parse(localStorage.getItem(key) || '[]');
     }
 
-    function isFav(nome) {
-        return _favoritosCache.includes(nome);
+    function saveFavs(favs) {
+        const key = _userId ? 'favoritos_' + _userId : 'favoritos_guest';
+        localStorage.setItem(key, JSON.stringify(favs));
     }
 
-    async function toggleFav(e, nome) {
+    function isFav(nome) { return getFavs().includes(nome); }
+
+    function toggleFav(e, nome) {
         e.stopPropagation();
         if (!_userId) {
             showFavToast('Faz login para guardar favoritos ❤', true);
-            setTimeout(() => location.href = 'login.html', 1200);
+            setTimeout(() => location.href = 'login.html', 1400);
             return;
         }
-
+        let favs = getFavs();
         const jaFav = isFav(nome);
-
         if (jaFav) {
-            // Remove favorito
-            await supabase
-                .from('favoritos')
-                .delete()
-                .eq('user_id', _userId)
-                .eq('servico_nome', nome);
-            _favoritosCache = _favoritosCache.filter(f => f !== nome);
+            favs = favs.filter(f => f !== nome);
         } else {
-            // Adiciona favorito
-            await supabase
-                .from('favoritos')
-                .insert([{ user_id: _userId, servico_nome: nome }]);
-            _favoritosCache.push(nome);
+            favs.push(nome);
         }
+        saveFavs(favs);
 
-        // Atualiza botão visualmente
-        const btnFav = document.querySelector(`.btn-fav[data-nome="${CSS.escape(nome)}"]`);
-        if (btnFav) atualizarBtnFav(btnFav, !jaFav);
+        const btnFav = document.querySelector(`.btn-fav[data-nome="${nome}"]`);
+        if (btnFav) {
+            btnFav.classList.toggle('ativo', !jaFav);
+            btnFav.querySelector('.heart-icon').textContent = !jaFav ? '♥' : '♡';
+        }
         showFavToast(!jaFav ? '♥ Adicionado aos favoritos!' : '♡ Removido dos favoritos');
-    }
-
-    function atualizarBtnFav(btn, ativo) {
-        btn.classList.toggle('ativo', ativo);
-        btn.querySelector('.heart-icon').textContent = ativo ? '♥' : '♡';
-        btn.title = ativo ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
     }
 
     function showFavToast(msg, isError) {
@@ -471,71 +420,25 @@
         t._timer = setTimeout(() => t.style.display = 'none', 2200);
     }
 
-    // ── PREFERÊNCIAS → SUPABASE ───────────────────────────
-    // Tabela: preferencias (id, user_id, reparticao, divisao, cumprimento)
-    let _prefs = { reparticao: '', divisao: '', cumprimento: '' };
+    // ── PREFERÊNCIAS (localStorage) ──
+    function getPref(campo) { return localStorage.getItem(campo + 'Escolhida') || ''; }
+    function setPref(campo, valor) { localStorage.setItem(campo + 'Escolhida', valor); }
 
-    async function carregarPreferencias() {
-        if (!_userId) return;
-        await carregarFavoritos();
-
-        const { data } = await supabase
-            .from('preferencias')
-            .select('reparticao, divisao, cumprimento')
-            .eq('user_id', _userId)
-            .single();
-
-        if (data) {
-            _prefs.reparticao  = data.reparticao  || '';
-            _prefs.divisao     = data.divisao     || '';
-            _prefs.cumprimento = data.cumprimento || '';
-        }
-    }
-
-    async function guardarPreferencia(campo, valor) {
-        if (!_userId) {
-            // Fallback para localStorage se não logado
-            localStorage.setItem(campo + 'Escolhida', valor);
-            return;
-        }
-
-        // Upsert: cria ou atualiza
-        const { data: existe } = await supabase
-            .from('preferencias')
-            .select('id')
-            .eq('user_id', _userId)
-            .single();
-
-        if (existe) {
-            await supabase
-                .from('preferencias')
-                .update({ [campo]: valor })
-                .eq('user_id', _userId);
-        } else {
-            await supabase
-                .from('preferencias')
-                .insert([{ user_id: _userId, [campo]: valor }]);
-        }
-
-        _prefs[campo] = valor;
-    }
-
-    // ── RENDER GRID ───────────────────────────────────────
+    // ── RENDER GRID ──
     function renderGrid() {
         const grid = document.getElementById('gridServicos');
         grid.innerHTML = servicos.map(s => {
             const fav = isFav(s.nome);
             return `
-            <div class="card" onclick="abrirModal('${s.nome}','${s.duracao}','${s.img}','${s.preco}')">
-                <button 
-                    class="btn-fav ${fav ? 'ativo' : ''}" 
+            <div class="card" onclick="abrirModal('${s.nome.replace(/'/g,"\\'")}','${s.duracao}','${s.img}','${s.preco}')">
+                <button
+                    class="btn-fav ${fav ? 'ativo' : ''}"
                     data-nome="${s.nome}"
-                    title="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}"
-                    onclick="toggleFav(event, '${s.nome}')">
+                    onclick="toggleFav(event, '${s.nome.replace(/'/g,"\\'")}')">
                     <span class="heart-icon">${fav ? '♥' : '♡'}</span>
                 </button>
                 <div class="img-box">
-                    <img src="${s.img}" alt="${s.nome}">
+                    <img src="${s.img}" alt="${s.nome}" onerror="this.style.display='none'">
                 </div>
                 <div class="card-legenda">
                     <b>${s.nome}</b>
@@ -545,7 +448,7 @@
         }).join('');
     }
 
-    // ── INFO MODAL ────────────────────────────────────────
+    // ── INFO MODAL ──
     const infoData = {
         reparticao:  { img:'reparticao.png',  titulo:'REPARTIÇÃO',  sub:'DO COURO CABELUDO', temSelector:true, campo:'reparticao', opcoes:['Brick-Lay','Square/Box','Diamond','Triangle','Organic/Freeform'], items:['<strong>BRICK-LAY</strong> → colocação de tijolo','<strong>SQUARE/BOX</strong> → quadrado-box','<strong>DIAMOND</strong> → losango','<strong>TRIANGLE</strong> → triângulo','<strong>ORGANIC/FREEFORM</strong> → orgânico / forma livre'] },
         divisao:     { img:'divisao.png',     titulo:'DIVISÃO',     sub:'SEPARAÇÃO DO CABELO EM PARTES', temSelector:true, campo:'divisao', opcoes:['Extra Large','Large','Medium','Small','Extra Small'], items:['<strong>EXTRA LARGE</strong> → tranças muito grossas','<strong>LARGE</strong> → tranças grossas','<strong>MEDIUM</strong> → tranças médias','<strong>SMALL</strong> → tranças finas','<strong>EXTRA SMALL</strong> → tranças muito finas'] },
@@ -568,7 +471,7 @@
         document.getElementById('btnEscolhaWrap').style.display = d.temSelector ? 'block' : 'none';
         document.getElementById('btnEscolha').innerHTML = 'ESCOLHA AQUI <span class="btn-seta"></span>';
         if (d.temSelector && d.campo) {
-            const guardada = _prefs[d.campo] || localStorage.getItem(d.campo + 'Escolhida') || '';
+            const guardada = getPref(d.campo);
             if (guardada) {
                 document.getElementById('escolhaConfirmada').innerText = '✔ ESCOLHA ATUAL: ' + guardada.toUpperCase();
                 document.getElementById('escolhaConfirmada').style.display = 'block';
@@ -586,7 +489,7 @@
         const selector = document.getElementById('opcoesSelector');
         if (_selectorAberto) {
             lista.style.display = 'none';
-            const guardada = _prefs[d.campo] || localStorage.getItem(d.campo + 'Escolhida') || '';
+            const guardada = getPref(d.campo);
             selector.innerHTML = d.opcoes.map(op=>`<button class="opcao-btn ${op===guardada?'escolhido':''}" onclick="escolherOpcao('${op}')">${op.toUpperCase()}</button>`).join('');
             selector.classList.add('visivel');
             document.getElementById('btnEscolha').innerHTML = 'FECHAR <span class="btn-seta"></span>';
@@ -597,13 +500,9 @@
         }
     }
 
-    async function escolherOpcao(opcao) {
+    function escolherOpcao(opcao) {
         const d = infoData[_tipoAtual];
-        // Guarda no Supabase (ou localStorage se não logado)
-        await guardarPreferencia(d.campo, opcao);
-        // Fallback localStorage
-        localStorage.setItem(d.campo + 'Escolhida', opcao);
-
+        setPref(d.campo, opcao);
         document.querySelectorAll('.opcao-btn').forEach(b => b.classList.remove('escolhido'));
         event.target.classList.add('escolhido');
         const conf = document.getElementById('escolhaConfirmada');
@@ -620,7 +519,7 @@
     function fecharInfoModal() { document.getElementById('modalInfo').classList.remove('active'); _selectorAberto = false; }
     document.getElementById('modalInfo').addEventListener('click', function(e) { if (e.target === this) fecharInfoModal(); });
 
-    // ── MODAL SERVIÇO ─────────────────────────────────────
+    // ── MODAL SERVIÇO ──
     let _nomeAtual = '';
 
     function abrirModal(nome, duracao, img, preco) {
@@ -629,9 +528,9 @@
         document.getElementById('modalDuracao').innerText = duracao;
         document.getElementById('modalImg').src           = img;
         document.getElementById('modalPreco').innerText   = 'A PARTIR DE ' + preco;
-        const rep  = _prefs.reparticao  || localStorage.getItem('reparticaoEscolhida')  || '';
-        const div  = _prefs.divisao     || localStorage.getItem('divisaoEscolhida')     || '';
-        const cump = _prefs.cumprimento || localStorage.getItem('cumprimentoEscolhido') || '';
+        const rep  = getPref('reparticao');
+        const div  = getPref('divisao');
+        const cump = getPref('cumprimento');
         const prefsBox = document.getElementById('modalPrefs');
         if (rep || div || cump) {
             prefsBox.style.display = 'block';
@@ -663,14 +562,20 @@
 
     function irAgendar() {
         localStorage.setItem('servicoEscolhido', _nomeAtual);
-        window.location.href = 'agendar.html';
+        if (!_userId) {
+            localStorage.setItem('redirectAfterLogin', 'agendar.html');
+            location.href = 'login.html';
+            return;
+        }
+        location.href = 'agendar.html';
     }
 
     function fecharModal() { document.getElementById('modalDetalhe').classList.remove('active'); }
     document.getElementById('modalDetalhe').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
 
-    // ── INIT ─────────────────────────────────────────────
+    // ── INIT ──
     initAuth();
+    renderGrid();
 </script>
 </body>
 </html>
