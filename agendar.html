@@ -5,70 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Glow — Agendar</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; background: #fff; }
-        @font-face { font-family: 'High Cruiser'; src: url('fonts/HighCruiser-PersonalUseOnly.otf') format('truetype'); }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { font-family:Arial,sans-serif; min-height:100vh; display:flex; flex-direction:column; background:#fff; }
+        @font-face { font-family:'High Cruiser'; src:url('fonts/HighCruiser-PersonalUseOnly.otf') format('truetype'); }
+
         .logotipo { width:100%; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid #eee; position:sticky; top:0; z-index:1000; }
         .logo img { width:150px; display:block; }
         .menu { display:flex; align-items:center; gap:22px; font-weight:bold; }
         .menu a { text-decoration:none; font-size:13px; font-weight:bold; color:#111; letter-spacing:.5px; }
         .menu a:hover { color:#888; }
         .mais-menu { position:relative; cursor:pointer; }
-        .mais-links { display:none; position:absolute; top:calc(100% + 10px); right:0; background:white; box-shadow:0 8px 24px rgba(0,0,0,0.12); border-radius:10px; flex-direction:column; min-width:160px; z-index:999; overflow:hidden; }
+        .mais-links { display:none; position:absolute; top:calc(100% + 10px); right:0; background:white; box-shadow:0 8px 24px rgba(0,0,0,.12); border-radius:10px; flex-direction:column; min-width:160px; z-index:999; overflow:hidden; }
         .mais-links a { padding:11px 16px; text-decoration:none; font-size:13px; font-weight:bold; color:#111; display:block; }
         .mais-links a:hover { background:#f5f5f5; }
         .mais-menu:hover .mais-links { display:flex; }
-        .btn-login { background:#111; color:white !important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity 0.2s; white-space:nowrap; }
-        .btn-login:hover { opacity:0.8; }
+        .btn-login { background:#111; color:white!important; padding:8px 18px; border-radius:20px; font-size:13px; font-weight:bold; text-decoration:none; display:flex; align-items:center; gap:7px; transition:opacity .2s; white-space:nowrap; }
+        .btn-login:hover { opacity:.8; }
         .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
         .menu-toggle span { display:block; width:24px; height:2px; background:#111; border-radius:2px; }
-        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; position:fixed; left:0; width:100%; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .menu-mobile { display:none; flex-direction:column; background:#fff; border-bottom:1px solid #eee; padding:16px 20px; gap:14px; position:fixed; left:0; width:100%; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,.1); }
         .menu-mobile a { text-decoration:none; font-size:15px; font-weight:bold; color:#111; padding:8px 0; border-bottom:1px solid #f0f0f0; }
         .menu-mobile .btn-login { justify-content:center; margin-top:4px; }
-        .banner { width:100%; background:linear-gradient(180deg, rgba(36,32,28,0.175), rgba(248,222,187,0.175), rgba(196,175,154,0.175)); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px 20px; }
+
+        .banner { width:100%; background:linear-gradient(180deg,rgba(36,32,28,.175),rgba(248,222,187,.175),rgba(196,175,154,.175)); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px 20px; }
         .banner h1 { font-family:'High Cruiser',Arial,sans-serif; font-size:30px; margin:0; }
-        .banner p { margin-top:10px; }
-        .container { display:flex; justify-content:center; align-items:flex-start; padding:50px; margin-top:10px; flex-wrap:wrap; gap:80px; flex:1; }
-        .agendamento { background:linear-gradient(to bottom,#dcd6cf,#f9f7f3); padding:40px; border-radius:12px; width:350px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .banner p { margin-top:10px; color:#555; }
+
+        .container { display:flex; justify-content:center; align-items:flex-start; padding:50px; flex-wrap:wrap; gap:40px; flex:1; }
+
+        .agendamento { background:linear-gradient(to bottom,#dcd6cf,#f9f7f3); padding:40px; border-radius:12px; width:380px; box-shadow:0 4px 10px rgba(0,0,0,.1); }
         .agendamento h2 { text-align:center; margin-bottom:20px; font-family:'Arial Black',Arial,sans-serif; }
-        .agendamento label { display:block; margin-top:15px; margin-bottom:5px; font-weight:bold; }
-        .agendamento input, .agendamento select { width:100%; padding:12px 10px; border-radius:8px; border:1px solid #ccc; outline:none; font-size:14px; }
-        .agendamento select.preenchido { border-color:#9b59b6; background:#fdf6ff; }
-        .agendamento button { width:100%; margin-top:25px; padding:12px; background-color:#000; color:#fff; font-size:16px; border:none; border-radius:25px; cursor:pointer; transition:0.3s ease; }
-        .agendamento button:hover { opacity:0.9; transform:scale(1.02); }
-        .agendamento button:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-        .aviso-servico { display:none; margin-top:6px; font-size:12px; color:#7d3c98; font-style:italic; }
-        .prefs-box { display:none; margin-top:14px; background:#f0eaf5; border:1px solid #c77dbd; border-radius:8px; padding:10px 14px; font-size:13px; color:#555; }
-        .prefs-box .prefs-titulo { font-weight:bold; color:#7d3c98; margin-bottom:6px; }
-        .prefs-box p { margin:3px 0; }
-        .ref-img-box { display:none; margin-top:16px; background:#f9f4ff; border:1px solid #c77dbd; border-radius:8px; padding:12px 14px; }
-        .ref-img-box .ref-titulo { font-weight:bold; color:#7d3c98; font-size:13px; margin-bottom:8px; }
-        .ref-img-box img { width:100%; max-height:180px; object-fit:cover; border-radius:8px; }
-        .ref-img-box .ref-nome { font-size:11px; color:#888; margin-top:6px; }
-        .ref-img-box .btn-remover { background:none; border:none; color:#c0392b; font-size:12px; cursor:pointer; margin-top:4px; padding:0; text-decoration:underline; }
-        .msg-ok   { display:none; background:#e0ffe0; color:#27ae60; padding:10px 14px; border-radius:8px; font-size:14px; margin-top:12px; text-align:center; }
-        .msg-erro { display:none; background:#ffe0e0; color:#c0392b; padding:10px 14px; border-radius:8px; font-size:14px; margin-top:12px; text-align:center; }
-        .calendario { width:350px; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .agendamento label { display:block; margin-top:15px; margin-bottom:5px; font-weight:bold; font-size:14px; }
+        .agendamento select, .agendamento input[type=text] { width:100%; padding:12px 10px; border-radius:8px; border:1px solid #ccc; outline:none; font-size:14px; background:white; }
+
+        /* PREFERÊNCIAS */
+        .pref-section { margin-top:18px; background:#f0eaf5; border:1.5px solid #c77dbd; border-radius:10px; padding:14px 16px; }
+        .pref-titulo { font-weight:bold; color:#7d3c98; font-size:13px; margin-bottom:12px; }
+        .pref-grupo { margin-bottom:10px; }
+        .pref-grupo:last-child { margin-bottom:0; }
+        .pref-grupo label { font-size:13px; font-weight:bold; color:#444; margin-bottom:4px; display:block; }
+        .pref-grupo select { width:100%; padding:10px; border-radius:8px; border:1.5px solid #ccc; font-size:13px; outline:none; background:white; transition:border-color .2s; }
+        .pref-grupo select.ok   { border-color:#27ae60; background:#f0fff4; }
+        .pref-grupo select.erro { border-color:#e74c3c; background:#fff5f5; }
+        .pref-aviso { font-size:11px; color:#e74c3c; margin-top:3px; display:none; font-weight:bold; }
+        .pref-aviso.visivel { display:block; }
+
+        .msg-ok   { display:none; background:#e0ffe0; color:#27ae60; padding:10px 14px; border-radius:8px; font-size:14px; margin-top:12px; text-align:center; font-weight:bold; }
+        .msg-erro { display:none; background:#ffe0e0; color:#c0392b; padding:10px 14px; border-radius:8px; font-size:14px; margin-top:12px; text-align:center; font-weight:bold; }
+
+        .btn-agendar { width:100%; margin-top:20px; padding:14px; background:#000; color:#fff; font-size:16px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; }
+        .btn-agendar:hover { opacity:.85; }
+        .btn-agendar:disabled { opacity:.5; cursor:not-allowed; }
+
+        /* CALENDÁRIO */
+        .calendario { width:340px; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,.1); }
         .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-        .cal-nav { background:none; border:none; font-size:20px; cursor:pointer; color:#555; padding:0 6px; line-height:1; }
+        .cal-nav { background:none; border:none; font-size:20px; cursor:pointer; color:#555; padding:0 6px; }
         .cal-nav:hover { color:#000; }
         .cal-mes-ano { font-weight:bold; font-size:14px; text-align:center; min-width:130px; }
         .calendario table { width:100%; border-collapse:collapse; text-align:center; }
         .calendario th { font-weight:bold; padding:8px 0; color:#555; font-size:13px; }
         .calendario td { padding:9px 0; color:#555; cursor:pointer; border-radius:5px; font-size:13px; }
-        .calendario td.today { background-color:#e4dddd; font-weight:bold; }
-        .calendario td.selecionado { background-color:#111; color:#fff; }
+        .calendario td.today { background:#e4dddd; font-weight:bold; }
+        .calendario td.selecionado { background:#111; color:#fff; }
         .calendario td.passado { color:#ccc; cursor:default; }
         .calendario td.vazio { cursor:default; }
-        .calendario td:hover:not(.passado):not(.vazio):not(.selecionado) { background-color:#e0dcd5; }
-        .contactos { background:#f8f8f8; color:#555; text-align:center; padding:20px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #eee; margin-top:auto; }
-        .contactos p { font-size:15px; color:#555; }
+        .calendario td:hover:not(.passado):not(.vazio):not(.selecionado) { background:#e0dcd5; }
+
+        .hora-label { font-size:13px; font-weight:bold; color:#555; margin:18px 0 8px; display:block; }
+        .horas-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+        .hora-btn { padding:8px 0; border-radius:8px; border:1.5px solid #ddd; background:white; font-size:13px; cursor:pointer; font-weight:bold; color:#555; transition:.15s; }
+        .hora-btn:hover { border-color:#999; color:#111; }
+        .hora-btn.ativa { background:#111; color:#fff; border-color:#111; }
+
+        .footer { background:#f8f8f8; color:#555; text-align:center; padding:20px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #eee; margin-top:auto; }
+        .footer p { font-size:15px; color:#555; }
         .insta { display:flex; align-items:center; gap:6px; }
         .insta span { font-size:14px; color:#555; }
         .icon { width:26px; }
         .footer-copy { font-size:12px; color:#aaa; width:100%; text-align:center; margin-top:4px; }
-        @media (max-width: 900px) { .container { flex-direction:column; align-items:center; padding:30px 16px; gap:30px; } .agendamento, .calendario { width:100%; max-width:400px; } }
-        @media (max-width: 768px) { .menu { display:none; } .menu-toggle { display:flex; } .contactos { flex-direction:column; padding:24px 16px; } }
+
+        @media(max-width:900px){ .container{flex-direction:column;align-items:center;padding:30px 16px;gap:30px} .agendamento,.calendario{width:100%;max-width:420px} }
+        @media(max-width:768px){ .menu{display:none} .menu-toggle{display:flex} .footer{flex-direction:column;padding:24px 16px} .horas-grid{grid-template-columns:repeat(3,1fr)} }
     </style>
 </head>
 <body>
@@ -103,76 +121,88 @@
     <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
 </div>
 
-<div style="padding: 12px 20px;">
-    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;">← VOLTAR</button>
+<div style="padding:12px 20px;">
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;font-weight:bold;color:#111;cursor:pointer;display:flex;align-items:center;gap:6px;">← VOLTAR</button>
 </div>
 
 <div class="banner">
     <h1>AGENDAR</h1>
-    <p>Escolha o seu serviço, data e horário preferido</p>
+    <p>Escolha o serviço, preferências, data e horário</p>
 </div>
 
 <div class="container">
-    <div class="agendamento">
-        <h2>Agende o seu horário connosco!</h2>
 
-        <label>Nome</label>
-        <input type="text" id="nome" placeholder="Seu nome completo" required>
+    <div class="agendamento">
+        <h2>Agende o seu horário!</h2>
 
         <label>Serviço</label>
-        <select id="servico" required>
-            <option value="" disabled selected>Selecione</option>
-            <option>Tranças Fulani X Lemonade</option>
-            <option>Tranças Lemonade</option>
-            <option>Tranças Fulani</option>
-            <option>Tranças Cornrows</option>
-            <option>Trança estilo mohawk</option>
-            <option>Tranças Dreads</option>
-            <option>Tranças Knotless</option>
-            <option>Tranças Gypsy</option>
-            <option>Tranças Twists</option>
-            <option>Tranças French</option>
-            <option>Manutenção Rasta + Penteado</option>
+        <select id="selServico">
+            <option value="" disabled selected>A carregar serviços...</option>
         </select>
-        <div class="aviso-servico" id="avisoServico">✔ Serviço pré-selecionado a partir dos Serviços</div>
 
-        <div class="prefs-box" id="prefsBox">
-            <div class="prefs-titulo">✔ Preferências selecionadas nos Serviços:</div>
-            <p id="prefRep"></p>
-            <p id="prefDiv"></p>
-            <p id="prefCump"></p>
+        <!-- PREFERÊNCIAS OBRIGATÓRIAS -->
+        <div class="pref-section">
+            <div class="pref-titulo">⚙️ Preferências obrigatórias</div>
+
+            <div class="pref-grupo">
+                <label>Repartição do couro cabeludo</label>
+                <select id="selReparticao" onchange="marcarOk(this,'avisoRep','reparticaoEscolhida')">
+                    <option value="" disabled selected>Selecione a repartição</option>
+                    <option value="Brick-Lay">Brick-Lay</option>
+                    <option value="Square/Box">Square/Box</option>
+                    <option value="Diamond">Diamond</option>
+                    <option value="Triangle">Triangle</option>
+                    <option value="Organic/Freeform">Organic/Freeform</option>
+                </select>
+                <div class="pref-aviso" id="avisoRep">⚠ Obrigatório — selecione a repartição.</div>
+            </div>
+
+            <div class="pref-grupo">
+                <label>Divisão (espessura das tranças)</label>
+                <select id="selDivisao" onchange="marcarOk(this,'avisoDiv','divisaoEscolhida')">
+                    <option value="" disabled selected>Selecione a divisão</option>
+                    <option value="Extra Large">Extra Large — muito grossas</option>
+                    <option value="Large">Large — grossas</option>
+                    <option value="Medium">Medium — médias</option>
+                    <option value="Small">Small — finas</option>
+                    <option value="Extra Small">Extra Small — muito finas</option>
+                </select>
+                <div class="pref-aviso" id="avisoDiv">⚠ Obrigatório — selecione a divisão.</div>
+            </div>
+
+            <div class="pref-grupo">
+                <label>Comprimento das tranças</label>
+                <select id="selCumprimento" onchange="marcarOk(this,'avisoCump','cumprimentoEscolhido')">
+                    <option value="" disabled selected>Selecione o comprimento</option>
+                    <option value="Neck length">Neck length — pescoço</option>
+                    <option value="Shoulder length">Shoulder length — ombros</option>
+                    <option value="Armpit length">Armpit length — axilas</option>
+                    <option value="Bra Strap length">Bra Strap length — soutien</option>
+                    <option value="Mid-back length">Mid-back length — meio costas</option>
+                    <option value="Waist length">Waist length — cintura</option>
+                    <option value="Hip length">Hip length — ancas</option>
+                    <option value="Tailbone length">Tailbone length — cóccix</option>
+                    <option value="Classic length">Classic length</option>
+                    <option value="Mid-thigh length">Mid-thigh length — coxa</option>
+                    <option value="Knee length">Knee length — joelho</option>
+                    <option value="Calf length">Calf length — barriga da perna</option>
+                    <option value="Ankle length">Ankle length — tornozelo</option>
+                    <option value="Floor length">Floor length — chão</option>
+                </select>
+                <div class="pref-aviso" id="avisoCump">⚠ Obrigatório — selecione o comprimento.</div>
+            </div>
         </div>
 
-        <div class="ref-img-box" id="refImgBox">
-            <div class="ref-titulo">📷 Imagem de referência:</div>
-            <img id="refImgAgendar" src="" alt="Imagem de referência">
-            <div class="ref-nome" id="refImgNome"></div>
-            <button class="btn-remover" onclick="removerImgRef()">✕ Remover imagem</button>
-        </div>
-
-        <label>Data</label>
-        <input id="data" type="date" required readonly style="background:#f9f9f9;cursor:default;">
-
-        <label>Horário</label>
-        <select id="horario" required>
-            <option value="" disabled selected>Selecione a hora</option>
-            <option>09:00</option><option>09:30</option>
-            <option>10:00</option><option>10:30</option>
-            <option>11:00</option><option>11:30</option>
-            <option>12:00</option><option>12:30</option>
-            <option>15:00</option><option>15:30</option>
-            <option>16:00</option><option>16:30</option>
-            <option>17:00</option><option>17:30</option>
-            <option>18:00</option><option>18:30</option>
-            <option>19:00</option><option>19:30</option>
-            <option>20:00</option>
-        </select>
+        <label style="margin-top:18px;">Data selecionada</label>
+        <input id="iData" type="text" readonly placeholder="← Selecione uma data no calendário"
+            style="background:#f9f9f9;cursor:default;color:#111;">
 
         <div class="msg-ok"   id="msgOk"></div>
         <div class="msg-erro" id="msgErro"></div>
-        <button id="btnAgendar" onclick="submeterAgendamento()">Agendar</button>
+        <button class="btn-agendar" id="btnAgendar" onclick="submeter()">AGENDAR</button>
     </div>
 
+    <!-- CALENDÁRIO + HORÁRIOS -->
     <div class="calendario">
         <div class="cal-header">
             <button class="cal-nav" onclick="mudarMes(-1)">&#8249;</button>
@@ -181,209 +211,231 @@
         </div>
         <table>
             <thead><tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr></thead>
-            <tbody id="calendarBody"></tbody>
+            <tbody id="calBody"></tbody>
         </table>
+        <span class="hora-label">Horário</span>
+        <div class="horas-grid" id="horasGrid"></div>
     </div>
+
 </div>
 
-<div class="contactos">
+<div class="footer">
     <p>easyglow@gmail.com &nbsp;|&nbsp; +351 925 215 786 &nbsp;|&nbsp; Seg a Sex 09:00–20:00</p>
     <div class="insta"><img src="iconinstagram.PNG" class="icon" alt="Instagram"><span>@easyglow._</span></div>
     <div class="footer-copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
 </div>
 
 <script>
-    const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
-    const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+const SUPA_URL='https://wonkioqayeekzcuoepcb.supabase.co';
+const SUPA_KEY='sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
 
-    async function supaFetch(method, table, body = null, filter = '') {
-        const res = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPA_KEY,
-                'Authorization': `Bearer ${SUPA_KEY}`,
-                'Prefer': method === 'POST' ? 'return=representation' : ''
-            },
-            body: body ? JSON.stringify(body) : null
-        });
-        if (!res.ok) { const e = await res.json().catch(() => ({})); console.error(e); return null; }
-        return res.json();
+async function supa(method,table,body,filter=''){
+    const h={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+    if(method==='POST'||method==='PATCH') h['Prefer']='return=representation';
+    const r=await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`,{method,headers:h,body:body?JSON.stringify(body):null});
+    const t=await r.text();
+    try{return JSON.parse(t);}catch(e){return null;}
+}
+
+// ── AUTH ──
+const ulog=(()=>{try{return JSON.parse(localStorage.getItem('ulog'));}catch(e){return null;}})();
+if(!ulog||!ulog.id){localStorage.setItem('redirectAfterLogin','agendar.html');location.href='login.html';}
+
+function toggleMenu(){
+    const m=document.getElementById('menuMobile'),nb=document.getElementById('navbar');
+    m.style.display=m.style.display==='flex'?'none':'flex';
+    if(m.style.display==='flex')m.style.top=nb.offsetHeight+'px';
+}
+document.addEventListener('click',function(e){
+    const m=document.getElementById('menuMobile'),t=document.querySelector('.menu-toggle');
+    if(m&&m.style.display==='flex'&&!m.contains(e.target)&&t&&!t.contains(e.target))m.style.display='none';
+});
+
+const nome=ulog&&ulog.nome?ulog.nome.split(' ')[0].toUpperCase():'PERFIL';
+['btnAuth','btnAuthMobile'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.href='perfil1.html';const s=el.querySelector('span');if(s)s.textContent=nome;else el.textContent=nome;}
+});
+
+// ── SERVIÇOS ──
+async function carregarServicos(){
+    const data=await supa('GET','servicos',null,'?select=id,nome,preco,duracao&order=nome.asc');
+    const sel=document.getElementById('selServico');
+    sel.innerHTML='<option value="" disabled selected>Selecione um serviço</option>';
+    (data||[]).forEach(s=>{
+        const o=document.createElement('option');
+        o.value=s.id;
+        o.textContent=`${s.nome} — ${s.preco}€${s.duracao?' ('+s.duracao+')':''}`;
+        sel.appendChild(o);
+    });
+    // Pré-selecionar serviço vindo da página de serviços
+    const escolhido=localStorage.getItem('servicoEscolhido');
+    if(escolhido){
+        Array.from(sel.options).forEach(o=>{if(o.textContent.startsWith(escolhido))sel.value=o.value;});
+        localStorage.removeItem('servicoEscolhido');
+    }
+    // Pré-preencher preferências guardadas
+    const prefs=[
+        {selId:'selReparticao', lsKey:'reparticaoEscolhida', avisoId:'avisoRep'},
+        {selId:'selDivisao',    lsKey:'divisaoEscolhida',    avisoId:'avisoDiv'},
+        {selId:'selCumprimento',lsKey:'cumprimentoEscolhido',avisoId:'avisoCump'}
+    ];
+    prefs.forEach(p=>{
+        const v=localStorage.getItem(p.lsKey);
+        if(v){
+            const el=document.getElementById(p.selId);
+            el.value=v;
+            marcarOk(el,p.avisoId,p.lsKey);
+        }
+    });
+}
+
+// ── PREFERÊNCIAS ──
+function marcarOk(sel,avisoId,lsKey){
+    if(sel.value){
+        sel.classList.add('ok');
+        sel.classList.remove('erro');
+        document.getElementById(avisoId).classList.remove('visivel');
+        localStorage.setItem(lsKey,sel.value);
+    }
+}
+
+function validarPreferencias(){
+    let valido=true;
+    [
+        {id:'selReparticao',aviso:'avisoRep'},
+        {id:'selDivisao',   aviso:'avisoDiv'},
+        {id:'selCumprimento',aviso:'avisoCump'}
+    ].forEach(c=>{
+        const sel=document.getElementById(c.id);
+        if(!sel.value){
+            sel.classList.add('erro');
+            sel.classList.remove('ok');
+            document.getElementById(c.aviso).classList.add('visivel');
+            valido=false;
+        }
+    });
+    return valido;
+}
+
+// ── CALENDÁRIO ──
+const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const hoje=new Date();
+let calMes=hoje.getMonth(),calAno=hoje.getFullYear(),dataSel=null,horaSel=null;
+
+const horas=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
+             '15:00','15:30','16:00','16:30','17:00','17:30'];
+
+function renderHoras(){
+    document.getElementById('horasGrid').innerHTML=horas.map(h=>
+        `<button class="hora-btn${horaSel===h?' ativa':''}" onclick="selecionarHora('${h}')">${h}</button>`
+    ).join('');
+}
+
+function selecionarHora(h){ horaSel=h; renderHoras(); }
+
+function mudarMes(dir){
+    calMes+=dir;
+    if(calMes<0){calMes=11;calAno--;}
+    if(calMes>11){calMes=0;calAno++;}
+    gerarCal();
+}
+
+function gerarCal(){
+    document.getElementById('calMesAno').innerText=meses[calMes]+' '+calAno;
+    const corpo=document.getElementById('calBody');
+    corpo.innerHTML='';
+    const primeiro=new Date(calAno,calMes,1).getDay();
+    const total=new Date(calAno,calMes+1,0).getDate();
+    let dia=1;
+    for(let i=0;i<6;i++){
+        const tr=document.createElement('tr');
+        for(let j=0;j<7;j++){
+            const td=document.createElement('td');
+            if((i===0&&j<primeiro)||dia>total){td.classList.add('vazio');}
+            else{
+                const d=dia;
+                td.textContent=d;
+                const dc=new Date(calAno,calMes,d);
+                const passado=dc<new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate());
+                const eHoje=d===hoje.getDate()&&calMes===hoje.getMonth()&&calAno===hoje.getFullYear();
+                const eSel=dataSel&&d===dataSel.d&&calMes===dataSel.m&&calAno===dataSel.a;
+                if(passado) td.classList.add('passado');
+                else if(eHoje&&!eSel) td.classList.add('today');
+                if(eSel) td.classList.add('selecionado');
+                if(!passado) td.onclick=()=>{
+                    dataSel={d,m:calMes,a:calAno};
+                    const iso=calAno+'-'+String(calMes+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+                    document.getElementById('iData').value=String(d).padStart(2,'0')+'/'+String(calMes+1).padStart(2,'0')+'/'+calAno;
+                    document.getElementById('iData').dataset.iso=iso;
+                    gerarCal();
+                };
+                dia++;
+            }
+            tr.appendChild(td);
+        }
+        corpo.appendChild(tr);
+        if(dia>total)break;
+    }
+}
+
+// ── SUBMETER ──
+async function submeter(){
+    const msgOk=document.getElementById('msgOk'),msgErro=document.getElementById('msgErro');
+    msgOk.style.display=msgErro.style.display='none';
+
+    const id_servico=document.getElementById('selServico').value;
+    if(!id_servico){
+        msgErro.innerText='⚠ Por favor selecione um serviço.';
+        msgErro.style.display='block'; return;
     }
 
-    // ── AUTH ──────────────────────────────────────────────
-    const ulogRaw = localStorage.getItem('ulog');
-    const ulog    = ulogRaw ? JSON.parse(ulogRaw) : null;
-    const btn  = document.getElementById('btnAuth');
-    const btnT = document.getElementById('btnAuthText');
-    const btnM = document.getElementById('btnAuthMobile');
-
-    if (ulog && ulog.id) {
-        btn.href  = 'perfil1.html';
-        btnM.href = 'perfil1.html';
-        const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
-        btnT.textContent = nome;
-        btnM.textContent = nome;
-    } else {
-        localStorage.setItem('redirectAfterLogin', 'agendar.html');
-        location.href = 'login.html';
+    if(!validarPreferencias()){
+        msgErro.innerText='⚠ Preencha todas as preferências: repartição, divisão e comprimento.';
+        msgErro.style.display='block';
+        document.querySelector('.pref-section').scrollIntoView({behavior:'smooth',block:'center'});
+        return;
     }
 
-    function toggleMenu() {
-        const m = document.getElementById('menuMobile');
-        const navbar = document.getElementById('navbar');
-        if (m.style.display === 'flex') { m.style.display = 'none'; }
-        else { m.style.top = navbar.offsetHeight + 'px'; m.style.display = 'flex'; }
+    const dataISO=document.getElementById('iData').dataset.iso;
+    if(!dataISO){
+        msgErro.innerText='⚠ Por favor selecione uma data no calendário.';
+        msgErro.style.display='block'; return;
     }
-    document.addEventListener('click', function(e) {
-        const m = document.getElementById('menuMobile');
-        const toggle = document.querySelector('.menu-toggle');
-        if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) m.style.display = 'none';
+
+    if(!horaSel){
+        msgErro.innerText='⚠ Por favor selecione um horário.';
+        msgErro.style.display='block'; return;
+    }
+
+    const btn=document.getElementById('btnAgendar');
+    btn.disabled=true; btn.innerText='A agendar...';
+
+    const result=await supa('POST','marcacoes',{
+        id_utilizador:       ulog.id,
+        id_servico:          id_servico,
+        data_agendamento:    dataISO,
+        horario_agendamento: horaSel+':00',
+        estado:              'pendente',
+        reparticao:          document.getElementById('selReparticao').value,
+        divisao:             document.getElementById('selDivisao').value,
+        cumprimento:         document.getElementById('selCumprimento').value
     });
 
-    // ── CALENDÁRIO ────────────────────────────────────────
-    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    const hoje = new Date();
-    let calMes = hoje.getMonth(), calAno = hoje.getFullYear(), dataSelecionada = null;
+    btn.disabled=false; btn.innerText='AGENDAR';
 
-    function mudarMes(dir) {
-        calMes += dir;
-        if (calMes < 0)  { calMes = 11; calAno--; }
-        if (calMes > 11) { calMes = 0;  calAno++; }
-        gerarCalendario();
+    if(result&&result.length>0){
+        ['reparticaoEscolhida','divisaoEscolhida','cumprimentoEscolhido'].forEach(k=>localStorage.removeItem(k));
+        msgOk.innerText='✔ Marcação enviada com sucesso! A redirecionar...';
+        msgOk.style.display='block';
+        setTimeout(()=>location.href='marcacoes.html',1500);
+    } else {
+        msgErro.innerText='Erro ao enviar marcação. Tente novamente.';
+        msgErro.style.display='block';
     }
+}
 
-    function gerarCalendario() {
-        document.getElementById('calMesAno').innerText = meses[calMes] + ' ' + calAno;
-        const corpo = document.getElementById('calendarBody');
-        corpo.innerHTML = '';
-        const primeiroDia = new Date(calAno, calMes, 1).getDay();
-        const diasNoMes   = new Date(calAno, calMes + 1, 0).getDate();
-        let dia = 1;
-        for (let i = 0; i < 6; i++) {
-            const linha = document.createElement('tr');
-            for (let j = 0; j < 7; j++) {
-                const cel = document.createElement('td');
-                if ((i === 0 && j < primeiroDia) || dia > diasNoMes) {
-                    cel.classList.add('vazio');
-                } else {
-                    const d = dia;
-                    cel.textContent = d;
-                    const dataCel  = new Date(calAno, calMes, d);
-                    const eHoje    = d === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
-                    const ePassado = dataCel < new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-                    const eSel     = dataSelecionada && d === dataSelecionada.d && calMes === dataSelecionada.m && calAno === dataSelecionada.a;
-                    if (ePassado)   cel.classList.add('passado');
-                    else if (eHoje) cel.classList.add('today');
-                    if (eSel) cel.classList.add('selecionado');
-                    if (!ePassado) cel.addEventListener('click', function() {
-                        dataSelecionada = { d, m: calMes, a: calAno };
-                        document.getElementById('data').value = calAno + '-' + String(calMes+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-                        gerarCalendario();
-                    });
-                    dia++;
-                }
-                linha.appendChild(cel);
-            }
-            corpo.appendChild(linha);
-            if (dia > diasNoMes) break;
-        }
-    }
-
-    function removerImgRef() {
-        localStorage.removeItem('imgReferencia');
-        localStorage.removeItem('imgReferenciaNome');
-        document.getElementById('refImgBox').style.display = 'none';
-    }
-
-    window.onload = function() {
-        if (ulog && ulog.nome) document.getElementById('nome').value = ulog.nome;
-
-        const s = localStorage.getItem('servicoEscolhido');
-        if (s) {
-            const sel = document.getElementById('servico');
-            for (let i = 0; i < sel.options.length; i++) {
-                if (sel.options[i].text === s || sel.options[i].value === s) {
-                    sel.selectedIndex = i;
-                    sel.classList.add('preenchido');
-                    document.getElementById('avisoServico').style.display = 'block';
-                    break;
-                }
-            }
-            localStorage.removeItem('servicoEscolhido');
-        }
-
-        const rep  = localStorage.getItem('reparticaoEscolhida');
-        const div  = localStorage.getItem('divisaoEscolhida');
-        const cump = localStorage.getItem('cumprimentoEscolhido');
-        if (rep || div || cump) {
-            document.getElementById('prefsBox').style.display = 'block';
-            if (rep)  document.getElementById('prefRep').innerHTML  = '<strong>Repartição:</strong> '  + rep;
-            if (div)  document.getElementById('prefDiv').innerHTML  = '<strong>Divisão:</strong> '     + div;
-            if (cump) document.getElementById('prefCump').innerHTML = '<strong>Cumprimento:</strong> ' + cump;
-        }
-
-        const imgRef  = localStorage.getItem('imgReferencia');
-        const imgNome = localStorage.getItem('imgReferenciaNome');
-        if (imgRef) {
-            document.getElementById('refImgBox').style.display = 'block';
-            document.getElementById('refImgAgendar').src = imgRef;
-            document.getElementById('refImgNome').innerText = imgNome || '';
-        }
-
-        gerarCalendario();
-    };
-
-    async function submeterAgendamento() {
-        const msgOk   = document.getElementById('msgOk');
-        const msgErro = document.getElementById('msgErro');
-        msgOk.style.display = msgErro.style.display = 'none';
-
-        if (!document.getElementById('data').value) {
-            msgErro.innerText = 'Por favor selecione uma data no calendário.';
-            msgErro.style.display = 'block'; return;
-        }
-        const nome    = document.getElementById('nome').value.trim();
-        const servico = document.getElementById('servico').value;
-        const data    = document.getElementById('data').value;
-        const hora    = document.getElementById('horario').value;
-
-        if (!nome || !servico || !hora) {
-            msgErro.innerText = 'Por favor preencha todos os campos.';
-            msgErro.style.display = 'block'; return;
-        }
-        if (!ulog || !ulog.id) { location.href = 'login.html'; return; }
-
-        const btn = document.getElementById('btnAgendar');
-        btn.disabled = true; btn.innerText = 'A agendar...';
-
-        const body = {
-            id_utilizador: ulog.id,
-            servico,
-            data,
-            hora,
-            estado: 'pendente',
-            reparticao:  localStorage.getItem('reparticaoEscolhida')  || null,
-            divisao:     localStorage.getItem('divisaoEscolhida')     || null,
-            cumprimento: localStorage.getItem('cumprimentoEscolhido') || null
-        };
-
-        const result = await supaFetch('POST', 'marcacoes', body);
-
-        btn.disabled = false; btn.innerText = 'Agendar';
-
-        if (result && result.length > 0) {
-            // Limpar preferências
-            ['reparticaoEscolhida','divisaoEscolhida','cumprimentoEscolhido','imgReferencia','imgReferenciaNome']
-                .forEach(k => localStorage.removeItem(k));
-            msgOk.innerText = '✔ Marcação enviada com sucesso! A redirecionar...';
-            msgOk.style.display = 'block';
-            setTimeout(() => location.href = 'marcacoes.html', 1500);
-        } else {
-            msgErro.innerText = 'Erro ao enviar marcação. Tente novamente.';
-            msgErro.style.display = 'block';
-        }
-    }
+window.onload=function(){ carregarServicos(); gerarCal(); renderHoras(); };
 </script>
 </body>
 </html>
