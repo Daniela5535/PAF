@@ -217,7 +217,7 @@
 
         // Tenta as colunas que podem existir na tabela marcacoes
         const data = await supa('GET', 'marcacoes', null,
-            `?id_utilizador=eq.${ulog.id}&select=id,data_agendamento,horario_agendamento,estado,servicos(nome),reparticao,divisao,cumprimento&order=data_agendamento.desc`
+            `?email=eq.${encodeURIComponent(ulog.email)}&select=id,servico,data,hora,estado,reparticao,divisao,cumprimento&order=data.desc`
         );
 
         if (!data) {
@@ -241,9 +241,9 @@
         lista.innerHTML = data.map((m, i) => {
             const estado = (m.estado || 'pendente').toLowerCase();
             const podeCancelar = !cancelaveis.includes(estado);
-            const nomeServico = m.servicos?.nome || m.servico || '—';
-            const dataFmt = formatarData(m.data_agendamento || m.data);
-            const horaFmt = formatarHora(m.horario_agendamento || m.hora);
+            const nomeServico = m.servico || '—';
+            const dataFmt = formatarData(m.data);
+            const horaFmt = formatarHora(m.hora);
 
             return `
                 ${i > 0 ? '<hr class="separador">' : ''}
@@ -290,7 +290,7 @@
 
     async function confirmarCancelamento() {
         fecharModal();
-        const r = await supa('PATCH', 'marcacoes', { estado: 'cancelada' }, `?id=eq.${cancelarId}&id_utilizador=eq.${ulog.id}`);
+        const r = await supa('PATCH', 'marcacoes', { estado: 'cancelada' }, `?id=eq.${cancelarId}&email=eq.${encodeURIComponent(ulog.email)}`);
         if (r !== null) renderizar();
         else alert('Erro ao cancelar. Tente novamente.');
     }

@@ -239,9 +239,8 @@
         sendBtn.innerText = 'A enviar...';
 
         const body = { nome, email, mensagem: msg };
-        if (ulog && ulog.id) body.id_utilizador = ulog.id;
 
-        const data = await supa('POST', 'mensagens', body);
+        const data = await supa('POST', 'contacto', body);
 
         if (data && !data.error) {
             document.getElementById('contactMsg').value = '';
@@ -269,7 +268,7 @@
         secao.style.display = 'block';
         lista.innerHTML = '<div class="msgs-loading">A carregar mensagens...</div>';
 
-        const msgs = await supa('GET', 'mensagens', null, `?id_utilizador=eq.${ulog.id}&order=enviado_em.desc`);
+        const msgs = await supa('GET', 'contacto', null, `?email=eq.${encodeURIComponent(ulog.email)}&order=enviado_em.desc`);
 
         if (!msgs || !msgs.length) {
             lista.innerHTML = '<div class="msgs-loading">Ainda não enviou nenhuma mensagem.</div>';

@@ -324,7 +324,7 @@ const hoje=new Date();
 let calMes=hoje.getMonth(),calAno=hoje.getFullYear(),dataSel=null,horaSel=null;
 
 const horas=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
-             '15:00','15:30','16:00','16:30','17:00','17:30'];
+             '15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00'];
 
 function renderHoras(){
     document.getElementById('horasGrid').innerHTML=horas.map(h=>
@@ -411,15 +411,17 @@ async function submeter(){
     const btn=document.getElementById('btnAgendar');
     btn.disabled=true; btn.innerText='A agendar...';
 
+  const nomeServico = document.getElementById('selServico').selectedOptions[0].textContent.split(' — ')[0];
+
     const result=await supa('POST','marcacoes',{
-        id_utilizador:       ulog.id,
-        id_servico:          id_servico,
-        data_agendamento:    dataISO,
-        horario_agendamento: horaSel+':00',
-        estado:              'pendente',
-        reparticao:          document.getElementById('selReparticao').value,
-        divisao:             document.getElementById('selDivisao').value,
-        cumprimento:         document.getElementById('selCumprimento').value
+        email:       ulog.email,
+        servico:     nomeServico,
+        data:        dataISO,
+        hora:        horaSel,
+        estado:      'pendente',
+        reparticao:  document.getElementById('selReparticao').value,
+        divisao:     document.getElementById('selDivisao').value,
+        cumprimento: document.getElementById('selCumprimento').value
     });
 
     btn.disabled=false; btn.innerText='AGENDAR';

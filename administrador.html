@@ -51,7 +51,6 @@
         .cnt-cancelada  .num { color:#c0392b; }
         .cnt-rejeitada  .num { color:#7f1d1d; }
         .cnt-msgs .num { color:#2980b9; }
-        /* Mensagens */
         .msg-card { background:#fff; border-radius:14px; padding:18px 24px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
         .msg-topo { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
         .msg-nome { font-weight:bold; font-size:15px; }
@@ -73,7 +72,6 @@
         .resposta-enviada .rl { font-weight:bold; font-size:11px; text-transform:uppercase; color:#27ae60; margin-bottom:6px; }
         .resposta-enviada .rt { color:#333; line-height:1.5; font-size:14px; }
         .resposta-enviada .rd { font-size:11px; color:#999; margin-top:4px; }
-        /* Utilizadores */
         .pesquisa-wrap { margin-bottom:16px; }
         .pesquisa-wrap input { padding:10px 16px; border-radius:20px; border:1px solid #ccc; font-size:14px; outline:none; width:280px; }
         .tabela-wrap { overflow-x:auto; }
@@ -98,7 +96,6 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginWrap" class="login-wrap">
     <div class="login-box">
         <h2>🔒 Área Admin</h2>
@@ -109,7 +106,6 @@
     </div>
 </div>
 
-<!-- PAINEL -->
 <div id="painelWrap" style="display:none;">
     <div class="admin-header">
         <h1>Easy Glow — Painel Admin</h1>
@@ -122,7 +118,6 @@
             <button class="tab-btn"       onclick="mudarAba('utilizadores',this)">Utilizadores</button>
         </div>
 
-        <!-- MARCAÇÕES -->
         <div class="secao ativa" id="secao-marcacoes">
             <h2>Marcações</h2>
             <div class="contador" id="contadores"></div>
@@ -136,14 +131,12 @@
             <div id="listaMarcacoes"></div>
         </div>
 
-        <!-- MENSAGENS -->
         <div class="secao" id="secao-mensagens">
             <h2>Mensagens de Contacto</h2>
             <div class="contador" id="contadoresMsgs"></div>
             <div id="listaMensagens"></div>
         </div>
 
-        <!-- UTILIZADORES -->
         <div class="secao" id="secao-utilizadores">
             <h2>Utilizadores</h2>
             <div class="contador" id="contadoresUser"></div>
@@ -160,7 +153,6 @@
     </div>
 </div>
 
-<!-- MODAL UTILIZADOR -->
 <div class="modal-overlay" id="modalUser">
     <div class="modal-user">
         <button class="modal-fechar" onclick="fecharModal()">&#x2715;</button>
@@ -178,21 +170,13 @@ const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
 const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
 
 async function supa(method, table, body, filter='') {
-    const h = {
-        'Content-Type':'application/json',
-        'apikey': SUPA_KEY,
-        'Authorization': 'Bearer ' + SUPA_KEY
-    };
+    const h = { 'Content-Type':'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
     if (method === 'POST' || method === 'PATCH') h['Prefer'] = 'return=representation';
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, {
-        method, headers: h,
-        body: body ? JSON.stringify(body) : null
-    });
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, { method, headers: h, body: body ? JSON.stringify(body) : null });
     const t = await r.text();
     try { return JSON.parse(t); } catch(e) { return null; }
 }
 
-// ── AUTH ──
 let filtroAtivo = 'todas';
 let todasMarcacoes = [];
 
@@ -201,19 +185,9 @@ async function fazerLogin() {
     const pass  = document.getElementById('adminPass').value;
     const erro  = document.getElementById('loginErro');
     erro.style.display = 'none';
-
     if (!email || !pass) { erro.innerText = 'Preencha todos os campos.'; erro.style.display = 'block'; return; }
-
-    // funcionarios usa coluna "password"
-    const data = await supa('GET', 'funcionarios', null,
-        `?email=eq.${encodeURIComponent(email)}&password=eq.${encodeURIComponent(pass)}&select=id,nome`);
-
-    if (!data || !data.length) {
-        erro.innerText = 'Credenciais incorretas.';
-        erro.style.display = 'block';
-        return;
-    }
-
+    const data = await supa('GET', 'funcionarios', null, `?email=eq.${encodeURIComponent(email)}&password=eq.${encodeURIComponent(pass)}&select=id,nome`);
+    if (!data || !data.length) { erro.innerText = 'Credenciais incorretas.'; erro.style.display = 'block'; return; }
     sessionStorage.setItem('adminLog', JSON.stringify({ id: data[0].id, nome: data[0].nome }));
     mostrarPainel();
 }
@@ -232,14 +206,12 @@ function sair() {
     document.getElementById('adminPass').value  = '';
 }
 
-// Verificar sessão ativa
 if (sessionStorage.getItem('adminLog')) mostrarPainel();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') fazerLogin();
 });
 
-// ── ABAS ──
 function mudarAba(aba, btn) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
     document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
@@ -250,7 +222,6 @@ function mudarAba(aba, btn) {
     if (aba === 'utilizadores') renderizarUsers();
 }
 
-// ── FILTROS ──
 function filtrar(f, btn) {
     filtroAtivo = f;
     document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('ativo'));
@@ -259,28 +230,27 @@ function filtrar(f, btn) {
 }
 
 // ── MARCAÇÕES ──
-// Colunas corretas: data_agendamento, horario_agendamento, id_servico (join servicos), id_utilizador (join utilizadores)
-// Estados válidos: pendente, confirmada, cancelada, rejeitada
 async function renderizarMarcacoes() {
     const lista = document.getElementById('listaMarcacoes');
     lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
 
     const data = await supa('GET', 'marcacoes', null,
-        `?select=id,data_agendamento,horario_agendamento,estado,servicos(nome),utilizadores(nome,email)&order=data_agendamento.desc`);
+        `?select=id,email,servico,data,hora,estado,reparticao,divisao,cumprimento&order=data.desc`);
 
     if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações.</div>'; return; }
 
     todasMarcacoes = data.map(m => ({
-        id:      m.id,
-        nome:    m.utilizadores?.nome  || '—',
-        email:   m.utilizadores?.email || '—',
-        servico: m.servicos?.nome      || '—',
-        data:    m.data_agendamento    || '—',
-        hora:    m.horario_agendamento ? m.horario_agendamento.substring(0,5) : '—',
-        estado:  m.estado || 'pendente'
+        id:          m.id,
+        email:       m.email   || '—',
+        servico:     m.servico || '—',
+        data:        m.data    || '—',
+        hora:        m.hora    ? m.hora.substring(0,5) : '—',
+        estado:      m.estado  || 'pendente',
+        reparticao:  m.reparticao  || '',
+        divisao:     m.divisao     || '',
+        cumprimento: m.cumprimento || ''
     }));
 
-    // Contadores
     const cnt = { pendente:0, confirmada:0, cancelada:0, rejeitada:0 };
     todasMarcacoes.forEach(m => { if (cnt[m.estado] !== undefined) cnt[m.estado]++; });
     document.getElementById('contadores').innerHTML = `
@@ -309,16 +279,18 @@ function renderizarListaMarcacoes() {
     lista.innerHTML = filtradas.map(m => `
         <div class="card">
             <div class="card-info">
-                <p><strong>${m.nome}</strong> &nbsp;
+                <p><strong>${m.email}</strong> &nbsp;
                    <span class="badge badge-${m.estado}">${m.estado.toUpperCase()}</span></p>
                 <p>Serviço: <strong>${m.servico}</strong></p>
                 <p>Data: <strong>${formatarData(m.data)}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
-                <p style="font-size:12px;color:#999;">Email: ${m.email}</p>
+                ${m.reparticao  ? `<p style="font-size:12px;color:#777;">Repartição: ${m.reparticao}</p>`  : ''}
+                ${m.divisao     ? `<p style="font-size:12px;color:#777;">Divisão: ${m.divisao}</p>`         : ''}
+                ${m.cumprimento ? `<p style="font-size:12px;color:#777;">Cumprimento: ${m.cumprimento}</p>` : ''}
             </div>
             <div class="card-acoes">
-                ${m.estado !== 'confirmada' ? `<button class="btn-confirmar" onclick="mudarEstado('${m.id}','confirmada')">✔ Confirmar</button>` : ''}
-                ${m.estado !== 'cancelada'  ? `<button class="btn-cancelar-m" onclick="mudarEstado('${m.id}','cancelada')">✖ Cancelar</button>` : ''}
-                ${m.estado !== 'rejeitada'  ? `<button class="btn-rejeitar"  onclick="mudarEstado('${m.id}','rejeitada')">⊘ Rejeitar</button>` : ''}
+                ${m.estado !== 'confirmada' ? `<button class="btn-confirmar"  onclick="mudarEstado('${m.id}','confirmada')">✔ Confirmar</button>` : ''}
+                ${m.estado !== 'cancelada'  ? `<button class="btn-cancelar-m" onclick="mudarEstado('${m.id}','cancelada')">✖ Cancelar</button>`  : ''}
+                ${m.estado !== 'rejeitada'  ? `<button class="btn-rejeitar"   onclick="mudarEstado('${m.id}','rejeitada')">⊘ Rejeitar</button>`  : ''}
             </div>
         </div>`).join('');
 }
@@ -328,14 +300,12 @@ async function mudarEstado(id, novoEstado) {
     renderizarMarcacoes();
 }
 
-// ── MENSAGENS (tabela: contacto) ──
+// ── MENSAGENS ──
 async function renderizarMensagens() {
     const lista = document.getElementById('listaMensagens');
     lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
 
-    // Tabela correta: contacto
     const data = await supa('GET', 'contacto', null, `?order=enviado_em.desc`);
-
     if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar mensagens.</div>'; return; }
 
     const novas       = data.filter(m => !m.lida && !m.resposta).length;
@@ -351,13 +321,9 @@ async function renderizarMensagens() {
     lista.innerHTML = data.map(m => {
         const badgeHtml = m.resposta
             ? `<span class="badge badge-respondida">Respondida</span>`
-            : m.lida
-                ? `<span class="badge badge-lida">Lida</span>`
-                : `<span class="badge badge-nova">Nova</span>`;
+            : m.lida ? `<span class="badge badge-lida">Lida</span>` : `<span class="badge badge-nova">Nova</span>`;
 
-        const dataEnvio = m.enviado_em
-            ? new Date(m.enviado_em).toLocaleDateString('pt-PT')
-            : '—';
+        const dataEnvio = m.enviado_em ? new Date(m.enviado_em).toLocaleDateString('pt-PT') : '—';
 
         const respostaHtml = m.resposta
             ? `<div class="resposta-enviada">
@@ -387,8 +353,8 @@ async function renderizarMensagens() {
             </div>
             <div class="msg-texto">${m.mensagem}</div>
             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                ${!m.lida     ? `<button class="btn-lida"       onclick="marcarLida('${m.id}')">✔ Marcar como lida</button>` : ''}
-                ${!m.resposta ? `<button class="btn-responder"   onclick="abrirResposta('${m.id}')">✉ Responder</button>` : ''}
+                ${!m.lida     ? `<button class="btn-lida"      onclick="marcarLida('${m.id}')">✔ Marcar como lida</button>` : ''}
+                ${!m.resposta ? `<button class="btn-responder"  onclick="abrirResposta('${m.id}')">✉ Responder</button>` : ''}
                 <button class="btn-apagar-msg" onclick="apagarMensagem('${m.id}')">✖ Apagar</button>
             </div>
             ${respostaHtml}
@@ -398,22 +364,14 @@ async function renderizarMensagens() {
 
 function abrirResposta(id) {
     const area = document.getElementById('area-' + id);
-    if (area) {
-        area.style.display = area.style.display === 'block' ? 'none' : 'block';
-        if (area.style.display === 'block') document.getElementById('txt-' + id)?.focus();
-    }
+    if (area) { area.style.display = area.style.display === 'block' ? 'none' : 'block'; if (area.style.display === 'block') document.getElementById('txt-' + id)?.focus(); }
 }
-function fecharResposta(id) {
-    const area = document.getElementById('area-' + id);
-    if (area) area.style.display = 'none';
-}
+function fecharResposta(id) { const area = document.getElementById('area-' + id); if (area) area.style.display = 'none'; }
 
 async function enviarResposta(id) {
     const txt = document.getElementById('txt-' + id);
     if (!txt || !txt.value.trim()) { alert('Escreva uma resposta antes de enviar.'); return; }
-    const agora = new Date().toISOString(); // timestamp ISO para resposta_data
-    // Tabela: contacto
-    await supa('PATCH', 'contacto', { resposta: txt.value.trim(), resposta_data: agora, lida: true }, `?id=eq.${id}`);
+    await supa('PATCH', 'contacto', { resposta: txt.value.trim(), resposta_data: new Date().toISOString(), lida: true }, `?id=eq.${id}`);
     renderizarMensagens();
 }
 
@@ -437,10 +395,10 @@ async function renderizarUsers() {
     const users = await supa('GET', 'utilizadores', null, filter);
     if (!users) return;
 
-    // Contar marcações por utilizador
-    const marcacoes = await supa('GET', 'marcacoes', null, '?select=id_utilizador');
+    // Contagem de marcações por email
+    const marcacoes = await supa('GET', 'marcacoes', null, '?select=email');
     const contagem = {};
-    (marcacoes || []).forEach(m => { contagem[m.id_utilizador] = (contagem[m.id_utilizador] || 0) + 1; });
+    (marcacoes || []).forEach(m => { if (m.email) contagem[m.email] = (contagem[m.email] || 0) + 1; });
 
     document.getElementById('contadoresUser').innerHTML = `
         <div class="cnt-card"><div class="num">${users.length}</div><div class="label">Contas registadas</div></div>`;
@@ -459,10 +417,10 @@ async function renderizarUsers() {
             </td>
             <td>${u.email}</td>
             <td>${u.telefone || '—'}</td>
-            <td>${contagem[u.id] || 0}</td>
+            <td>${contagem[u.email] || 0}</td>
             <td>${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-PT') : '—'}</td>
             <td style="display:flex;gap:6px;">
-                <button class="btn-ver" onclick='verUser(${JSON.stringify(u).replace(/'/g,"&#39;")},${contagem[u.id]||0})'>Ver</button>
+                <button class="btn-ver" onclick='verUser(${JSON.stringify(u).replace(/'/g,"&#39;")},${contagem[u.email]||0})'>Ver</button>
                 <button class="btn-apagar" onclick="apagarUser('${u.id}','${u.email}')">Apagar</button>
             </td>
         </tr>`).join('');
@@ -483,7 +441,6 @@ async function apagarUser(id, email) {
     renderizarUsers();
 }
 
-document.getElementById('btnFecharModal') && document.getElementById('btnFecharModal').addEventListener('click', fecharModal);
 document.getElementById('modalUser').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
 function fecharModal() { document.getElementById('modalUser').classList.remove('ativo'); }
 </script>
