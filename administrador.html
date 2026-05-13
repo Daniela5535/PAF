@@ -15,8 +15,8 @@
         .login-box button { width:100%; padding:12px; background:#111; color:#fff; border:none; border-radius:25px; font-size:15px; font-weight:bold; cursor:pointer; }
         .msg-erro { color:#c0392b; font-size:13px; margin-top:8px; display:none; }
         .painel { padding:30px 40px; }
-        .tabs { display:flex; margin-bottom:30px; border-bottom:2px solid #ddd; }
-        .tab-btn { padding:11px 28px; background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; cursor:pointer; font-size:14px; font-weight:bold; color:#888; }
+        .tabs { display:flex; margin-bottom:30px; border-bottom:2px solid #ddd; flex-wrap:wrap; }
+        .tab-btn { padding:11px 24px; background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; cursor:pointer; font-size:14px; font-weight:bold; color:#888; }
         .tab-btn.ativo { color:#111; border-bottom-color:#111; }
         .tab-btn:hover:not(.ativo) { color:#444; }
         .secao { display:none; }
@@ -51,6 +51,7 @@
         .cnt-cancelada  .num { color:#c0392b; }
         .cnt-rejeitada  .num { color:#7f1d1d; }
         .cnt-msgs .num { color:#2980b9; }
+        .cnt-gold .num { color:#b8860b; }
         .msg-card { background:#fff; border-radius:14px; padding:18px 24px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
         .msg-topo { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
         .msg-nome { font-weight:bold; font-size:15px; }
@@ -92,6 +93,37 @@
         .modal-user hr { border:none; border-top:1px solid #eee; margin:14px 0; }
         .modal-fechar { float:right; background:none; border:none; font-size:22px; cursor:pointer; color:#888; }
         .erro-box { background:#fff0f0; border:1px solid #f5aaaa; border-radius:10px; padding:14px 18px; font-size:13px; color:#c0392b; margin-bottom:16px; }
+
+        /* ── FIDELIDADE ── */
+        .fid-pesquisa { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; align-items:center; }
+        .fid-pesquisa input { padding:11px 18px; border-radius:20px; border:1px solid #ccc; font-size:14px; outline:none; flex:1; min-width:220px; max-width:360px; }
+        .fid-pesquisa button { padding:11px 24px; border-radius:20px; border:none; background:#111; color:#fff; font-size:13px; font-weight:bold; cursor:pointer; }
+        .fid-card { background:#fff; border-radius:16px; padding:24px 28px; box-shadow:0 2px 12px rgba(0,0,0,0.08); margin-bottom:20px; }
+        .fid-card-top { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+        .fid-nome { font-size:18px; font-weight:bold; color:#111; }
+        .fid-email { font-size:13px; color:#999; margin-top:3px; }
+        .fid-visitas-num { font-size:32px; font-weight:bold; color:#1a1410; text-align:right; }
+        .fid-visitas-label { font-size:11px; color:#999; text-align:right; letter-spacing:1px; text-transform:uppercase; }
+        .stamps-wrap { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+        .stamp {
+            width:50px; height:50px; border-radius:50%;
+            border:2px solid #e0d8d0; background:#f8f5f0;
+            display:flex; align-items:center; justify-content:center;
+            font-size:10px; color:#c8bfb4; font-weight:bold; text-align:center; line-height:1.3;
+        }
+        .stamp.filled { background:#1a1410; border-color:#1a1410; color:#fff; font-size:13px; }
+        .stamp.milestone { background:#d4a855; border-color:#d4a855; color:#1a1410; font-size:9px; font-weight:bold; }
+        .fid-acoes { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+        .btn-carimbar { padding:11px 26px; border-radius:20px; border:none; background:#1a1410; color:#d4a855; font-size:13px; font-weight:bold; cursor:pointer; letter-spacing:.5px; transition:opacity .2s; }
+        .btn-carimbar:hover { opacity:.85; }
+        .btn-carimbar:disabled { opacity:.4; cursor:not-allowed; }
+        .btn-remover-carimbo { padding:11px 20px; border-radius:20px; border:1px solid #e0d8d0; background:#fff; color:#c0392b; font-size:13px; font-weight:bold; cursor:pointer; }
+        .btn-remover-carimbo:hover { background:#fff0f0; }
+        .btn-remover-carimbo:disabled { opacity:.4; cursor:not-allowed; }
+        .fid-desc-nivel { font-size:13px; color:#5a4a3a; background:#faf8f5; border-radius:10px; padding:10px 16px; border-left:3px solid #d4a855; }
+        .fid-msg-ok { display:none; font-size:13px; color:#27ae60; font-weight:bold; margin-top:8px; }
+        .fid-sem { text-align:center; color:#aaa; padding:30px; font-size:14px; background:#fff; border-radius:14px; }
+
         @media(max-width:600px){ .painel{padding:16px} .card{flex-direction:column} }
     </style>
 </head>
@@ -117,8 +149,10 @@
             <button class="tab-btn ativo" onclick="mudarAba('marcacoes',this)">Marcações</button>
             <button class="tab-btn"       onclick="mudarAba('mensagens',this)">Mensagens</button>
             <button class="tab-btn"       onclick="mudarAba('utilizadores',this)">Utilizadores</button>
+            <button class="tab-btn"       onclick="mudarAba('fidelidade',this)">✦ Fidelidade</button>
         </div>
 
+        <!-- MARCAÇÕES -->
         <div class="secao ativa" id="secao-marcacoes">
             <h2>Marcações</h2>
             <div class="contador" id="contadores"></div>
@@ -132,12 +166,14 @@
             <div id="listaMarcacoes"></div>
         </div>
 
+        <!-- MENSAGENS -->
         <div class="secao" id="secao-mensagens">
             <h2>Mensagens de Contacto</h2>
             <div class="contador" id="contadoresMsgs"></div>
             <div id="listaMensagens"></div>
         </div>
 
+        <!-- UTILIZADORES -->
         <div class="secao" id="secao-utilizadores">
             <h2>Utilizadores</h2>
             <div class="contador" id="contadoresUser"></div>
@@ -151,9 +187,26 @@
                 </table>
             </div>
         </div>
+
+        <!-- FIDELIDADE -->
+        <div class="secao" id="secao-fidelidade">
+            <h2>Cartão de Cliente Fiel</h2>
+            <div class="contador">
+                <div class="cnt-card cnt-gold"><div class="num" id="cntFidTotal">—</div><div class="label">Clientes com visitas</div></div>
+                <div class="cnt-card cnt-confirmada"><div class="num" id="cntFid3">—</div><div class="label">Com 10% desconto (3ª)</div></div>
+                <div class="cnt-card cnt-confirmada"><div class="num" id="cntFid6">—</div><div class="label">Com 15% desconto (6ª)</div></div>
+                <div class="cnt-card cnt-confirmada"><div class="num" id="cntFid10">—</div><div class="label">Com 20% desconto (10ª)</div></div>
+            </div>
+            <div class="fid-pesquisa">
+                <input type="text" id="pesquisaFid" placeholder="Pesquisar cliente por nome ou email..." oninput="pesquisarFid()">
+                <button onclick="pesquisarFid()">Pesquisar</button>
+            </div>
+            <div id="listaFidelidade"></div>
+        </div>
     </div>
 </div>
 
+<!-- MODAL UTILIZADOR -->
 <div class="modal-overlay" id="modalUser">
     <div class="modal-user">
         <button class="modal-fechar" onclick="fecharModal()">&#x2715;</button>
@@ -168,9 +221,8 @@
 
 <script>
 const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
-const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indvbmtpb3FheWVla3pjdW9lcGNiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE2ODY1MywiZXhwIjoyMDkzNzQ0NjUzfQ.5w-VYxZ56Jkz_NIXdhW32WtLSH5MkycHfMySX7fsY5c';
 
-// Função supa melhorada — devolve sempre array ou null
 async function supa(method, table, body, filter='') {
     const h = { 'Content-Type':'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
     if (method === 'POST' || method === 'PATCH') h['Prefer'] = 'return=representation';
@@ -178,21 +230,15 @@ async function supa(method, table, body, filter='') {
         const r = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, { method, headers: h, body: body ? JSON.stringify(body) : null });
         const t = await r.text();
         const parsed = JSON.parse(t);
-        // Se o Supabase devolver um objeto de erro (code, message) retorna null
-        if (!Array.isArray(parsed) && parsed && parsed.code) {
-            console.error(`Supabase error [${table}]:`, parsed);
-            return null;
-        }
+        if (!Array.isArray(parsed) && parsed && parsed.code) { console.error(`Supabase error [${table}]:`, parsed); return null; }
         return parsed;
-    } catch(e) {
-        console.error(`Fetch error [${table}]:`, e);
-        return null;
-    }
+    } catch(e) { console.error(`Fetch error [${table}]:`, e); return null; }
 }
 
 let filtroAtivo = 'todas';
 let todasMarcacoes = [];
 
+// ── LOGIN ──
 async function fazerLogin() {
     const email = document.getElementById('adminEmail').value.trim();
     const pass  = document.getElementById('adminPass').value;
@@ -233,6 +279,7 @@ function mudarAba(aba, btn) {
     if (aba === 'marcacoes')    renderizarMarcacoes();
     if (aba === 'mensagens')    renderizarMensagens();
     if (aba === 'utilizadores') renderizarUsers();
+    if (aba === 'fidelidade')   renderizarFidelidade();
 }
 
 function filtrar(f, btn) {
@@ -246,24 +293,13 @@ function filtrar(f, btn) {
 async function renderizarMarcacoes() {
     const lista = document.getElementById('listaMarcacoes');
     lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
-
-    const data = await supa('GET', 'marcacoes', null,
-        `?select=id,email,servico,data,hora,estado,reparticao,divisao,cumprimento&order=data.desc`);
-
-    if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações. Verifique o RLS no Supabase.</div>'; return; }
-
+    const data = await supa('GET', 'marcacoes', null, `?select=id,email,servico,data,hora,estado,reparticao,divisao,cumprimento&order=data.desc`);
+    if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações.</div>'; return; }
     todasMarcacoes = data.map(m => ({
-        id:          m.id,
-        email:       m.email   || '—',
-        servico:     m.servico || '—',
-        data:        m.data    || '—',
-        hora:        m.hora    ? m.hora.substring(0,5) : '—',
-        estado:      m.estado  || 'pendente',
-        reparticao:  m.reparticao  || '',
-        divisao:     m.divisao     || '',
-        cumprimento: m.cumprimento || ''
+        id: m.id, email: m.email||'—', servico: m.servico||'—',
+        data: m.data||'—', hora: m.hora ? m.hora.substring(0,5) : '—',
+        estado: m.estado||'pendente', reparticao: m.reparticao||'', divisao: m.divisao||'', cumprimento: m.cumprimento||''
     }));
-
     const cnt = { pendente:0, confirmada:0, cancelada:0, rejeitada:0 };
     todasMarcacoes.forEach(m => { if (cnt[m.estado] !== undefined) cnt[m.estado]++; });
     document.getElementById('contadores').innerHTML = `
@@ -271,7 +307,6 @@ async function renderizarMarcacoes() {
         <div class="cnt-card cnt-confirmada"><div class="num">${cnt.confirmada}</div> <div class="label">Confirmadas</div></div>
         <div class="cnt-card cnt-cancelada"> <div class="num">${cnt.cancelada}</div>  <div class="label">Canceladas</div></div>
         <div class="cnt-card cnt-rejeitada"> <div class="num">${cnt.rejeitada}</div>  <div class="label">Rejeitadas</div></div>`;
-
     renderizarListaMarcacoes();
 }
 
@@ -282,22 +317,17 @@ function formatarData(d) {
 }
 
 function renderizarListaMarcacoes() {
-    const filtradas = filtroAtivo === 'todas'
-        ? todasMarcacoes
-        : todasMarcacoes.filter(m => m.estado === filtroAtivo);
-
+    const filtradas = filtroAtivo === 'todas' ? todasMarcacoes : todasMarcacoes.filter(m => m.estado === filtroAtivo);
     const lista = document.getElementById('listaMarcacoes');
     if (!filtradas.length) { lista.innerHTML = '<div class="sem-resultados">Sem marcações para mostrar.</div>'; return; }
-
     lista.innerHTML = filtradas.map(m => `
         <div class="card">
             <div class="card-info">
-                <p><strong>${m.email}</strong> &nbsp;
-                   <span class="badge badge-${m.estado}">${m.estado.toUpperCase()}</span></p>
+                <p><strong>${m.email}</strong> &nbsp; <span class="badge badge-${m.estado}">${m.estado.toUpperCase()}</span></p>
                 <p>Serviço: <strong>${m.servico}</strong></p>
                 <p>Data: <strong>${formatarData(m.data)}</strong> &nbsp; Hora: <strong>${m.hora}</strong></p>
-                ${m.reparticao  ? `<p style="font-size:12px;color:#777;">Repartição: ${m.reparticao}</p>`  : ''}
-                ${m.divisao     ? `<p style="font-size:12px;color:#777;">Divisão: ${m.divisao}</p>`         : ''}
+                ${m.reparticao  ? `<p style="font-size:12px;color:#777;">Repartição: ${m.reparticao}</p>` : ''}
+                ${m.divisao     ? `<p style="font-size:12px;color:#777;">Divisão: ${m.divisao}</p>` : ''}
                 ${m.cumprimento ? `<p style="font-size:12px;color:#777;">Cumprimento: ${m.cumprimento}</p>` : ''}
             </div>
             <div class="card-acoes">
@@ -317,69 +347,33 @@ async function mudarEstado(id, novoEstado) {
 async function renderizarMensagens() {
     const lista = document.getElementById('listaMensagens');
     lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
-
-    const data = await supa('GET', 'contacto', null, `?order=enviado_em.desc`);
-
-    if (!data) {
-        lista.innerHTML = `
-            <div class="erro-box">
-                ⚠ Erro ao carregar mensagens. Certifique-se que correu este SQL no Supabase:<br><br>
-                <code>ALTER TABLE public.contacto DISABLE ROW LEVEL SECURITY;</code>
-            </div>`;
-        return;
-    }
-
-    const novas       = data.filter(m => !m.lida && !m.resposta).length;
+    const data = await supa('GET', 'mensagens', null, `?order=enviado_em.desc`);
+    if (!data) { lista.innerHTML = `<div class="erro-box">⚠ Erro ao carregar mensagens.</div>`; return; }
+    const novas = data.filter(m => !m.lida && !m.resposta).length;
     const respondidas = data.filter(m => m.resposta).length;
-
     document.getElementById('contadoresMsgs').innerHTML = `
-        <div class="cnt-card cnt-msgs">      <div class="num">${data.length}</div>  <div class="label">Total</div></div>
-        <div class="cnt-card cnt-pendente">  <div class="num">${novas}</div>         <div class="label">Por responder</div></div>
-        <div class="cnt-card cnt-confirmada"><div class="num">${respondidas}</div>   <div class="label">Respondidas</div></div>`;
-
+        <div class="cnt-card cnt-msgs">      <div class="num">${data.length}</div> <div class="label">Total</div></div>
+        <div class="cnt-card cnt-pendente">  <div class="num">${novas}</div>        <div class="label">Por responder</div></div>
+        <div class="cnt-card cnt-confirmada"><div class="num">${respondidas}</div>  <div class="label">Respondidas</div></div>`;
     if (!data.length) { lista.innerHTML = '<div class="sem-resultados">Sem mensagens.</div>'; return; }
-
     lista.innerHTML = data.map(m => {
-        const badgeHtml = m.resposta
-            ? `<span class="badge badge-respondida">Respondida</span>`
+        const badgeHtml = m.resposta ? `<span class="badge badge-respondida">Respondida</span>`
             : m.lida ? `<span class="badge badge-lida">Lida</span>` : `<span class="badge badge-nova">Nova</span>`;
-
         const dataEnvio = m.enviado_em ? new Date(m.enviado_em).toLocaleDateString('pt-PT') : '—';
-
         const respostaHtml = m.resposta
-            ? `<div class="resposta-enviada">
-                <div class="rl">✔ Resposta enviada</div>
-                <div class="rt">${m.resposta}</div>
-                <div class="rd">${m.resposta_data ? new Date(m.resposta_data).toLocaleString('pt-PT') : ''}</div>
-               </div>`
-            : `<div class="resposta-area" id="area-${m.id}">
-                <textarea id="txt-${m.id}" placeholder="Escreva a sua resposta..."></textarea>
-                <div class="resposta-acoes">
-                    <button class="btn-enviar-resposta" onclick="enviarResposta('${m.id}')">Enviar resposta</button>
-                    <button class="btn-cancelar-resposta" onclick="fecharResposta('${m.id}')">Cancelar</button>
-                </div>
-               </div>`;
-
-        return `
-        <div class="msg-card">
+            ? `<div class="resposta-enviada"><div class="rl">✔ Resposta enviada</div><div class="rt">${m.resposta}</div><div class="rd">${m.resposta_data ? new Date(m.resposta_data).toLocaleString('pt-PT') : ''}</div></div>`
+            : `<div class="resposta-area" id="area-${m.id}"><textarea id="txt-${m.id}" placeholder="Escreva a sua resposta..."></textarea><div class="resposta-acoes"><button class="btn-enviar-resposta" onclick="enviarResposta('${m.id}')">Enviar resposta</button><button class="btn-cancelar-resposta" onclick="fecharResposta('${m.id}')">Cancelar</button></div></div>`;
+        return `<div class="msg-card">
             <div class="msg-topo">
-                <div>
-                    <span class="msg-nome">${m.nome || '—'}</span>
-                    <span class="msg-email"> — ${m.email || ''}</span>
-                </div>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    ${badgeHtml}
-                    <span class="msg-data">${dataEnvio}</span>
-                </div>
+                <div><span class="msg-nome">${m.nome||'—'}</span><span class="msg-email"> — ${m.email||''}</span></div>
+                <div style="display:flex;gap:8px;align-items:center;">${badgeHtml}<span class="msg-data">${dataEnvio}</span></div>
             </div>
             <div class="msg-texto">${m.mensagem}</div>
             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                ${!m.lida     ? `<button class="btn-lida"      onclick="marcarLida('${m.id}')">✔ Marcar como lida</button>` : ''}
-                ${!m.resposta ? `<button class="btn-responder"  onclick="abrirResposta('${m.id}')">✉ Responder</button>` : ''}
+                ${!m.lida     ? `<button class="btn-lida"     onclick="marcarLida('${m.id}')">✔ Marcar como lida</button>` : ''}
+                ${!m.resposta ? `<button class="btn-responder" onclick="abrirResposta('${m.id}')">✉ Responder</button>` : ''}
                 <button class="btn-apagar-msg" onclick="apagarMensagem('${m.id}')">✖ Apagar</button>
-            </div>
-            ${respostaHtml}
-        </div>`;
+            </div>${respostaHtml}</div>`;
     }).join('');
 }
 
@@ -388,56 +382,34 @@ function abrirResposta(id) {
     if (area) { area.style.display = area.style.display === 'block' ? 'none' : 'block'; if (area.style.display === 'block') document.getElementById('txt-' + id)?.focus(); }
 }
 function fecharResposta(id) { const area = document.getElementById('area-' + id); if (area) area.style.display = 'none'; }
-
 async function enviarResposta(id) {
     const txt = document.getElementById('txt-' + id);
     if (!txt || !txt.value.trim()) { alert('Escreva uma resposta antes de enviar.'); return; }
-    await supa('PATCH', 'contacto', { resposta: txt.value.trim(), resposta_data: new Date().toISOString(), lida: true }, `?id=eq.${id}`);
+    await supa('PATCH', 'mensagens', { resposta: txt.value.trim(), resposta_data: new Date().toISOString(), lida: true }, `?id=eq.${id}`);
     renderizarMensagens();
 }
-
-async function marcarLida(id) {
-    await supa('PATCH', 'contacto', { lida: true }, `?id=eq.${id}`);
-    renderizarMensagens();
-}
-
-async function apagarMensagem(id) {
-    if (!confirm('Apagar esta mensagem?')) return;
-    await supa('DELETE', 'contacto', null, `?id=eq.${id}`);
-    renderizarMensagens();
-}
+async function marcarLida(id) { await supa('PATCH', 'mensagens', { lida: true }, `?id=eq.${id}`); renderizarMensagens(); }
+async function apagarMensagem(id) { if (!confirm('Apagar esta mensagem?')) return; await supa('DELETE', 'mensagens', null, `?id=eq.${id}`); renderizarMensagens(); }
 
 // ── UTILIZADORES ──
 async function renderizarUsers() {
     const pesquisa = document.getElementById('pesquisaUser')?.value.trim() || '';
     let filter = '?select=id,nome,email,telefone,criado_em&order=criado_em.desc';
     if (pesquisa) filter += `&or=(nome.ilike.%25${encodeURIComponent(pesquisa)}%25,email.ilike.%25${encodeURIComponent(pesquisa)}%25)`;
-
     const users = await supa('GET', 'utilizadores', null, filter);
     if (!users) return;
-
     const marcacoes = await supa('GET', 'marcacoes', null, '?select=email');
     const contagem = {};
     (marcacoes || []).forEach(m => { if (m.email) contagem[m.email] = (contagem[m.email] || 0) + 1; });
-
-    document.getElementById('contadoresUser').innerHTML = `
-        <div class="cnt-card"><div class="num">${users.length}</div><div class="label">Contas registadas</div></div>`;
-
+    document.getElementById('contadoresUser').innerHTML = `<div class="cnt-card"><div class="num">${users.length}</div><div class="label">Contas registadas</div></div>`;
     const tbody = document.getElementById('tabelaUsers');
-    if (!users.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:30px">Nenhum utilizador encontrado.</td></tr>';
-        return;
-    }
-
+    if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:30px">Nenhum utilizador encontrado.</td></tr>'; return; }
     tbody.innerHTML = users.map(u => `
         <tr>
-            <td>
-                <span class="user-avatar">${u.nome ? u.nome[0].toUpperCase() : '?'}</span>
-                <span>${u.nome || '—'}</span>
-            </td>
+            <td><span class="user-avatar">${u.nome ? u.nome[0].toUpperCase() : '?'}</span><span>${u.nome||'—'}</span></td>
             <td>${u.email}</td>
-            <td>${u.telefone || '—'}</td>
-            <td>${contagem[u.email] || 0}</td>
+            <td>${u.telefone||'—'}</td>
+            <td>${contagem[u.email]||0}</td>
             <td>${u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-PT') : '—'}</td>
             <td style="display:flex;gap:6px;">
                 <button class="btn-ver" onclick='verUser(${JSON.stringify(u).replace(/'/g,"&#39;")},${contagem[u.email]||0})'>Ver</button>
@@ -447,22 +419,170 @@ async function renderizarUsers() {
 }
 
 function verUser(u, numMarcacoes) {
-    document.getElementById('mNome').innerText      = u.nome     || '—';
-    document.getElementById('mEmail').innerText     = u.email    || '—';
-    document.getElementById('mTel').innerText       = u.telefone || 'Não definido';
+    document.getElementById('mNome').innerText      = u.nome||'—';
+    document.getElementById('mEmail').innerText     = u.email||'—';
+    document.getElementById('mTel').innerText       = u.telefone||'Não definido';
     document.getElementById('mMarcacoes').innerText = numMarcacoes;
     document.getElementById('mData').innerText      = u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-PT') : '—';
     document.getElementById('modalUser').classList.add('ativo');
 }
-
 async function apagarUser(id, email) {
     if (!confirm(`Apagar a conta de ${email}? Esta ação é permanente.`)) return;
     await supa('DELETE', 'utilizadores', null, `?id=eq.${id}`);
     renderizarUsers();
 }
-
 document.getElementById('modalUser').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
 function fecharModal() { document.getElementById('modalUser').classList.remove('ativo'); }
+
+// ── FIDELIDADE ──
+let todosUsersFid = [];
+
+async function renderizarFidelidade() {
+    const lista = document.getElementById('listaFidelidade');
+    lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
+
+    const users = await supa('GET', 'utilizadores', null, '?select=id,nome,email,visitas&order=nome.asc');
+    if (!users) {
+        lista.innerHTML = `<div class="erro-box">⚠ Erro ao carregar. Certifica-te que correste este SQL no Supabase:<br><br><code>ALTER TABLE public.utilizadores ADD COLUMN IF NOT EXISTS visitas integer DEFAULT 0;</code></div>`;
+        return;
+    }
+
+    todosUsersFid = users;
+
+    const com3  = users.filter(u => (u.visitas||0) >= 3).length;
+    const com6  = users.filter(u => (u.visitas||0) >= 6).length;
+    const com10 = users.filter(u => (u.visitas||0) >= 10).length;
+    document.getElementById('cntFidTotal').innerText = users.filter(u => (u.visitas||0) > 0).length;
+    document.getElementById('cntFid3').innerText  = com3;
+    document.getElementById('cntFid6').innerText  = com6;
+    document.getElementById('cntFid10').innerText = com10;
+
+    renderizarCardsFid(users);
+}
+
+function pesquisarFid() {
+    const q = document.getElementById('pesquisaFid').value.trim().toLowerCase();
+    if (!q) { renderizarCardsFid(todosUsersFid); return; }
+    const filtrados = todosUsersFid.filter(u =>
+        (u.nome||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q)
+    );
+    renderizarCardsFid(filtrados);
+}
+
+function descricaoNivel(v) {
+    if (v >= 10) return '🏆 Nível máximo atingido! Próxima visita com 20% de desconto.';
+    if (v >= 6)  return '⭐ Ótimo! Na 10.ª visita tem 20% de desconto.';
+    if (v >= 3)  return '✨ Na 6.ª visita tem 15% de desconto.';
+    if (v === 2) return '💛 Mais uma visita para o 1.º desconto de 10%!';
+    if (v === 1) return '👋 Bem-vinda! Na 3.ª visita tem 10% de desconto.';
+    return '🌟 Ainda sem visitas registadas.';
+}
+
+function renderizarCardsFid(users) {
+    const lista = document.getElementById('listaFidelidade');
+    if (!users.length) { lista.innerHTML = '<div class="fid-sem">Nenhuma cliente encontrada.</div>'; return; }
+
+    const milestones = { 3:'10%', 6:'15%', 10:'20%' };
+
+    lista.innerHTML = users.map(u => {
+        const v = u.visitas || 0;
+        const stampsHtml = Array.from({length:10}, (_,i) => {
+            const n = i + 1;
+            if (milestones[n]) {
+                const cls = n <= v ? 'stamp milestone' : 'stamp';
+                return `<div class="${cls}">${n <= v ? '✓' : n}<br>${milestones[n]}</div>`;
+            }
+            return `<div class="${n <= v ? 'stamp filled' : 'stamp'}">${n <= v ? '✓' : n}</div>`;
+        }).join('');
+
+        return `
+        <div class="fid-card" id="fidcard-${u.id}">
+            <div class="fid-card-top">
+                <div>
+                    <div class="fid-nome">${u.nome || '—'}</div>
+                    <div class="fid-email">${u.email}</div>
+                </div>
+                <div>
+                    <div class="fid-visitas-num">${v}</div>
+                    <div class="fid-visitas-label">Visitas</div>
+                </div>
+            </div>
+            <div class="stamps-wrap">${stampsHtml}</div>
+            <div class="fid-desc-nivel" id="fiddesc-${u.id}">${descricaoNivel(v)}</div>
+            <div class="fid-acoes" style="margin-top:14px;">
+                <button class="btn-carimbar" onclick="carimbar('${u.id}', ${v})" id="btncar-${u.id}" ${v >= 10 ? 'disabled' : ''}>
+                    ✦ Registar Visita
+                </button>
+                <button class="btn-remover-carimbo" onclick="removerCarimbo('${u.id}', ${v})" id="btnrem-${u.id}" ${v <= 0 ? 'disabled' : ''}>
+                    − Remover
+                </button>
+                <div class="fid-msg-ok" id="fidmsg-${u.id}">✔ Visita registada!</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function carimbar(userId, visitas) {
+    const btn = document.getElementById('btncar-' + userId);
+    btn.disabled = true;
+    btn.textContent = '...';
+    const novas = visitas + 1;
+    const res = await supa('PATCH', 'utilizadores', { visitas: novas }, `?id=eq.${userId}`);
+    if (res) {
+        // Atualizar no array local
+        const u = todosUsersFid.find(x => x.id === userId);
+        if (u) u.visitas = novas;
+        // Atualizar card sem recarregar tudo
+        atualizarCard(userId, novas);
+        const msg = document.getElementById('fidmsg-' + userId);
+        if (msg) { msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 2500); }
+    } else {
+        alert('Erro ao registar visita. Verifica o SQL no Supabase.');
+        btn.disabled = false;
+        btn.textContent = '✦ Registar Visita';
+    }
+}
+
+async function removerCarimbo(userId, visitas) {
+    if (visitas <= 0) return;
+    if (!confirm('Remover a última visita desta cliente?')) return;
+    const novas = visitas - 1;
+    const res = await supa('PATCH', 'utilizadores', { visitas: novas }, `?id=eq.${userId}`);
+    if (res) {
+        const u = todosUsersFid.find(x => x.id === userId);
+        if (u) u.visitas = novas;
+        atualizarCard(userId, novas);
+    }
+}
+
+function atualizarCard(userId, v) {
+    const milestones = { 3:'10%', 6:'15%', 10:'20%' };
+    // Atualizar número de visitas
+    const card = document.getElementById('fidcard-' + userId);
+    if (!card) return;
+    card.querySelector('.fid-visitas-num').textContent = v;
+    // Atualizar carimbos
+    const stampsWrap = card.querySelector('.stamps-wrap');
+    stampsWrap.innerHTML = Array.from({length:10}, (_,i) => {
+        const n = i + 1;
+        if (milestones[n]) {
+            const cls = n <= v ? 'stamp milestone' : 'stamp';
+            return `<div class="${cls}">${n <= v ? '✓' : n}<br>${milestones[n]}</div>`;
+        }
+        return `<div class="${n <= v ? 'stamp filled' : 'stamp'}">${n <= v ? '✓' : n}</div>`;
+    }).join('');
+    // Atualizar descrição
+    document.getElementById('fiddesc-' + userId).textContent = descricaoNivel(v);
+    // Atualizar botões
+    const btnCar = document.getElementById('btncar-' + userId);
+    const btnRem = document.getElementById('btnrem-' + userId);
+    btnCar.disabled = v >= 10;
+    btnCar.textContent = '✦ Registar Visita';
+    btnRem.disabled = v <= 0;
+    // Atualizar dados do botão onclick
+    btnCar.setAttribute('onclick', `carimbar('${userId}', ${v})`);
+    btnRem.setAttribute('onclick', `removerCarimbo('${userId}', ${v})`);
+}
 </script>
 </body>
 </html>
