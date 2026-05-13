@@ -91,6 +91,7 @@
         .modal-user p { margin:6px 0; font-size:14px; color:#333; }
         .modal-user hr { border:none; border-top:1px solid #eee; margin:14px 0; }
         .modal-fechar { float:right; background:none; border:none; font-size:22px; cursor:pointer; color:#888; }
+        .erro-box { background:#fff0f0; border:1px solid #f5aaaa; border-radius:10px; padding:14px 18px; font-size:13px; color:#c0392b; margin-bottom:16px; }
         @media(max-width:600px){ .painel{padding:16px} .card{flex-direction:column} }
     </style>
 </head>
@@ -169,12 +170,24 @@
 const SUPA_URL = 'https://wonkioqayeekzcuoepcb.supabase.co';
 const SUPA_KEY = 'sb_publishable_ilm7_hVtksY0LtByJ7a_JQ_1Xq4YudK';
 
+// Função supa melhorada — devolve sempre array ou null
 async function supa(method, table, body, filter='') {
     const h = { 'Content-Type':'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
     if (method === 'POST' || method === 'PATCH') h['Prefer'] = 'return=representation';
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, { method, headers: h, body: body ? JSON.stringify(body) : null });
-    const t = await r.text();
-    try { return JSON.parse(t); } catch(e) { return null; }
+    try {
+        const r = await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`, { method, headers: h, body: body ? JSON.stringify(body) : null });
+        const t = await r.text();
+        const parsed = JSON.parse(t);
+        // Se o Supabase devolver um objeto de erro (code, message) retorna null
+        if (!Array.isArray(parsed) && parsed && parsed.code) {
+            console.error(`Supabase error [${table}]:`, parsed);
+            return null;
+        }
+        return parsed;
+    } catch(e) {
+        console.error(`Fetch error [${table}]:`, e);
+        return null;
+    }
 }
 
 let filtroAtivo = 'todas';
@@ -237,7 +250,7 @@ async function renderizarMarcacoes() {
     const data = await supa('GET', 'marcacoes', null,
         `?select=id,email,servico,data,hora,estado,reparticao,divisao,cumprimento&order=data.desc`);
 
-    if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações.</div>'; return; }
+    if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar marcações. Verifique o RLS no Supabase.</div>'; return; }
 
     todasMarcacoes = data.map(m => ({
         id:          m.id,
@@ -306,7 +319,15 @@ async function renderizarMensagens() {
     lista.innerHTML = '<div class="sem-resultados">A carregar...</div>';
 
     const data = await supa('GET', 'contacto', null, `?order=enviado_em.desc`);
-    if (!data) { lista.innerHTML = '<div class="sem-resultados">Erro ao carregar mensagens.</div>'; return; }
+
+    if (!data) {
+        lista.innerHTML = `
+            <div class="erro-box">
+                ⚠ Erro ao carregar mensagens. Certifique-se que correu este SQL no Supabase:<br><br>
+                <code>ALTER TABLE public.contacto DISABLE ROW LEVEL SECURITY;</code>
+            </div>`;
+        return;
+    }
 
     const novas       = data.filter(m => !m.lida && !m.resposta).length;
     const respondidas = data.filter(m => m.resposta).length;
@@ -395,7 +416,6 @@ async function renderizarUsers() {
     const users = await supa('GET', 'utilizadores', null, filter);
     if (!users) return;
 
-    // Contagem de marcações por email
     const marcacoes = await supa('GET', 'marcacoes', null, '?select=email');
     const contagem = {};
     (marcacoes || []).forEach(m => { if (m.email) contagem[m.email] = (contagem[m.email] || 0) + 1; });

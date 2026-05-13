@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter – Easy Glow</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+
+        @font-face {
+            font-family: 'High Cruiser';
+            src: url('fonts/HighCruiser.otf.otf') format('truetype');
+        }
+
+        /* ── NAVBAR (igual ao resto do site) ── */
+        .logotipo {
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo img { width: 150px; display: block; }
+        .menu { display: flex; align-items: center; gap: 22px; }
+        .menu a { text-decoration: none; font-size: 13px; font-weight: bold; color: #111; letter-spacing: .5px; }
+        .menu a:hover { color: #888; }
+        .mais-menu { position: relative; cursor: pointer; }
+        .mais-links {
+            display: none; position: absolute; top: calc(100% + 10px); right: 0;
+            background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-radius: 10px; flex-direction: column; min-width: 160px; z-index: 999; overflow: hidden;
+        }
+        .mais-links a { padding: 11px 16px; text-decoration: none; font-size: 13px; font-weight: bold; color: #111; display: block; }
+        .mais-links a:hover { background: #f5f5f5; }
+        .mais-menu:hover .mais-links { display: flex; }
+        .btn-login {
+            background: #111; color: white !important; padding: 8px 18px; border-radius: 20px;
+            font-size: 13px; font-weight: bold; text-decoration: none; display: flex;
+            align-items: center; gap: 7px; transition: opacity 0.2s; white-space: nowrap;
+        }
+        .btn-login:hover { opacity: 0.8; }
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+        .menu-toggle span { display: block; width: 24px; height: 2px; background: #111; border-radius: 2px; }
+        .menu-mobile {
+            display: none; flex-direction: column; background: #fff; border-bottom: 1px solid #eee;
+            padding: 16px 20px; gap: 14px; position: fixed; left: 0; width: 100%; z-index: 999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .menu-mobile a { text-decoration: none; font-size: 15px; font-weight: bold; color: #111; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+        .menu-mobile .btn-login { justify-content: center; margin-top: 4px; }
+
+        /* ── HERO ── */
+        .nl-hero {
+            background: #1a1410;
+            text-align: center;
+            padding: 60px 20px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .nl-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 80%, rgba(212,168,85,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .nl-hero-tag { font-size: 10px; letter-spacing: 4px; color: #9a8878; text-transform: uppercase; margin-bottom: 16px; }
+        .nl-hero h1 { font-family: 'High Cruiser', Arial, sans-serif; font-size: 38px; color: #fff; letter-spacing: 4px; line-height: 1.15; margin-bottom: 10px; }
+        .nl-hero h1 span { color: #d4a855; }
+        .nl-hero p { font-size: 14px; color: #9a8878; letter-spacing: 1px; max-width: 380px; margin: 0 auto; line-height: 1.7; }
+        .nl-divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 22px 0 0; }
+        .nl-divider span { width: 40px; height: 1px; background: #3a2e26; }
+        .nl-divider i { color: #d4a855; font-size: 10px; }
+
+        /* ── TABS ── */
+        .tab-wrap {
+            background: #faf8f5;
+            border-bottom: 1px solid #e8e0d8;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            position: sticky;
+            top: 61px;
+            z-index: 100;
+        }
+        .tab-btn {
+            padding: 16px 24px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #9a8878;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-btn:hover { color: #1a1410; }
+        .tab-btn.active { color: #1a1410; border-bottom-color: #1a1410; }
+
+        /* ── CONTENT ── */
+        .nl-content { background: #faf8f5; padding: 40px 20px 60px; }
+        .panel { display: none; max-width: 900px; margin: 0 auto; }
+        .panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-label {
+            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+            color: #9a8878; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+        }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: #e8e0d8; }
+
+        /* promo grid */
+        .promo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+        .promo-card { background: #1a1410; border-radius: 12px; padding: 22px 16px; text-align: center; }
+        .promo-tag { font-size: 9px; letter-spacing: 2px; color: #9a8878; text-transform: uppercase; margin-bottom: 6px; }
+        .promo-pct { font-size: 36px; font-weight: bold; color: #d4a855; line-height: 1; }
+        .promo-off { font-size: 13px; color: #fff; font-weight: bold; margin: 4px 0; }
+        .promo-desc { font-size: 11px; color: #7a6a5a; }
+
+        /* styles grid */
+        .styles-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 32px; }
+        .style-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 10px; padding: 16px 14px; }
+        .style-name { font-size: 12px; font-weight: bold; color: #1a1410; margin-bottom: 4px; letter-spacing: .5px; }
+        .style-price { font-size: 13px; color: #9a8878; font-style: italic; }
+
+        /* info cards */
+        .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+        .info-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 12px; padding: 20px; }
+        .info-card-tag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #d4a855; margin-bottom: 8px; }
+        .info-card-title { font-size: 15px; font-weight: bold; color: #1a1410; margin-bottom: 8px; }
+        .info-card-desc { font-size: 13px; color: #7a6a5a; line-height: 1.6; margin-bottom: 10px; }
+        .info-card-price { font-size: 16px; font-weight: bold; color: #1a1410; font-style: italic; }
+        .badge { display: inline-block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: #1a1410; color: #d4a855; padding: 3px 8px; border-radius: 10px; margin-bottom: 10px; }
+
+        /* loyalty */
+        .loyalty-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+        .loyalty-header { margin-bottom: 20px; }
+        .loyalty-title { font-size: 18px; font-weight: bold; color: #1a1410; margin-bottom: 6px; }
+        .loyalty-sub { font-size: 13px; color: #9a8878; }
+        .stamps { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+        .stamp {
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 1.5px solid #e8e0d8; background: #f8f5f0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: #c8bfb4; font-weight: bold; text-align: center; line-height: 1.3;
+        }
+        .stamp.filled { background: #2e2018; border-color: #2e2018; color: #fff; }
+        .stamp.milestone { background: #d4a855; border-color: #d4a855; color: #1a1410; font-size: 9px; }
+        .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .tier { background: #faf8f5; border: 1px solid #e8e0d8; border-radius: 10px; padding: 16px; text-align: center; }
+        .tier-visit { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #9a8878; margin-bottom: 6px; }
+        .tier-pct { font-size: 28px; font-weight: bold; color: #1a1410; line-height: 1; }
+        .tier-desc { font-size: 11px; color: #9a8878; margin-top: 4px; }
+
+        /* products */
+        .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+        .prod-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 12px; padding: 20px 16px; text-align: center; }
+        .prod-emoji { font-size: 32px; margin-bottom: 10px; }
+        .prod-name { font-size: 13px; font-weight: bold; color: #1a1410; margin-bottom: 4px; }
+        .prod-desc { font-size: 11px; color: #9a8878; line-height: 1.5; margin-bottom: 10px; }
+        .prod-price { font-size: 15px; font-weight: bold; color: #1a1410; }
+        .prod-btn {
+            display: inline-block; margin-top: 10px; padding: 7px 16px; background: #1a1410;
+            color: #fff; font-size: 10px; font-weight: bold; letter-spacing: 1px;
+            border-radius: 20px; border: none; cursor: pointer; transition: opacity 0.2s;
+        }
+        .prod-btn:hover { opacity: 0.8; }
+
+        /* CTA button */
+        .btn-cta {
+            display: block; width: 100%; max-width: 340px; margin: 0 auto;
+            padding: 16px 32px; background: #1a1410; color: #fff;
+            text-align: center; border-radius: 30px; font-size: 12px;
+            font-weight: bold; letter-spacing: 2px; border: none; cursor: pointer;
+            text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+        }
+        .btn-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* footer */
+        .nl-footer-main {
+            background: #1a1410; color: #7a6a5a; text-align: center;
+            padding: 30px 20px; font-size: 12px; line-height: 2;
+        }
+        .nl-footer-main a { color: #9a8878; text-decoration: none; }
+        .nl-footer-main .copy { font-size: 11px; color: #3a2e26; margin-top: 6px; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            .menu { display: none; }
+            .menu-toggle { display: flex; }
+            .nl-hero h1 { font-size: 26px; }
+            .tab-btn { padding: 14px 12px; font-size: 10px; letter-spacing: 1px; }
+            .promo-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .promo-pct { font-size: 26px; }
+            .styles-grid { grid-template-columns: repeat(2, 1fr); }
+            .card-grid { grid-template-columns: 1fr; }
+            .prod-grid { grid-template-columns: repeat(2, 1fr); }
+            .tier-grid { grid-template-columns: repeat(3, 1fr); }
+            .stamps { gap: 6px; }
+            .stamp { width: 42px; height: 42px; font-size: 9px; }
+        }
+        @media (max-width: 480px) {
+            .promo-grid { grid-template-columns: 1fr; }
+            .prod-grid { grid-template-columns: 1fr; }
+            .tab-wrap { overflow-x: auto; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="logotipo" id="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="novologo.PNG" alt="Easy Glow Logo"></a>
+        </div>
+        <div class="menu">
+            <a href="servicos.html">SERVIÇOS</a>
+            <a href="agendar.html">AGENDAR</a>
+            <div class="mais-menu">
+                <span style="font-size:13px;font-weight:bold;cursor:pointer;">MAIS ▾</span>
+                <div class="mais-links">
+                    <a href="contactos.html">CONTACTOS</a>
+                    <a href="marcacoes.html">MARCAÇÕES</a>
+                    <a href="sobre.html">SOBRE</a>
+                </div>
+            </div>
+            <a id="btnAuth" href="login.html" class="btn-login">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+                <span id="btnAuthText">LOGIN</span>
+            </a>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <!-- MENU MOBILE -->
+    <div class="menu-mobile" id="menuMobile">
+        <a href="servicos.html">SERVIÇOS</a>
+        <a href="agendar.html">AGENDAR</a>
+        <a href="contactos.html">CONTACTOS</a>
+        <a href="marcacoes.html">MARCAÇÕES</a>
+        <a href="sobre.html">SOBRE</a>
+        <a id="btnAuthMobile" href="login.html" class="btn-login">LOGIN</a>
+    </div>
+
+    <!-- HERO -->
+    <div class="nl-hero">
+        <div class="nl-hero-tag">✦ Exclusivo para Subscritoras ✦</div>
+        <h1>NOVIDADES<br><span>EASY GLOW</span></h1>
+        <p>Promoções, formações, cartão de fidelidade e produtos — tudo em primeira mão para ti.</p>
+        <div class="nl-divider">
+            <span></span>
+            <i>✦ ✦ ✦</i>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-wrap">
+        <button class="tab-btn active" onclick="showPanel('promocoes', this)">PROMOÇÕES</button>
+        <button class="tab-btn" onclick="showPanel('formacoes', this)">FORMAÇÕES</button>
+        <button class="tab-btn" onclick="showPanel('fidelidade', this)">FIDELIDADE</button>
+        <button class="tab-btn" onclick="showPanel('produtos', this)">PRODUTOS</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="nl-content">
+
+        <!-- PROMOÇÕES -->
+        <div class="panel active" id="panel-promocoes">
+            <div class="section-label">Promoções do mês</div>
+            <div class="promo-grid">
+                <div class="promo-card">
+                    <div class="promo-tag">Nova cliente</div>
+                    <div class="promo-pct">20%</div>
+                    <div class="promo-off">DESCONTO</div>
+                    <div class="promo-desc">1.ª marcação</div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-tag">Pack amiga</div>
+                    <div class="promo-pct">15%</div>
+                    <div class="promo-off">OFF</div>
+                    <div class="promo-desc">2 clientes juntas</div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-tag">Maio</div>
+                    <div class="promo-pct">€10</div>
+                    <div class="promo-off">OFF</div>
+                    <div class="promo-desc">Lavagem incluída</div>
+                </div>
+            </div>
+
+            <div class="section-label">Os nossos estilos</div>
+            <div class="styles-grid">
+                <div class="style-card">
+                    <div class="style-name">CORNROWS</div>
+                    <div class="style-price">a partir de €40</div>
+                </div>
+                <div class="style-card">
+                    <div class="style-name">BOHO BRAIDS</div>
+                    <div class="style-price">a partir de €80</div>
+                </div>
+                <div class="style-card">
+                    <div class="style-name">TWISTS</div>
+                    <div class="style-price">a partir de €60</div>
+                </div>
+                <div class="style-card">
+                    <div class="style-name">LEMONADE</div>
+                    <div class="style-price">a partir de €70</div>
+                </div>
+            </div>
+
+            <a href="agendar.html" class="btn-cta">AGENDAR AGORA</a>
+        </div>
+
+        <!-- FORMAÇÕES -->
+        <div class="panel" id="panel-formacoes">
+            <div class="section-label">Formações disponíveis</div>
+            <div class="card-grid">
+                <div class="info-card">
+                    <div class="info-card-tag">✦ Iniciante</div>
+                    <div class="info-card-title">Intro às Tranças Afro</div>
+                    <div class="info-card-desc">Aprende as técnicas base: cornrows, box braids e cuidados com o cabelo natural. Material incluído.</div>
+                    <div class="info-card-price">€120 · 1 dia</div>
+                </div>
+                <div class="info-card">
+                    <div class="badge">Novidade</div>
+                    <div class="info-card-tag">✦ Avançado</div>
+                    <div class="info-card-title">Boho & Knotless Braids</div>
+                    <div class="info-card-desc">Técnicas avançadas de tranças sem nó e acabamentos em cachos. Para quem já tem base.</div>
+                    <div class="info-card-price">€180 · 2 dias</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-tag">✦ Profissional</div>
+                    <div class="info-card-title">Estilista de Tranças</div>
+                    <div class="info-card-desc">Formação completa para quem quer trabalhar na área. Certificado de conclusão incluído.</div>
+                    <div class="info-card-price">€350 · 5 dias</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-tag">✦ Workshop</div>
+                    <div class="info-card-title">Cuidados Capilares</div>
+                    <div class="info-card-desc">Como cuidar das tranças em casa, produtos recomendados e dicas de hidratação.</div>
+                    <div class="info-card-price">€60 · 3 horas</div>
+                </div>
+            </div>
+            <a href="contactos.html" class="btn-cta">INSCREVER NUMA FORMAÇÃO</a>
+        </div>
+
+        <!-- FIDELIDADE -->
+        <div class="panel" id="panel-fidelidade">
+            <div class="section-label">Cartão de cliente fiel</div>
+            <div class="loyalty-card">
+                <div class="loyalty-header">
+                    <div class="loyalty-title">Cliente Fiel Easy Glow</div>
+                    <div class="loyalty-sub">Um presente por seres especial para nós. Cada visita aproxima-te de um desconto.</div>
+                </div>
+                <div class="stamps" id="stampsContainer"></div>
+                <div class="tier-grid">
+                    <div class="tier">
+                        <div class="tier-visit">3.ª visita</div>
+                        <div class="tier-pct">10%</div>
+                        <div class="tier-desc">desconto no próximo serviço</div>
+                    </div>
+                    <div class="tier">
+                        <div class="tier-visit">6.ª visita</div>
+                        <div class="tier-pct">15%</div>
+                        <div class="tier-desc">desconto no próximo serviço</div>
+                    </div>
+                    <div class="tier">
+                        <div class="tier-visit">10.ª visita</div>
+                        <div class="tier-pct">20%</div>
+                        <div class="tier-desc">desconto no próximo serviço</div>
+                    </div>
+                </div>
+            </div>
+            <a href="agendar.html" class="btn-cta">AGENDAR E GANHAR PONTOS</a>
+        </div>
+
+        <!-- PRODUTOS -->
+        <div class="panel" id="panel-produtos">
+            <div class="section-label">Loja Easy Glow</div>
+            <div class="prod-grid">
+                <div class="prod-card">
+                    <div class="prod-emoji">🪮</div>
+                    <div class="prod-name">Pente de Dentes Largos</div>
+                    <div class="prod-desc">Ideal para desembaraçar sem partir o cabelo</div>
+                    <div class="prod-price">€8,50</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Pente de Dentes Largos')">ENCOMENDAR</button>
+                </div>
+                <div class="prod-card">
+                    <div class="prod-emoji">💆</div>
+                    <div class="prod-name">Escova de Cabelo Natural</div>
+                    <div class="prod-desc">Cerdas macias, ideal para bordas e retoques</div>
+                    <div class="prod-price">€12,00</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Escova de Cabelo Natural')">ENCOMENDAR</button>
+                </div>
+                <div class="prod-card">
+                    <div class="prod-emoji">💧</div>
+                    <div class="prod-name">Óleo de Rícino</div>
+                    <div class="prod-desc">Hidratação intensa e crescimento capilar</div>
+                    <div class="prod-price">€9,00</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Óleo de Rícino')">ENCOMENDAR</button>
+                </div>
+                <div class="prod-card">
+                    <div class="prod-emoji">🧴</div>
+                    <div class="prod-name">Leave-in Hidratante</div>
+                    <div class="prod-desc">Sem sulfatos, formulado para cabelo natural</div>
+                    <div class="prod-price">€14,50</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Leave-in Hidratante')">ENCOMENDAR</button>
+                </div>
+                <div class="prod-card">
+                    <div class="prod-emoji">🪡</div>
+                    <div class="prod-name">Elásticos sem Metal</div>
+                    <div class="prod-desc">Pack 50 unidades, não partem nem danificam</div>
+                    <div class="prod-price">€5,00</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Elásticos sem Metal')">ENCOMENDAR</button>
+                </div>
+                <div class="prod-card">
+                    <div class="prod-emoji">✨</div>
+                    <div class="prod-name">Spray Brilho</div>
+                    <div class="prod-desc">Acabamento perfeito e duradouro nas tranças</div>
+                    <div class="prod-price">€11,00</div>
+                    <button class="prod-btn" onclick="encomendarProduto('Spray Brilho')">ENCOMENDAR</button>
+                </div>
+            </div>
+            <a href="contactos.html" class="btn-cta">VER TODOS OS PRODUTOS</a>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="nl-footer-main">
+        easyglow@gmail.com &nbsp;·&nbsp; +351 925 215 786 &nbsp;·&nbsp; Seg a Sex 09:00–20:00<br>
+        Instagram: <a href="#">@easyglow._</a>
+        <div class="copy">© 2025 Easy Glow. Todos os direitos reservados.</div>
+    </div>
+
+    <script>
+        // ── AUTH ──
+        function initAuth() {
+            const ulog = JSON.parse(localStorage.getItem('ulog') || 'null');
+            const btn  = document.getElementById('btnAuth');
+            const btnT = document.getElementById('btnAuthText');
+            const btnM = document.getElementById('btnAuthMobile');
+            if (ulog && ulog.id) {
+                const nome = ulog.nome ? ulog.nome.split(' ')[0].toUpperCase() : 'PERFIL';
+                btn.href = btnM.href = 'perfil1.html';
+                btnT.textContent = btnM.textContent = nome;
+            } else {
+                btn.href = btnM.href = 'login.html';
+                btnT.textContent = btnM.textContent = 'LOGIN';
+            }
+        }
+        initAuth();
+
+        // ── MOBILE MENU ──
+        function toggleMenu() {
+            const m = document.getElementById('menuMobile');
+            const navbar = document.getElementById('navbar');
+            if (m.style.display === 'flex') {
+                m.style.display = 'none';
+            } else {
+                m.style.top = navbar.offsetHeight + 'px';
+                m.style.display = 'flex';
+            }
+        }
+        document.addEventListener('click', function(e) {
+            const m = document.getElementById('menuMobile');
+            const toggle = document.querySelector('.menu-toggle');
+            if (m && m.style.display === 'flex' && !m.contains(e.target) && !toggle.contains(e.target)) {
+                m.style.display = 'none';
+            }
+        });
+
+        // ── TABS ──
+        function showPanel(name, el) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById('panel-' + name).classList.add('active');
+            el.classList.add('active');
+        }
+
+        // ── CARTÃO FIDELIDADE (carimbos dinâmicos baseados no histórico) ──
+        function buildStamps() {
+            const ulog = JSON.parse(localStorage.getItem('ulog') || 'null');
+            const visitas = ulog && ulog.visitas ? parseInt(ulog.visitas) : 0;
+            const milestones = { 3: '10%', 6: '15%', 10: '20%' };
+            const container = document.getElementById('stampsContainer');
+            container.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const stamp = document.createElement('div');
+                if (milestones[i]) {
+                    stamp.className = 'stamp milestone';
+                    stamp.innerHTML = i + '<br>' + milestones[i];
+                } else if (i <= visitas) {
+                    stamp.className = 'stamp filled';
+                    stamp.textContent = i;
+                } else {
+                    stamp.className = 'stamp';
+                    stamp.textContent = i;
+                }
+                container.appendChild(stamp);
+            }
+        }
+        buildStamps();
+
+        // ── ENCOMENDAR PRODUTO ──
+        function encomendarProduto(nome) {
+            const ulog = JSON.parse(localStorage.getItem('ulog') || 'null');
+            if (!ulog || !ulog.id) {
+                localStorage.setItem('redirectAfterLogin', 'newsletter.html');
+                location.href = 'login.html';
+                return;
+            }
+            const msg = `Olá! Tenho interesse no produto: ${nome}. Como posso encomendar?`;
+            const whatsapp = `https://wa.me/351925215786?text=${encodeURIComponent(msg)}`;
+            window.open(whatsapp, '_blank');
+        }
+    </script>
+</body>
+</html>
