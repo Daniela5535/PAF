@@ -170,17 +170,27 @@
 
         /* products */
         .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
-        .prod-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 12px; padding: 20px 16px; text-align: center; }
+        .prod-card { background: #fff; border: 1px solid #e8e0d8; border-radius: 12px; padding: 20px 16px; text-align: center; opacity: 0.8; }
         .prod-emoji { font-size: 32px; margin-bottom: 10px; }
         .prod-name { font-size: 13px; font-weight: bold; color: #1a1410; margin-bottom: 4px; }
         .prod-desc { font-size: 11px; color: #9a8878; line-height: 1.5; margin-bottom: 10px; }
         .prod-price { font-size: 15px; font-weight: bold; color: #1a1410; }
-        .prod-btn {
-            display: inline-block; margin-top: 10px; padding: 7px 16px; background: #1a1410;
-            color: #fff; font-size: 10px; font-weight: bold; letter-spacing: 1px;
-            border-radius: 20px; border: none; cursor: pointer; transition: opacity 0.2s;
+
+        /* Em breve banner */
+        .soon-banner {
+            background: #fdf6e8;
+            border: 1px solid #e8d5a0;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: #7a5c1a;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .prod-btn:hover { opacity: 0.8; }
+        .soon-banner-icon { font-size: 18px; flex-shrink: 0; }
 
         /* CTA button */
         .btn-cta {
@@ -399,51 +409,59 @@
         <!-- PRODUTOS -->
         <div class="panel" id="panel-produtos">
             <div class="section-label">Loja Easy Glow</div>
+
+            <!-- Banner Em Breve -->
+            <div class="soon-banner">
+                <span class="soon-banner-icon">✦</span>
+                <span>A nossa loja está a chegar! Em breve poderás encomendar os nossos produtos diretamente aqui. Fica atenta às novidades — serás das primeiras a saber.</span>
+            </div>
+
             <div class="prod-grid">
                 <div class="prod-card">
                     <div class="prod-emoji">🪮</div>
                     <div class="prod-name">Pente de Dentes Largos</div>
-                    <div class="prod-desc">Ideal para desembaraçar sem partir o cabelo</div>
+                    <div class="prod-desc">Pack de 5 Ideal para desembaraçar sem partir o cabelo</div>
                     <div class="prod-price">€8,50</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Pente de Dentes Largos')">ENCOMENDAR</button>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
                 <div class="prod-card">
                     <div class="prod-emoji">💆</div>
                     <div class="prod-name">Escova de Cabelo Natural</div>
                     <div class="prod-desc">Cerdas macias, ideal para bordas e retoques</div>
-                    <div class="prod-price">€12,00</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Escova de Cabelo Natural')">ENCOMENDAR</button>
+                    <div class="prod-price">€7,00</div>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
                 <div class="prod-card">
                     <div class="prod-emoji">💧</div>
                     <div class="prod-name">Óleo de Rícino</div>
                     <div class="prod-desc">Hidratação intensa e crescimento capilar</div>
                     <div class="prod-price">€9,00</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Óleo de Rícino')">ENCOMENDAR</button>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
                 <div class="prod-card">
                     <div class="prod-emoji">🧴</div>
                     <div class="prod-name">Leave-in Hidratante</div>
                     <div class="prod-desc">Sem sulfatos, formulado para cabelo natural</div>
                     <div class="prod-price">€14,50</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Leave-in Hidratante')">ENCOMENDAR</button>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
                 <div class="prod-card">
                     <div class="prod-emoji">🪡</div>
                     <div class="prod-name">Elásticos sem Metal</div>
                     <div class="prod-desc">Pack 50 unidades, não partem nem danificam</div>
                     <div class="prod-price">€5,00</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Elásticos sem Metal')">ENCOMENDAR</button>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
                 <div class="prod-card">
                     <div class="prod-emoji">✨</div>
                     <div class="prod-name">Spray Brilho</div>
                     <div class="prod-desc">Acabamento perfeito e duradouro nas tranças</div>
                     <div class="prod-price">€11,00</div>
-                    <button class="prod-btn" onclick="encomendarProduto('Spray Brilho')">ENCOMENDAR</button>
+                    <div class="badge" style="margin-top:10px;">Em breve</div>
                 </div>
             </div>
-            <a href="contactos.html" class="btn-cta">VER TODOS OS PRODUTOS</a>
+
+            <a href="contactos.html" class="btn-cta">CONTACTA-NOS</a>
         </div>
 
     </div>
@@ -523,19 +541,6 @@
             }
         }
         buildStamps();
-
-        // ── ENCOMENDAR PRODUTO ──
-        function encomendarProduto(nome) {
-            const ulog = JSON.parse(localStorage.getItem('ulog') || 'null');
-            if (!ulog || !ulog.id) {
-                localStorage.setItem('redirectAfterLogin', 'newsletter.html');
-                location.href = 'login.html';
-                return;
-            }
-            const msg = `Olá! Tenho interesse no produto: ${nome}. Como posso encomendar?`;
-            const whatsapp = `https://wa.me/351925215786?text=${encodeURIComponent(msg)}`;
-            window.open(whatsapp, '_blank');
-        }
     </script>
 </body>
 </html>
